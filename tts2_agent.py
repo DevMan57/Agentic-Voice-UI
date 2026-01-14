@@ -3434,19 +3434,19 @@ def create_ui():
         :root {
             /* FORCE GRADIO INTERNAL VARIABLES TO ORANGE */
             --color-accent: #ff4500 !important;
-            --slider-color: #ff4500 !important;
-            --loader-color: #ff4500 !important;
+            --slider-color: #00BFFF !important;
+            --loader-color: #00BFFF !important;
 
             /* 1. Structure (Borders/Glows) - Aggressive Neon */
             --primary-500: #ff4500;
             --plasma-primary: #ff4500;
             --plasma-glow: rgba(255, 69, 0, 0.4);
 
-            /* 2. Text - Lightsaber Purple */
-            --body-text-color: #cc00ff;
-            --block-label-text-color: #ff4500;
-            --plasma-text: #cc00ff;
-            --plasma-dim: #883300;
+            /* 2. Text - Lapis Lazuli Glowing */
+            --body-text-color: #00BFFF;
+            --block-label-text-color: #00BFFF;
+            --plasma-text: #00BFFF;
+            --plasma-dim: #006699;
             --plasma-border-dim: #551a00;
 
             /* 3. Background Tints */
@@ -3479,9 +3479,9 @@ def create_ui():
             border-radius: 0px !important;
         }
 
-        /* Text glow effect - Soft amber bloom */
+        /* Text glow effect - Lapis lazuli bloom */
         body, button, input, textarea {
-            text-shadow: 0 0 2px rgba(255, 160, 50, 0.3);
+            text-shadow: 0 0 4px rgba(0, 191, 255, 0.5);
         }
 
         /* Main container - Black with orange border */
@@ -3511,7 +3511,7 @@ def create_ui():
 
         /* Force slider accent color */
         input[type="range"] {
-            accent-color: #ff4500 !important;
+            accent-color: #00BFFF !important;
             filter: drop-shadow(0 0 5px #ff4500);
         }
 
@@ -3535,18 +3535,18 @@ def create_ui():
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #ffcc99;
+            color: #00BFFF;
         }
         .hud-label {
-            color: #883300;
+            color: #006699;
         }
         .hud-value {
-            color: #ff4500;
+            color: #00BFFF;
             font-weight: bold;
             text-shadow: 0 0 5px #ff4500;
         }
-        .hud-value.warning { color: #ffff00; }
-        .hud-value.danger { color: #ff0040; }
+        .hud-value.warning { color: #00BFFF; }
+        .hud-value.danger { color: #00BFFF; }
 
         /* ============================================
            EMOTION METER - HUD Bar Gauge
@@ -3560,7 +3560,7 @@ def create_ui():
             border: 1px solid #ff4500;
         }
         #emotion-meter .meter-label {
-            color: #883300;
+            color: #006699;
             font-size: 0.75em;
             text-transform: uppercase;
             min-width: 60px;
@@ -3583,7 +3583,7 @@ def create_ui():
         #emotion-meter .meter-fill.angry { background: #ff0040; }
         #emotion-meter .meter-fill.fear { background: #9933ff; }
         #emotion-meter .meter-value {
-            color: #ff4500;
+            color: #00BFFF;
             font-size: 0.8em;
             min-width: 40px;
             text-align: right;
@@ -3600,7 +3600,7 @@ def create_ui():
             transition: all 0.2s ease;
             background: #000000;
             border: 2px solid #ff4500;
-            color: #ff4500;
+            color: #00BFFF;
             text-transform: uppercase;
             letter-spacing: 2px;
             text-shadow: 0 0 10px #ff4500;
@@ -3610,13 +3610,13 @@ def create_ui():
         @keyframes pulse-recording {
             0%, 100% {
                 box-shadow: 0 0 10px #ff0040, inset 0 0 20px rgba(255, 0, 64, 0.1);
-                border-color: #ff0040;
-                color: #ff0040;
+                border-color: #00BFFF;
+                color: #00BFFF;
             }
             50% {
                 box-shadow: 0 0 30px #ff0040, inset 0 0 40px rgba(255, 0, 64, 0.2);
-                border-color: #ff0040;
-                color: #ff0040;
+                border-color: #00BFFF;
+                color: #00BFFF;
             }
         }
         .recording {
@@ -3627,7 +3627,7 @@ def create_ui():
         @keyframes pulse-processing {
             0%, 100% {
                 box-shadow: 0 0 10px #ff4500;
-                border-color: #ff4500;
+                border-color: #00BFFF;
             }
             50% {
                 box-shadow: 0 0 25px #ff8800;
@@ -3636,7 +3636,7 @@ def create_ui():
         }
         .processing {
             animation: pulse-processing 1s ease-in-out infinite;
-            border-color: #ff4500 !important;
+            border-color: #00BFFF !important;
         }
 
         /* SPEAKING STATE - Full plasma burn */
@@ -3646,13 +3646,13 @@ def create_ui():
         }
         .speaking {
             animation: pulse-burn 0.5s infinite alternate;
-            border-color: #ff4500 !important;
-            color: #ff4500 !important;
+            border-color: #00BFFF !important;
+            color: #00BFFF !important;
             text-shadow: 0 0 15px #ff4500 !important;
         }
 
         #tts-warning {
-            color: #ffcc99;
+            color: #00BFFF;
             font-size: 0.9em;
             text-transform: uppercase;
         }
@@ -3703,7 +3703,7 @@ def create_ui():
             bottom: -18px;
             left: 50%;
             transform: translateX(-50%);
-            color: #ff4500;
+            color: #00BFFF;
             font-size: 10px;
             z-index: 1;
             background: #000000;
@@ -3742,7 +3742,7 @@ def create_ui():
         /* Protocol Args - Amber text on burnt black */
         .tool-call-args,
         #main-chatbot .tool-call-args {
-            color: #ffb380 !important;
+            color: #00BFFF !important;
             margin: 0 !important;
             padding: 8px 12px !important;
             font-size: 0.85em !important;
@@ -3778,7 +3778,7 @@ def create_ui():
             right: 8px;
             background: #000000;
             border: 1px solid #ff4500;
-            color: #ff4500;
+            color: #00BFFF;
             cursor: pointer;
             padding: 4px 8px;
             font-size: 12px;
@@ -3820,7 +3820,7 @@ def create_ui():
             display: block;
             text-align: center;
             padding: 8px;
-            color: #ff4500;
+            color: #00BFFF;
             cursor: pointer;
             font-size: 0.9em;
             background: #000000;
@@ -3838,7 +3838,7 @@ def create_ui():
         /* Message timestamps */
         .message-timestamp {
             font-size: 0.7em;
-            color: #883300;
+            color: #006699;
             margin-top: 4px;
             text-align: right;
             opacity: 0.7;
@@ -3846,7 +3846,7 @@ def create_ui():
 
         /* Thinking indicator - Heating coil bar */
         .thinking-indicator {
-            color: #ffcc99;
+            color: #00BFFF;
             font-style: normal;
             font-size: 0.9em;
             margin: 4px 0;
@@ -3880,7 +3880,7 @@ def create_ui():
         /* Token usage - HUD style */
         .token-usage {
             font-size: 0.75em;
-            color: #ffcc99;
+            color: #00BFFF;
             padding: 6px 12px;
             background: #000000;
             display: inline-flex;
@@ -3893,8 +3893,8 @@ def create_ui():
             align-items: center;
             gap: 6px;
         }
-        .token-usage .token-in { color: #ff4500; }
-        .token-usage .token-out { color: #ffcc99; }
+        .token-usage .token-in { color: #00BFFF; }
+        .token-usage .token-out { color: #00BFFF; }
         .token-usage .token-total { color: #cc6600; }
 
         /* Mood indicator - HUD style */
@@ -3908,7 +3908,7 @@ def create_ui():
             border: 1px solid #ff4500;
             text-transform: uppercase;
         }
-        .mood-indicator .mood-text { color: #ff4500; }
+        .mood-indicator .mood-text { color: #00BFFF; }
 
         /* ============================================
            PANELS - Black with Orange Borders
@@ -3944,7 +3944,7 @@ def create_ui():
         #main-chatbot [role="user"] > p,
         #main-chatbot [role="user"] > span,
         #main-chatbot [role="user"] > div:not(.tool-call-block):not(.tool-chain-container) {
-            color: #ffb380 !important;
+            color: #00BFFF !important;
         }
 
         /* Assistant messages - Full plasma orange border */
@@ -3958,13 +3958,13 @@ def create_ui():
         #main-chatbot [role="assistant"] > p,
         #main-chatbot [role="assistant"] > span,
         #main-chatbot [role="assistant"] > div:not(.tool-call-block):not(.tool-chain-container):not(.message-expandable) {
-            color: #ffb380 !important;
+            color: #00BFFF !important;
             font-weight: 500 !important;
             text-shadow: 0 0 3px rgba(255, 69, 0, 0.4) !important;
             letter-spacing: 0.5px;
         }
         #main-chatbot [role="assistant"] .message-expandable {
-            color: #ffb380 !important;
+            color: #00BFFF !important;
         }
 
         /* Remove inner box styling */
@@ -3984,7 +3984,7 @@ def create_ui():
         #msg-input textarea {
             background: #000000 !important;
             border: 2px solid #ff4500 !important;
-            color: #ffb380 !important;
+            color: #00BFFF !important;
         }
         #msg-input:focus-within,
         #msg-input textarea:focus {
@@ -3996,7 +3996,7 @@ def create_ui():
            ============================================ */
 
         .tabs, .tab-nav, .tabitem {
-            border-color: #ff4500 !important;
+            border-color: #00BFFF !important;
         }
 
         .gradio-accordion {
@@ -4005,7 +4005,7 @@ def create_ui():
         .gradio-accordion > .label-wrap {
             border-bottom: 1px solid #ff4500 !important;
             background: #000000 !important;
-            color: #ff4500 !important;
+            color: #00BFFF !important;
         }
 
         .gradio-group {
@@ -4017,13 +4017,13 @@ def create_ui():
             border-color: #551a00 !important;
         }
         .gradio-dropdown:focus-within, .gradio-textbox:focus-within {
-            border-color: #ff4500 !important;
+            border-color: #00BFFF !important;
             box-shadow: 0 0 10px rgba(255, 69, 0, 0.3) !important;
         }
 
         /* Labels - Amber */
         label, .label-wrap, .svelte-1gfkn6j {
-            color: #ff4500 !important;
+            color: #00BFFF !important;
         }
 
         /* Button styling - Plasma */
@@ -4044,7 +4044,7 @@ def create_ui():
         /* Secondary buttons */
         button.secondary {
             background: #331100 !important;
-            color: #ff4500 !important;
+            color: #00BFFF !important;
             border: 1px solid #ff4500 !important;
         }
         button.secondary:hover {
@@ -4062,7 +4062,7 @@ def create_ui():
                 #330a00 20px
             );
             border: 1px solid #551a00;
-            color: #883300;
+            color: #006699;
         }
         .vad-indicator.active {
             background: #ff4500;
@@ -4088,8 +4088,8 @@ def create_ui():
         }
         input[type="checkbox"]:checked {
             background: #ff4500 !important;
-            background-color: #ff4500 !important;
-            border-color: #ff4500 !important;
+            background-color: #00BFFF !important;
+            border-color: #00BFFF !important;
             box-shadow: 0 0 10px #ff4500;
         }
         input[type="checkbox"]:hover {
@@ -4100,8 +4100,8 @@ def create_ui():
         /* Force Radio Buttons to Orange */
         input[type="radio"]:checked {
             background: #ff4500 !important;
-            background-color: #ff4500 !important;
-            border-color: #ff4500 !important;
+            background-color: #00BFFF !important;
+            border-color: #00BFFF !important;
             box-shadow: 0 0 10px #ff4500;
         }
         input[type="radio"]:hover {
@@ -4129,8 +4129,8 @@ def create_ui():
         .gr-check-radio input:checked,
         .gr-input-label input:checked,
         [data-testid="checkbox"] input:checked {
-            background-color: #ff4500 !important;
-            border-color: #ff4500 !important;
+            background-color: #00BFFF !important;
+            border-color: #00BFFF !important;
         }
 
         /* ============================================
@@ -4143,7 +4143,7 @@ def create_ui():
         [data-testid="radio"] label,
         .wrap label span,
         label.svelte-1gfkn6j span {
-            color: #cc00ff !important;
+            color: #00BFFF !important;
         }
 
         /* Radio button group - selected item styling */
@@ -4198,7 +4198,7 @@ def create_ui():
         [role="radiogroup"] label:not(.selected) {
             background: #000000 !important;
             border: 1px solid #ff4500 !important;
-            color: #cc00ff !important;
+            color: #00BFFF !important;
         }
 
         /* ============================================
@@ -4208,7 +4208,7 @@ def create_ui():
         /* Primary buttons - now black with orange border */
         button.primary {
             background: #000000 !important;
-            color: #cc00ff !important;
+            color: #00BFFF !important;
             border: 2px solid #ff4500 !important;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -4224,7 +4224,7 @@ def create_ui():
         /* Secondary buttons - black with orange border */
         button.secondary {
             background: #000000 !important;
-            color: #cc00ff !important;
+            color: #00BFFF !important;
             border: 1px solid #ff4500 !important;
         }
         button.secondary:hover {
@@ -4235,7 +4235,7 @@ def create_ui():
         /* All other buttons */
         button:not(.primary):not(.secondary) {
             background: #000000 !important;
-            color: #cc00ff !important;
+            color: #00BFFF !important;
             border: 1px solid #ff4500 !important;
         }
         button:not(.primary):not(.secondary):hover {
@@ -4249,44 +4249,44 @@ def create_ui():
 
         /* Override body text to purple */
         body, p, span, div {
-            color: #cc00ff !important;
+            color: #00BFFF !important;
         }
 
         /* Labels stay orange for structure */
         label, .label-wrap, .svelte-1gfkn6j, h1, h2, h3, h4, h5, h6 {
-            color: #ff4500 !important;
+            color: #00BFFF !important;
         }
 
         /* Input text - purple */
         input, textarea, select {
-            color: #cc00ff !important;
+            color: #00BFFF !important;
         }
 
-        /* Placeholder text - dimmer purple */
+        /* Placeholder text - dimmer lapis lazuli */
         input::placeholder, textarea::placeholder {
-            color: #9900cc !important;
+            color: #0088AA !important;
         }
 
         /* Chatbot messages */
         #main-chatbot [role="user"] > p,
         #main-chatbot [role="user"] > span,
         #main-chatbot [role="user"] > div:not(.tool-call-block):not(.tool-chain-container) {
-            color: #cc00ff !important;
+            color: #00BFFF !important;
         }
         #main-chatbot [role="assistant"] > p,
         #main-chatbot [role="assistant"] > span,
         #main-chatbot [role="assistant"] > div:not(.tool-call-block):not(.tool-chain-container):not(.message-expandable) {
-            color: #cc00ff !important;
+            color: #00BFFF !important;
         }
         #main-chatbot [role="assistant"] .message-expandable {
-            color: #cc00ff !important;
+            color: #00BFFF !important;
         }
 
         /* ============================================
            GRADIO FOOTER FIX
            ============================================ */
         footer, footer a, footer span, .footer, .built-with {
-            color: #cc00ff !important;
+            color: #00BFFF !important;
         }
 
         /* ============================================
@@ -4296,12 +4296,12 @@ def create_ui():
         button, .gr-button, [class*="button"] {
             background: #000000 !important;
             background-color: #000000 !important;
-            color: #cc00ff !important;
+            color: #00BFFF !important;
             border: 1px solid #ff4500 !important;
         }
         button:hover, .gr-button:hover, [class*="button"]:hover {
             background: #ff4500 !important;
-            background-color: #ff4500 !important;
+            background-color: #00BFFF !important;
             color: #000000 !important;
         }
     """
@@ -4458,7 +4458,7 @@ def create_ui():
         
         gr.HTML(f"""
         <div style="border: 3px solid #ff4500; background: #000000; padding: 15px 20px; margin-bottom: 15px; box-shadow: 0 0 25px rgba(255, 69, 0, 0.4), inset 0 0 30px rgba(255, 69, 0, 0.08);">
-            <pre style="color: #ff4500; font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; font-size: 16px; line-height: 1.15; margin: 0; text-align: center; letter-spacing: 0px; text-shadow: 0 0 10px rgba(255, 69, 0, 0.6);">
+            <pre style="color: #00BFFF; font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; font-size: 16px; line-height: 1.15; margin: 0; text-align: center; letter-spacing: 0px; text-shadow: 0 0 10px rgba(255, 69, 0, 0.6);">
 ╔════════════════════════════════════════════════════════════════════════════════════╗
 ║  ████████╗████████╗ ███████╗ ██████╗    ██╗   ██╗ ██████╗ ██╗ ██████╗███████╗      ║
 ║  ╚══██╔══╝╚══██╔══╝ ██╔════╝ ╚════██╗   ██║   ██║██╔═══██╗██║██╔════╝██╔════╝      ║
@@ -4468,8 +4468,8 @@ def create_ui():
 ║     ╚═╝      ╚═╝    ╚══════╝ ╚══════╝     ╚═══╝   ╚═════╝ ╚═╝ ╚═════╝╚══════╝      ║
 ╚════════════════════════════════════════════════════════════════════════════════════╝
             </pre>
-            <div style="text-align: center; color: #ffcc99; font-size: 0.9em; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">
-                Multi-Character • Memory • Tools • Vision • MCP &nbsp;|&nbsp; <span style="color: #ffcc99;">Running on {PLATFORM.title()}{" (WSL)" if IS_WSL else ""}</span>
+            <div style="text-align: center; color: #00BFFF; font-size: 0.9em; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">
+                Multi-Character • Memory • Tools • Vision • MCP &nbsp;|&nbsp; <span style="color: #00BFFF;">Running on {PLATFORM.title()}{" (WSL)" if IS_WSL else ""}</span>
             </div>
         </div>
         """)
