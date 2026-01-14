@@ -120,16 +120,10 @@ def main():
     print("=" * 65)
     print()
 
-    if recorded:
-        print("Files saved to recordings/ folder.")
-        print()
-        print("Next step: Run calibration analysis:")
-        print("  VoiceChat.bat -> Option [5] (or run with --from-files)")
-        print()
-    else:
+    if not recorded:
         print("No recordings captured. Check your microphone.")
-
-    input("Press ENTER to exit...")
+        input("Press ENTER to exit...")
+    # If recordings succeeded, don't pause - let batch file continue to step 2
 
 
 if __name__ == "__main__":
