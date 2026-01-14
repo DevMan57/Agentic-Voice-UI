@@ -29,21 +29,21 @@ warnings.filterwarnings("ignore", message=".*WebSocketServerProtocol.*")
 # Silence noisy loggers
 import logging
 
-# Force all output to match the neon violet theme (RGB 191, 0, 255)
-PURPLE = "\033[38;2;191;0;255m"
+# Force all output to match the Engineered Amber theme (RGB 255, 69, 0)
+ORANGE = "\033[38;2;255;69;0m"
 RESET = "\033[0m"
 
-# Wrap stdout/stderr to always output purple
-class PurpleStream:
+# Wrap stdout/stderr to always output orange
+class OrangeStream:
     def __init__(self, stream):
         self._stream = stream
         self._at_line_start = True
 
     def write(self, text):
         if text:
-            # Add purple color code at the start of each line
+            # Add orange color code at the start of each line
             if self._at_line_start and text.strip():
-                self._stream.write(PURPLE)
+                self._stream.write(ORANGE)
             self._stream.write(text)
             self._at_line_start = text.endswith('\n')
 
@@ -53,17 +53,17 @@ class PurpleStream:
     def __getattr__(self, name):
         return getattr(self._stream, name)
 
-# Apply purple wrapper to stdout/stderr
-sys.stdout = PurpleStream(sys.__stdout__)
-sys.stderr = PurpleStream(sys.__stderr__)
+# Apply orange wrapper to stdout/stderr
+sys.stdout = OrangeStream(sys.__stdout__)
+sys.stderr = OrangeStream(sys.__stderr__)
 
-class PurpleFormatter(logging.Formatter):
+class OrangeFormatter(logging.Formatter):
     def format(self, record):
-        return f"{PURPLE}{super().format(record)}"
+        return f"{ORANGE}{super().format(record)}"
 
-# Apply purple formatter to all existing and future handlers
-def apply_purple_formatter():
-    formatter = PurpleFormatter("%(message)s")
+# Apply orange formatter to all existing and future handlers
+def apply_orange_formatter():
+    formatter = OrangeFormatter("%(message)s")
     root_logger = logging.getLogger()
 
     # Apply to root logger
@@ -82,9 +82,9 @@ def apply_purple_formatter():
             handler.setFormatter(formatter)
             handler.stream = sys.stdout
 
-apply_purple_formatter()
+apply_orange_formatter()
 
-# Silence noisy loggers (but keep them purple when they do speak)
+# Silence noisy loggers (but keep them orange when they do speak)
 logging.getLogger("transformers").setLevel(logging.ERROR)
 logging.getLogger("httpx").setLevel(logging.ERROR)
 logging.getLogger("uvicorn").setLevel(logging.WARNING)  # Allow startup messages
@@ -3246,9 +3246,9 @@ def get_ptt_status() -> Tuple[str, str, float, str]:
             extra = parts[2] if len(parts) > 2 else ""
             
             status_map = {
-                "ready": ("🎤 PTT Ready (Right Shift)", "#bf00ff", "purple"),
+                "ready": ("🎤 PTT Ready (Right Shift)", "#ff4500", "orange"),
                 "recording": (f"🔴 RECORDING ({duration:.1f}s)", "#ef4444", "red"),
-                "processing": (f"⏳ Processing...", "#d633ff", "purple"),
+                "processing": (f"⏳ Processing...", "#ffaa00", "orange"),
                 "sent": ("✅ Sent!", "#3b82f6", "blue"),
                 "error": (f"❌ Error: {extra}", "#ef4444", "red"),
                 "offline": ("⚫ Offline", "#6b7280", "gray"),
@@ -3432,6 +3432,11 @@ def create_ui():
 
         /* CSS Variables - Split Toning Palette */
         :root {
+            /* FORCE GRADIO INTERNAL VARIABLES TO ORANGE */
+            --color-accent: #ff4500 !important;
+            --slider-color: #ff4500 !important;
+            --loader-color: #ff4500 !important;
+
             /* 1. Structure (Borders/Glows) - Aggressive Neon */
             --primary-500: #ff4500;
             --plasma-primary: #ff4500;
@@ -3447,7 +3452,7 @@ def create_ui():
             /* 3. Background Tints */
             --plasma-bg: #050200;
             --plasma-bg-light: #0f0500;
-            --bg-overlay: rgba(0, 0, 0, 0.85);
+            --bg-overlay: rgba(0, 0, 0, 0.6);
             --panel-bg: rgba(20, 10, 5, 0.7);
 
             /* Carbon Fiber Colors (tinted toward burnt orange) */
@@ -4113,12 +4118,50 @@ def create_ui():
             transition: all 0.15s ease;
         }
         input[type="checkbox"]:checked {
-            background: var(--primary-500);
-            box-shadow: 0 0 10px var(--primary-500);
+            background: #ff4500 !important;
+            background-color: #ff4500 !important;
+            border-color: #ff4500 !important;
+            box-shadow: 0 0 10px #ff4500;
         }
         input[type="checkbox"]:hover {
             border-color: #ff6600;
             box-shadow: 0 0 5px rgba(255, 69, 0, 0.5);
+        }
+
+        /* Force Radio Buttons to Orange */
+        input[type="radio"]:checked {
+            background: #ff4500 !important;
+            background-color: #ff4500 !important;
+            border-color: #ff4500 !important;
+            box-shadow: 0 0 10px #ff4500;
+        }
+        input[type="radio"]:hover {
+            border-color: #ff6600;
+            box-shadow: 0 0 5px rgba(255, 69, 0, 0.5);
+        }
+
+        /* Force Gradio Slider Track and Thumb to Orange */
+        input[type="range"]::-webkit-slider-runnable-track {
+            background: linear-gradient(to right, #ff4500, #ff4500) !important;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            background: #ff4500 !important;
+            box-shadow: 0 0 8px #ff4500;
+        }
+        input[type="range"]::-moz-range-track {
+            background: #ff4500 !important;
+        }
+        input[type="range"]::-moz-range-thumb {
+            background: #ff4500 !important;
+            box-shadow: 0 0 8px #ff4500;
+        }
+
+        /* Override Gradio's internal toggle/switch styling */
+        .gr-check-radio input:checked,
+        .gr-input-label input:checked,
+        [data-testid="checkbox"] input:checked {
+            background-color: #ff4500 !important;
+            border-color: #ff4500 !important;
         }
     """
     

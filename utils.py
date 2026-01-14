@@ -24,69 +24,69 @@ import hashlib
 # ============================================================================
 
 def create_dark_theme():
-    """Create NEON VIOLET theme - Synthwave / Cyberpunk Purple"""
+    """Create ENGINEERED AMBER theme - Industrial Retro-Futurism"""
     return gr.themes.Soft(
-        primary_hue="purple",
-        secondary_hue="violet",
+        primary_hue="orange",
+        secondary_hue="amber",
         neutral_hue="slate",
         font=gr.themes.GoogleFont("Fira Code"),
     ).set(
-        # Base colors - Deep violet-black
-        body_background_fill="#05000a",
-        body_background_fill_dark="#05000a",
-        background_fill_primary="#0f0520",
-        background_fill_primary_dark="#0f0520",
-        background_fill_secondary="#1a0a30",
-        background_fill_secondary_dark="#1a0a30",
+        # Base colors - Deep burnt black
+        body_background_fill="#050200",
+        body_background_fill_dark="#050200",
+        background_fill_primary="#0a0400",
+        background_fill_primary_dark="#0a0400",
+        background_fill_secondary="#0f0500",
+        background_fill_secondary_dark="#0f0500",
 
-        # Block colors - Deep purple with neon borders
-        block_background_fill="#0f0520",
-        block_background_fill_dark="#0f0520",
-        block_border_color="#bf00ff",  # Electric Purple
-        block_border_color_dark="#bf00ff",
-        block_label_background_fill="#1a0a30",
-        block_label_background_fill_dark="#1a0a30",
-        block_title_text_color="#d0b3ff",  # Pale lavender for readability
-        block_title_text_color_dark="#d0b3ff",
+        # Block colors - Burnt black with neon orange borders
+        block_background_fill="#0a0400",
+        block_background_fill_dark="#0a0400",
+        block_border_color="#ff4500",  # Neon Orange
+        block_border_color_dark="#ff4500",
+        block_label_background_fill="#0f0500",
+        block_label_background_fill_dark="#0f0500",
+        block_title_text_color="#ffcc99",  # Soft Amber for readability
+        block_title_text_color_dark="#ffcc99",
 
-        # Input colors - Deep purple
-        input_background_fill="#1a0a30",
-        input_background_fill_dark="#1a0a30",
-        input_border_color="#3d1a66",
-        input_border_color_dark="#3d1a66",
-        input_placeholder_color="#6b3d99",
-        input_placeholder_color_dark="#6b3d99",
+        # Input colors - Deep burnt black
+        input_background_fill="#050200",
+        input_background_fill_dark="#050200",
+        input_border_color="#551a00",
+        input_border_color_dark="#551a00",
+        input_placeholder_color="#883300",
+        input_placeholder_color_dark="#883300",
 
-        # Button colors - NEON VIOLET Purple
-        button_primary_background_fill="#bf00ff",
-        button_primary_background_fill_dark="#bf00ff",
-        button_primary_background_fill_hover="#d633ff",
-        button_primary_background_fill_hover_dark="#d633ff",
-        button_primary_text_color="#000000",  # Black text on purple = high vis
+        # Button colors - NEON ORANGE
+        button_primary_background_fill="#ff4500",
+        button_primary_background_fill_dark="#ff4500",
+        button_primary_background_fill_hover="#ff6600",
+        button_primary_background_fill_hover_dark="#ff6600",
+        button_primary_text_color="#000000",  # Black text on orange = high vis
         button_primary_text_color_dark="#000000",
         # Secondary buttons
-        button_secondary_background_fill="#1a0a30",
-        button_secondary_background_fill_dark="#1a0a30",
-        button_secondary_background_fill_hover="#bf00ff",
-        button_secondary_background_fill_hover_dark="#bf00ff",
-        button_secondary_text_color="#bf00ff",
-        button_secondary_text_color_dark="#bf00ff",
+        button_secondary_background_fill="#0f0500",
+        button_secondary_background_fill_dark="#0f0500",
+        button_secondary_background_fill_hover="#ff4500",
+        button_secondary_background_fill_hover_dark="#ff4500",
+        button_secondary_text_color="#ff4500",
+        button_secondary_text_color_dark="#ff4500",
 
-        # Slider colors - NEON VIOLET Purple
-        slider_color="#bf00ff",
-        slider_color_dark="#bf00ff",
+        # Slider colors - NEON ORANGE
+        slider_color="#ff4500",
+        slider_color_dark="#ff4500",
 
-        # Checkbox colors - Electric Purple
-        checkbox_background_color_selected="#bf00ff",
-        checkbox_background_color_selected_dark="#bf00ff",
-        checkbox_border_color_selected="#bf00ff",
-        checkbox_border_color_selected_dark="#bf00ff",
+        # Checkbox colors - Neon Orange
+        checkbox_background_color_selected="#ff4500",
+        checkbox_background_color_selected_dark="#ff4500",
+        checkbox_border_color_selected="#ff4500",
+        checkbox_border_color_selected_dark="#ff4500",
 
-        # Text colors - Pale Lavender for easy reading
-        body_text_color="#e6d9ff",
-        body_text_color_dark="#e6d9ff",
-        body_text_color_subdued="#8c00bd",
-        body_text_color_subdued_dark="#8c00bd",
+        # Text colors - Soft Amber for easy reading
+        body_text_color="#ffcc99",
+        body_text_color_dark="#ffcc99",
+        body_text_color_subdued="#883300",
+        body_text_color_subdued_dark="#883300",
 
         # Border radius - CYBERDECK: Sharp corners
         block_radius="0px",
