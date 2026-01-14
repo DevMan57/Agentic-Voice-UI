@@ -1,0 +1,112 @@
+# ============================================
+# IndexTTS2 Voice Chat - Requirements
+# ============================================
+# Installation (WSL):
+#   pip install -r requirements.txt
+#
+# Note: Install PyTorch with CUDA first:
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+# ============================================
+
+# Core UI Framework
+gradio>=4.0.0,<6.0.0
+
+# HTTP Requests (OpenRouter API, LM Studio)
+requests>=2.28.0
+
+# Numerical Computing
+numpy>=1.26.0,<2.0.0
+scipy>=1.10.0,<2.0.0
+matplotlib>=3.8.0
+numba>=0.59.0                      # 0.59+ required for Python 3.12
+
+# Machine Learning (CUDA recommended for TTS)
+torch>=2.0.0
+ninja                              # Required for CUDA kernel compilation
+
+# Lightweight TTS
+kokoro-onnx>=0.3.1
+soundfile>=0.12.0
+
+# Speech-to-Text (CPU-optimized)
+faster-whisper>=0.9.0,<2.0.0
+
+# Memory System - Semantic Search (ONNX recommended)
+optimum[onnxruntime]>=1.17.0           # ONNX runtime for fast embeddings
+transformers>=4.51.0                   # Tokenizers for Qwen3
+sentence-transformers>=2.2.0,<4.0.0    # Fallback: E5-small-v2 embeddings
+sqlite-vec>=0.1.6                      # Native vector search (O(log n) KNN)
+
+# Local Graph Extraction (NuExtract)
+llama-cpp-python>=0.2.0                # GGUF model inference
+huggingface-hub>=0.20.0                # Model downloading
+
+# Memory Visualization
+networkx>=3.0
+pyvis>=0.3.0
+
+# Image Processing
+pillow>=9.0.0,<12.0.0
+pyautogui>=0.9.50              # Screen capture support
+
+# PDF Support
+pypdf>=3.0.0                   # PDF text extraction
+
+# Web Search (DuckDuckGo)
+ddgs>=4.0.0
+
+# Character Definitions (YAML support)
+pyyaml>=6.0
+
+# Testing
+pytest>=7.0.0
+
+# ============================================
+# New Audio Backends (Path C)
+# ============================================
+# FunASR - Unified STT (SenseVoice, Fun-ASR-Nano)
+funasr>=1.0.0
+
+# Supertonic - Ultra-fast ONNX TTS
+# Note: Requires model download: git clone https://huggingface.co/Supertone/supertonic assets/supertonic
+supertonic>=0.1.0
+
+# Soprano - Ultra-fast GPU TTS (2000x realtime, 80M params)
+# Uses ekwek/Soprano-80M from HuggingFace
+# Requires CUDA GPU
+soprano-tts>=0.0.2
+
+# ============================================
+# Optional: Voice Activity Detection (VAD)
+# ============================================
+# For hands-free recording mode:
+#   pip install webrtcvad          # Lightweight option
+#   # OR for best accuracy (uses torch):
+#   pip install silero-vad         # Requires torch
+
+# ============================================
+# Optional: Cloud Storage
+# ============================================
+# supabase>=2.0.0              # For cloud memory sync
+
+# ============================================
+# Optional: Enhanced Audio
+# ============================================
+# sounddevice                  # For audio playback
+# soundfile                    # For audio file handling
+# pygame                       # Alternative audio playback
+
+# ============================================
+# Optional: Web Scraping
+# ============================================
+# beautifulsoup4              # Enhanced URL parsing
+# wikipedia                   # Wikipedia tool
+
+# ============================================
+# Windows PTT Listener (ptt_windows.py)
+# Install in Windows Python (not WSL):
+#   pip install keyboard pyaudio
+#
+# If pyaudio fails on Windows:
+#   pip install pipwin && pipwin install pyaudio
+# ============================================

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "python",
+      "args": [
+        "tools/mcp_server_local.py"
+      ],
+      "env": {}
+    }
+  }
+}

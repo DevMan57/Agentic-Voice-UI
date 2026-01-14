@@ -1,0 +1,121 @@
+# ============================================================================
+# IndexTTS2 Voice Chat - Docker Compose
+# ============================================================================
+# Usage:
+#   1. Download model checkpoints to ./checkpoints/
+#   2. Copy config.env.example to config.env and add your API key
+#   3. Run: docker-compose up
+#
+# First Run:
+#   docker-compose up --build
+#
+# GPU Requirements:
+#   - NVIDIA GPU with 12GB+ VRAM
+#   - nvidia-container-toolkit installed
+#   - Docker configured for GPU access
+# ============================================================================
+
+services:
+  voice-chat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: indextts2-voice-chat:latest
+    container_name: indextts2-voice-chat
+    
+    # ========================================================================
+    # GPU Access - Requires nvidia-container-toolkit
+    # ========================================================================
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    
+    # ========================================================================
+    # Ports
+    # ========================================================================
+    ports:
+      - "7861:7861"   # Voice Chat UI
+      - "7863:7863"   # Character Manager UI
+    
+    # ========================================================================
+    # Volumes - Persistent Data
+    # ========================================================================
+    volumes:
+      # Model checkpoints (REQUIRED - download separately)
+      # Download from: https://huggingface.co/IndexTeam/Index-TTS
+      - ./checkpoints:/app/index-tts/checkpoints:ro
+      
+      # Voice reference samples
+      - ./voice_reference:/app/voice_chat/voice_reference
+      
+      # Character definitions
+      - ./characters:/app/voice_chat/characters
+      
+      # Persistent session data
+      - ./sessions:/app/voice_chat/sessions
+      
+      # Conversation history
+      - ./conversations:/app/voice_chat/conversations
+      
+      # Recordings (for VAD/PTT if using host audio bridge)
+      - ./recordings:/app/voice_chat/recordings
+      
+      # Configuration
+      - ./config.env:/app/voice_chat/config.env:ro
+    
+    # ========================================================================
+    # Environment
+    # ========================================================================
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
+      - GRADIO_SERVER_NAME=0.0.0.0
+      - GRADIO_SERVER_PORT=7861
+      # Disable PTT/VAD inside container (run on host for audio access)
+      - DISABLE_PTT=true
+      - DISABLE_VAD=true
+    
+    # ========================================================================
+    # Runtime Settings
+    # ========================================================================
+    restart: unless-stopped
+    
+    # Shared memory for PyTorch
+    shm_size: '8gb'
+    
+    # Keep container running for debugging
+    stdin_open: true
+    tty: true
+
+  # ==========================================================================
+  # Optional: Character Manager (Separate Container)
+  # ==========================================================================
+  # Uncomment if you want Character Manager in a separate container
+  # character-manager:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   image: indextts2-voice-chat:latest
+  #   container_name: indextts2-character-manager
+  #   command: ["python", "character_manager_ui.py"]
+  #   ports:
+  #     - "7863:7863"
+  #   volumes:
+  #     - ./characters:/app/voice_chat/characters
+  #     - ./voice_reference:/app/voice_chat/voice_reference
+  #     - ./sessions:/app/voice_chat/sessions
+  #   environment:
+  #     - GRADIO_SERVER_NAME=0.0.0.0
+  #     - GRADIO_SERVER_PORT=7863
+  #   restart: unless-stopped
+
+# ============================================================================
+# Networks
+# ============================================================================
+networks:
+  default:
+    name: indextts2-network

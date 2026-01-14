@@ -1,0 +1,164 @@
+# ============================================
+# IndexTTS2 Voice Chat - .gitignore
+# ============================================
+
+# ===========================================
+# PERSONAL DATA - NEVER COMMIT THESE
+# ===========================================
+
+# API keys and secrets
+config.env
+*.env
+!config.env.example
+
+# User settings (contains personal preferences)
+settings.json
+
+# Voice recordings (user's voice!)
+recordings/*.wav
+recordings/*.txt
+recordings/*.log
+
+# Personal voice reference (keep only example voices)
+voice_reference/me.wav
+voice_reference/my_*.wav
+voice_reference/personal_*.wav
+
+# Conversation history (private chats)
+conversations/*/
+conversations/**/*.json
+
+# Session data (all user data)
+sessions/*.json
+sessions/memory_storage/*.json
+sessions/graphs/*.html
+sessions/files/*
+!sessions/.gitkeep
+!sessions/files/.gitkeep
+!sessions/memory_storage/.gitkeep
+!sessions/graphs/.gitkeep
+
+# Generated audio
+generated_audio/*.wav
+!generated_audio/.gitkeep
+
+# Memory data (local storage with personal info)
+memory/*.json
+memory/*.db
+*.sqlite3
+
+# Custom characters (may contain personal info)
+characters.json
+
+# ===========================================
+# MODEL CHECKPOINTS (TOO LARGE FOR GIT)
+# ===========================================
+
+# IndexTTS2 model files (~10GB)
+checkpoints/*
+!checkpoints/.gitkeep
+!checkpoints/README.md
+
+# All model directories (downloaded on install)
+models/
+!models/.gitkeep
+
+# HuggingFace cache
+.cache/
+
+# ===========================================
+# PYTHON
+# ===========================================
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+eggs/
+*.egg
+.eggs/
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Backup files
+*.backup
+*.bak
+*.py.backup
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.conda/
+
+# ===========================================
+# IDE / EDITOR
+# ===========================================
+
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+*.sublime-*
+.spyderproject
+.spyproject
+
+# ===========================================
+# GENERATED / RUNTIME
+# ===========================================
+
+# TTS output (regenerated each time)
+generated_audio/*.wav
+
+# Model files (too large for git)
+*.pt
+*.pth
+*.bin
+*.onnx
+*.safetensors
+*.gguf
+
+# Temp files
+*.tmp
+*.temp
+*.log
+*.bak
+
+# ===========================================
+# OS FILES
+# ===========================================
+
+.DS_Store
+Thumbs.db
+desktop.ini
+*.lnk
+
+# ===========================================
+# JUPYTER
+# ===========================================
+
+.ipynb_checkpoints/
+*.ipynb
+
+# ===========================================
+# KEEP DIRECTORY STRUCTURE
+# ===========================================
+
+!recordings/.gitkeep
+!generated_audio/.gitkeep
+!sessions/.gitkeep
+!conversations/.gitkeep
+!voice_reference/.gitkeep
