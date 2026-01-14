@@ -3425,29 +3425,38 @@ def create_ui():
     
     custom_css = """
         /* ============================================
-           NEON VIOLET THEME
-           Synthwave / Cyberpunk Purple
-           Electric Purple + Pale Lavender + Deep Grape
+           ENGINEERED AMBER THEME
+           Industrial Retro-Futurism with Woven Carbon
+           Split Toning: Neon Orange (structure) + Soft Amber (reading)
            ============================================ */
 
-        /* CSS Variables for Neon Violet */
+        /* CSS Variables - Split Toning Palette */
         :root {
-            --neon-bg: #05000a;
-            --neon-bg-light: #0f0520;
-            --neon-primary: #bf00ff;
-            --neon-primary-dark: #8c00bd;
-            --neon-glow: rgba(191, 0, 255, 0.5);
-            --neon-text: #e6d9ff;
-            --neon-text-dim: #d0b3ff;
-            --neon-dim: #6b3d99;
-            --neon-border-dim: #3d1a66;
-            /* Carbon Fiber Colors (tinted toward violet) */
-            --carbon-dark-1: #08001a;
-            --carbon-dark-2: #0a0020;
-            --carbon-dark-3: #060015;
-            --carbon-light-1: #140828;
-            --carbon-light-2: #1a0a30;
-            --carbon-light-3: #100620;
+            /* 1. Structure (Borders/Glows) - Aggressive Neon */
+            --primary-500: #ff4500;
+            --plasma-primary: #ff4500;
+            --plasma-glow: rgba(255, 69, 0, 0.4);
+
+            /* 2. Reading Text - Comfortable Amber (fixes eye strain) */
+            --body-text-color: #ffcc99;
+            --block-label-text-color: #ffaa66;
+            --plasma-text: #ffcc99;
+            --plasma-dim: #883300;
+            --plasma-border-dim: #551a00;
+
+            /* 3. Background Tints */
+            --plasma-bg: #050200;
+            --plasma-bg-light: #0f0500;
+            --bg-overlay: rgba(0, 0, 0, 0.85);
+            --panel-bg: rgba(20, 10, 5, 0.7);
+
+            /* Carbon Fiber Colors (tinted toward burnt orange) */
+            --carbon-dark-1: #0a0400;
+            --carbon-dark-2: #0f0600;
+            --carbon-dark-3: #080300;
+            --carbon-light-1: #151008;
+            --carbon-light-2: #1a1208;
+            --carbon-light-3: #120c05;
         }
 
         /* Import monospace fonts */
@@ -3459,12 +3468,12 @@ def create_ui():
             border-radius: 0px !important;
         }
 
-        /* Text glow effect */
+        /* Text glow effect - Soft amber bloom */
         body, button, input, textarea {
-            text-shadow: 0 0 2px #8c00bd;
+            text-shadow: 0 0 2px rgba(255, 160, 50, 0.3);
         }
 
-        /* SCANLINES OVERLAY - CRT Effect (Purple tint) */
+        /* SCANLINES OVERLAY - CRT Effect (Orange tint) */
         .gradio-container::before {
             content: '';
             position: fixed;
@@ -3474,8 +3483,8 @@ def create_ui():
             height: 100%;
             background: repeating-linear-gradient(
                 0deg,
-                rgba(191, 0, 255, 0.03) 0px,
-                rgba(191, 0, 255, 0.03) 1px,
+                rgba(255, 69, 0, 0.03) 0px,
+                rgba(255, 69, 0, 0.03) 1px,
                 transparent 1px,
                 transparent 2px
             );
@@ -3483,37 +3492,37 @@ def create_ui():
             z-index: 9999;
         }
 
-        /* NEON GLOW - Main container border/shadow only (background set in carbon fiber section) */
+        /* PLASMA GLOW - Main container border/shadow only (background set in carbon fiber section) */
         .gradio-container {
-            border: 2px solid #bf00ff !important;
+            border: 2px solid #ff4500 !important;
             box-shadow:
-                inset 0 0 100px rgba(191, 0, 255, 0.08),
-                0 0 30px rgba(191, 0, 255, 0.5),
-                inset 0 0 10px rgba(191, 0, 255, 0.3) !important;
+                inset 0 0 100px rgba(255, 69, 0, 0.08),
+                0 0 25px rgba(255, 69, 0, 0.4),
+                inset 0 0 10px rgba(255, 69, 0, 0.4) !important;
         }
 
-        /* Scrollbars - Neon Violet */
+        /* Scrollbars - Burnt Orange */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #05000a;
-            border: 1px solid #3d1a66;
+            background: #050200;
+            border: 1px solid #551a00;
         }
         ::-webkit-scrollbar-thumb {
-            background: #bf00ff;
+            background: #ff4500;
             border: none;
-            filter: drop-shadow(0 0 5px #bf00ff);
+            filter: drop-shadow(0 0 5px #ff4500);
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #d633ff;
+            background: #ff6600;
         }
 
         /* Force slider accent color */
         input[type="range"] {
-            accent-color: #bf00ff !important;
-            filter: drop-shadow(0 0 8px #bf00ff);
+            accent-color: #ff4500 !important;
+            filter: drop-shadow(0 0 5px #ff4500);
         }
 
         /* ============================================
@@ -3524,27 +3533,27 @@ def create_ui():
             justify-content: space-between;
             align-items: center;
             padding: 8px 16px;
-            background: #05000a;
-            border: 2px solid #bf00ff;
+            background: #050200;
+            border: 2px solid #ff4500;
             margin-bottom: 10px;
             font-size: 0.85em;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 0 15px rgba(191, 0, 255, 0.3);
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.3);
         }
         .hud-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #e6d9ff;
+            color: #ffcc99;
         }
         .hud-label {
-            color: #6b3d99;
+            color: #883300;
         }
         .hud-value {
-            color: #bf00ff;
+            color: #ff4500;
             font-weight: bold;
-            text-shadow: 0 0 5px #bf00ff;
+            text-shadow: 0 0 5px #ff4500;
         }
         .hud-value.warning { color: #ffff00; }
         .hud-value.danger { color: #ff0040; }
@@ -3557,11 +3566,11 @@ def create_ui():
             align-items: center;
             gap: 10px;
             padding: 6px 12px;
-            background: #05000a;
-            border: 1px solid #bf00ff;
+            background: #050200;
+            border: 1px solid #ff4500;
         }
         #emotion-meter .meter-label {
-            color: #6b3d99;
+            color: #883300;
             font-size: 0.75em;
             text-transform: uppercase;
             min-width: 60px;
@@ -3569,8 +3578,8 @@ def create_ui():
         #emotion-meter .meter-bar {
             flex: 1;
             height: 12px;
-            background: #0f0520;
-            border: 1px solid #3d1a66;
+            background: #0f0500;
+            border: 1px solid #551a00;
             position: relative;
             overflow: hidden;
         }
@@ -3579,12 +3588,12 @@ def create_ui():
             transition: width 0.3s, background 0.3s;
         }
         #emotion-meter .meter-fill.happy { background: #00ff41; }
-        #emotion-meter .meter-fill.neutral { background: #bf00ff; }
+        #emotion-meter .meter-fill.neutral { background: #ff4500; }
         #emotion-meter .meter-fill.sad { background: #0066ff; }
         #emotion-meter .meter-fill.angry { background: #ff0040; }
         #emotion-meter .meter-fill.fear { background: #9933ff; }
         #emotion-meter .meter-value {
-            color: #bf00ff;
+            color: #ff4500;
             font-size: 0.8em;
             min-width: 40px;
             text-align: right;
@@ -3599,12 +3608,12 @@ def create_ui():
             font-size: 1.2em;
             font-weight: bold;
             transition: all 0.2s ease;
-            background: #05000a;
-            border: 2px solid #bf00ff;
-            color: #bf00ff;
+            background: #050200;
+            border: 2px solid #ff4500;
+            color: #ff4500;
             text-transform: uppercase;
             letter-spacing: 2px;
-            text-shadow: 0 0 10px #bf00ff;
+            text-shadow: 0 0 10px #ff4500;
         }
 
         /* RECORDING STATE - Bright red pulse */
@@ -3624,43 +3633,43 @@ def create_ui():
             animation: pulse-recording 0.8s ease-in-out infinite;
         }
 
-        /* PROCESSING STATE - Purple pulse */
+        /* PROCESSING STATE - Heater coil warming up */
         @keyframes pulse-processing {
             0%, 100% {
-                box-shadow: 0 0 10px #bf00ff;
-                border-color: #bf00ff;
+                box-shadow: 0 0 10px #ff4500;
+                border-color: #ff4500;
             }
             50% {
-                box-shadow: 0 0 25px #d633ff;
-                border-color: #d633ff;
+                box-shadow: 0 0 25px #ff8800;
+                border-color: #ff8800;
             }
         }
         .processing {
             animation: pulse-processing 1s ease-in-out infinite;
-            border-color: #bf00ff !important;
+            border-color: #ff4500 !important;
         }
 
-        /* SPEAKING STATE - Full neon glow */
-        @keyframes pulse-neon {
-            from { box-shadow: 0 0 10px #bf00ff; }
-            to { box-shadow: 0 0 25px #d633ff; }
+        /* SPEAKING STATE - Full plasma burn */
+        @keyframes pulse-burn {
+            from { box-shadow: 0 0 10px #ff4500; }
+            to { box-shadow: 0 0 25px #ff8800; }
         }
         .speaking {
-            animation: pulse-neon 0.5s infinite alternate;
-            border-color: #bf00ff !important;
-            color: #bf00ff !important;
-            text-shadow: 0 0 15px #bf00ff !important;
+            animation: pulse-burn 0.5s infinite alternate;
+            border-color: #ff4500 !important;
+            color: #ff4500 !important;
+            text-shadow: 0 0 15px #ff4500 !important;
         }
 
         #tts-warning {
-            color: #e6d9ff;
+            color: #ffcc99;
             font-size: 0.9em;
             text-transform: uppercase;
         }
         #audio-response {
             min-height: 60px;
-            border: 1px solid #bf00ff;
-            background: #05000a;
+            border: 1px solid #ff4500;
+            background: #050200;
         }
         #audio-response audio {
             width: 100%;
@@ -3681,21 +3690,21 @@ def create_ui():
             top: 0;
             bottom: 0;
             width: 3px;
-            background: linear-gradient(to bottom, #bf00ff, #d633ff);
+            background: linear-gradient(to bottom, #ff4500, #ff8800);
         }
 
-        /* Protocol Block - Black text on Purple header */
+        /* Protocol Block - Black text on Orange header */
         .tool-call-block,
         #main-chatbot .tool-call-block,
         #main-chatbot [role="assistant"] .tool-call-block {
-            background: #05000a !important;
-            border: 2px solid #bf00ff !important;
+            background: #050200 !important;
+            border: 2px solid #ff4500 !important;
             padding: 0 !important;
             margin: 8px 0 !important;
             font-size: 0.9em !important;
             position: relative !important;
             z-index: 10 !important;
-            box-shadow: 0 0 10px rgba(191, 0, 255, 0.3) !important;
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.3) !important;
             isolation: isolate;
         }
         .tool-call-block.tool-chain-continues::after {
@@ -3704,17 +3713,17 @@ def create_ui():
             bottom: -18px;
             left: 50%;
             transform: translateX(-50%);
-            color: #bf00ff;
+            color: #ff4500;
             font-size: 10px;
             z-index: 1;
-            background: #05000a;
+            background: #050200;
             padding: 2px 8px;
-            border: 1px solid #bf00ff;
+            border: 1px solid #ff4500;
         }
 
-        /* Protocol Step Badge - Neon style */
+        /* Protocol Step Badge - CAUTION TAPE style */
         .tool-step-badge {
-            background: #bf00ff !important;
+            background: #ff4500 !important;
             color: #000000 !important;
             padding: 4px 10px !important;
             font-size: 0.75em !important;
@@ -3725,10 +3734,10 @@ def create_ui():
             letter-spacing: 1px;
         }
 
-        /* Protocol Header - Purple bar */
+        /* Protocol Header - Orange bar */
         .tool-call-header,
         #main-chatbot .tool-call-header {
-            background: #bf00ff !important;
+            background: #ff4500 !important;
             color: #000000 !important;
             font-weight: bold !important;
             margin: 0 !important;
@@ -3740,28 +3749,28 @@ def create_ui():
             letter-spacing: 1px;
         }
 
-        /* Protocol Args - Lavender text on deep purple */
+        /* Protocol Args - Amber text on burnt black */
         .tool-call-args,
         #main-chatbot .tool-call-args {
-            color: #e6d9ff !important;
+            color: #ffb380 !important;
             margin: 0 !important;
             padding: 8px 12px !important;
             font-size: 0.85em !important;
             word-break: break-word !important;
             text-shadow: none !important;
             font-weight: normal !important;
-            background: #05000a !important;
-            border-top: 1px solid #3d1a66 !important;
+            background: #050200 !important;
+            border-top: 1px solid #331100 !important;
         }
 
-        /* Protocol Result - Lighter lavender output */
+        /* Protocol Result - Lighter amber output */
         .tool-call-result,
         #main-chatbot .tool-call-result,
         #main-chatbot [role="assistant"] .tool-call-result {
-            background: #0f0520 !important;
-            border-top: 2px solid #8c00bd !important;
+            background: #0f0500 !important;
+            border-top: 2px solid #cc6600 !important;
             border-left: none !important;
-            color: #d0b3ff !important;
+            color: #cc6600 !important;
             margin: 0 !important;
             padding: 8px 12px !important;
             font-size: 0.85em !important;
@@ -3772,14 +3781,14 @@ def create_ui():
             font-weight: normal !important;
         }
 
-        /* Copy button - Neon style */
+        /* Copy button - Plasma style */
         .message-copy-btn {
             position: absolute;
             top: 8px;
             right: 8px;
-            background: #05000a;
-            border: 1px solid #bf00ff;
-            color: #bf00ff;
+            background: #050200;
+            border: 1px solid #ff4500;
+            color: #ff4500;
             cursor: pointer;
             padding: 4px 8px;
             font-size: 12px;
@@ -3790,11 +3799,11 @@ def create_ui():
             opacity: 1;
         }
         .message-copy-btn:hover {
-            background: #bf00ff;
+            background: #ff4500;
             color: #000000;
         }
         .message-copy-btn.copied {
-            background: #bf00ff;
+            background: #ff4500;
             color: #000000;
         }
 
@@ -3814,40 +3823,40 @@ def create_ui():
             left: 0;
             right: 0;
             height: 60px;
-            background: linear-gradient(transparent, #05000a);
+            background: linear-gradient(transparent, #050200);
             pointer-events: none;
         }
         .expand-btn {
             display: block;
             text-align: center;
             padding: 8px;
-            color: #bf00ff;
+            color: #ff4500;
             cursor: pointer;
             font-size: 0.9em;
-            background: #05000a;
+            background: #050200;
             margin-top: 4px;
             transition: background 0.2s;
-            border: 1px solid #bf00ff;
+            border: 1px solid #ff4500;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
         .expand-btn:hover {
-            background: #bf00ff;
+            background: #ff4500;
             color: #000000;
         }
 
         /* Message timestamps */
         .message-timestamp {
             font-size: 0.7em;
-            color: #6b3d99;
+            color: #883300;
             margin-top: 4px;
             text-align: right;
             opacity: 0.7;
         }
 
-        /* Thinking indicator - Neon pulse bar */
+        /* Thinking indicator - Heating coil bar */
         .thinking-indicator {
-            color: #e6d9ff;
+            color: #ffcc99;
             font-style: normal;
             font-size: 0.9em;
             margin: 4px 0;
@@ -3859,8 +3868,8 @@ def create_ui():
         .thinking-bar-container {
             width: 150px;
             height: 6px;
-            background: #0f0520;
-            border: 1px solid #bf00ff;
+            background: #0f0500;
+            border: 1px solid #ff4500;
             overflow: hidden;
             position: relative;
         }
@@ -3870,7 +3879,7 @@ def create_ui():
             left: 0;
             height: 100%;
             width: 40%;
-            background: linear-gradient(90deg, transparent, #bf00ff, #d633ff, transparent);
+            background: linear-gradient(90deg, transparent, #ff4500, #ff8800, transparent);
             animation: thinking-slide 1.2s infinite linear;
         }
         @keyframes thinking-slide {
@@ -3881,12 +3890,12 @@ def create_ui():
         /* Token usage - HUD style */
         .token-usage {
             font-size: 0.75em;
-            color: #e6d9ff;
+            color: #ffcc99;
             padding: 6px 12px;
-            background: #05000a;
+            background: #050200;
             display: inline-flex;
             gap: 16px;
-            border: 1px solid #bf00ff;
+            border: 1px solid #ff4500;
             text-transform: uppercase;
         }
         .token-usage span {
@@ -3894,9 +3903,9 @@ def create_ui():
             align-items: center;
             gap: 6px;
         }
-        .token-usage .token-in { color: #bf00ff; }
-        .token-usage .token-out { color: #e6d9ff; }
-        .token-usage .token-total { color: #8c00bd; }
+        .token-usage .token-in { color: #ff4500; }
+        .token-usage .token-out { color: #ffcc99; }
+        .token-usage .token-total { color: #cc6600; }
 
         /* Mood indicator - HUD style */
         .mood-indicator {
@@ -3904,101 +3913,84 @@ def create_ui():
             align-items: center;
             gap: 8px;
             padding: 6px 12px;
-            background: #05000a;
+            background: #050200;
             font-size: 0.8em;
-            border: 1px solid #bf00ff;
+            border: 1px solid #ff4500;
             text-transform: uppercase;
         }
-        .mood-indicator .mood-text { color: #bf00ff; }
+        .mood-indicator .mood-text { color: #ff4500; }
 
         /* ============================================
-           CARBON FIBER BACKGROUNDS (Violet Tinted)
+           CARBON FIBER BACKGROUND (Orange Tinted)
+           Weave pattern on main container only
            ============================================ */
 
-        /* Main container - Forged carbon fiber (irregular swirl pattern, purple tinted) */
+        /* Main container - Carbon fiber weave (burnt orange tinted) */
         .gradio-container {
             background:
-                radial-gradient(ellipse 120% 80% at 10% 20%, #140828 0%, transparent 50%),
-                radial-gradient(ellipse 80% 60% at 90% 80%, #0a0518 0%, transparent 45%),
-                radial-gradient(ellipse 100% 70% at 50% 50%, #100620 0%, transparent 55%),
-                radial-gradient(ellipse 60% 90% at 30% 70%, #08041a 0%, transparent 40%),
-                radial-gradient(ellipse 90% 50% at 70% 30%, #0c0620 0%, transparent 50%),
-                radial-gradient(ellipse 50% 80% at 85% 15%, #0a0418 0%, transparent 45%),
-                radial-gradient(ellipse 70% 40% at 15% 85%, #0e0622 0%, transparent 40%) !important;
-            background-color: #05000a !important;
+                linear-gradient(27deg, #0a0400 5px, transparent 5px) 0 5px,
+                linear-gradient(207deg, #0a0400 5px, transparent 5px) 10px 0px,
+                linear-gradient(27deg, #0f0600 5px, transparent 5px) 0px 10px,
+                linear-gradient(207deg, #0f0600 5px, transparent 5px) 10px 5px,
+                linear-gradient(90deg, #080300 10px, transparent 10px),
+                linear-gradient(#090400 25%, #070300 25%, #070300 50%, transparent 50%, transparent 75%, #0b0500 75%, #0b0500) !important;
+            background-color: #050200 !important;
+            background-size: 20px 20px !important;
         }
 
-        /* Panels - Lighter carbon weave to stand out (purple tinted) */
+        /* Panels - Glass Effect over Carbon Weave */
         .block, .panel,
         .gradio-accordion,
         .gradio-group {
-            background:
-                linear-gradient(27deg, #1a0a30 5px, transparent 5px) 0 5px,
-                linear-gradient(207deg, #1a0a30 5px, transparent 5px) 10px 0px,
-                linear-gradient(27deg, #200c38 5px, transparent 5px) 0px 10px,
-                linear-gradient(207deg, #200c38 5px, transparent 5px) 10px 5px,
-                linear-gradient(90deg, #160828 10px, transparent 10px),
-                linear-gradient(#180a2c 25%, #140826 25%, #140826 50%, transparent 50%, transparent 75%, #1c0c32 75%, #1c0c32) !important;
-            background-color: #0f0520 !important;
-            background-size: 20px 20px !important;
-            border-color: #bf00ff !important;
+            background-color: var(--panel-bg) !important;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 69, 0, 0.3) !important;
         }
 
         /* Input areas - Solid dark for contrast */
         .gradio-dropdown,
         .gradio-textbox,
         .gradio-chatbot {
-            background-color: #05000a !important;
-        }
-
-        /* FORGED CARBON FIBER - Irregular swirl pattern (use .forged-carbon class) */
-        .forged-carbon {
-            background:
-                radial-gradient(ellipse 80% 50% at 20% 30%, #1a0a30 0%, transparent 50%),
-                radial-gradient(ellipse 60% 40% at 80% 70%, #160828 0%, transparent 40%),
-                radial-gradient(ellipse 50% 60% at 40% 60%, #1c0c32 0%, transparent 45%),
-                radial-gradient(ellipse 70% 30% at 60% 20%, #140826 0%, transparent 35%),
-                radial-gradient(ellipse 40% 50% at 90% 40%, #200c38 0%, transparent 50%),
-                linear-gradient(135deg, #08001a 25%, #0a0020 50%, #060015 75%) !important;
-            background-color: #08001a !important;
+            background-color: #050200 !important;
         }
 
         /* ============================================
-           CHATBOT MESSAGE STYLING - Neon Borders
+           CHATBOT MESSAGE STYLING - Plasma Borders
            ============================================ */
 
-        /* User messages - Lighter purple border */
+        /* User messages - Lighter amber border */
         #main-chatbot [role="user"],
         #main-chatbot .role-user,
         #main-chatbot .user {
-            background: #0f0520 !important;
-            border: 2px solid #8c00bd !important;
-            box-shadow: 0 0 10px rgba(140, 0, 189, 0.3);
+            background: #0f0500 !important;
+            border: 2px solid #cc6600 !important;
+            box-shadow: 0 0 10px rgba(204, 102, 0, 0.3);
         }
         #main-chatbot [role="user"] > p,
         #main-chatbot [role="user"] > span,
         #main-chatbot [role="user"] > div:not(.tool-call-block):not(.tool-chain-container) {
-            color: #e6d9ff !important;
+            color: #ffb380 !important;
         }
 
-        /* Assistant messages - Full neon purple border */
+        /* Assistant messages - Full plasma orange border */
         #main-chatbot [role="assistant"],
         #main-chatbot .role-assistant,
         #main-chatbot .bot {
-            background: #05000a !important;
-            border: 2px solid #bf00ff !important;
-            box-shadow: 0 0 10px rgba(191, 0, 255, 0.3);
+            background: #050200 !important;
+            border: 2px solid #ff4500 !important;
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
         }
         #main-chatbot [role="assistant"] > p,
         #main-chatbot [role="assistant"] > span,
         #main-chatbot [role="assistant"] > div:not(.tool-call-block):not(.tool-chain-container):not(.message-expandable) {
-            color: #e6d9ff !important;
+            color: #ffb380 !important;
             font-weight: 500 !important;
-            text-shadow: 0 0 3px rgba(191, 0, 255, 0.3) !important;
+            text-shadow: 0 0 3px rgba(255, 69, 0, 0.4) !important;
             letter-spacing: 0.5px;
         }
         #main-chatbot [role="assistant"] .message-expandable {
-            color: #e6d9ff !important;
+            color: #ffb380 !important;
         }
 
         /* Remove inner box styling */
@@ -4012,57 +4004,57 @@ def create_ui():
         }
 
         /* ============================================
-           INPUT AREA - Neon Border Active
+           INPUT AREA - Plasma Border Active
            ============================================ */
         #msg-input,
         #msg-input textarea {
-            background: #0f0520 !important;
-            border: 2px solid #bf00ff !important;
-            color: #e6d9ff !important;
+            background: #0f0500 !important;
+            border: 2px solid #ff4500 !important;
+            color: #ffb380 !important;
         }
         #msg-input:focus-within,
         #msg-input textarea:focus {
-            box-shadow: 0 0 15px rgba(191, 0, 255, 0.4) !important;
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.4) !important;
         }
 
         /* ============================================
-           TAB AND ACCORDION BORDERS - Neon
+           TAB AND ACCORDION BORDERS - Plasma
            ============================================ */
 
         .tabs, .tab-nav, .tabitem {
-            border-color: #bf00ff !important;
+            border-color: #ff4500 !important;
         }
 
         .gradio-accordion {
-            border: 1px solid #bf00ff !important;
+            border: 1px solid #ff4500 !important;
         }
         .gradio-accordion > .label-wrap {
-            border-bottom: 1px solid #bf00ff !important;
-            background: #05000a !important;
-            color: #bf00ff !important;
+            border-bottom: 1px solid #ff4500 !important;
+            background: #050200 !important;
+            color: #ff4500 !important;
         }
 
         .gradio-group {
-            border: 1px solid #bf00ff !important;
+            border: 1px solid #ff4500 !important;
         }
 
-        /* All inputs - Neon focus */
+        /* All inputs - Plasma focus */
         .gradio-dropdown, .gradio-textbox, .gradio-slider {
-            border-color: #3d1a66 !important;
+            border-color: #551a00 !important;
         }
         .gradio-dropdown:focus-within, .gradio-textbox:focus-within {
-            border-color: #bf00ff !important;
-            box-shadow: 0 0 10px rgba(191, 0, 255, 0.3) !important;
+            border-color: #ff4500 !important;
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.3) !important;
         }
 
-        /* Labels - Purple */
+        /* Labels - Amber */
         label, .label-wrap, .svelte-1gfkn6j {
-            color: #bf00ff !important;
+            color: #ff4500 !important;
         }
 
-        /* Button styling - Neon */
+        /* Button styling - Plasma */
         button.primary {
-            background: #bf00ff !important;
+            background: #ff4500 !important;
             color: #000000 !important;
             border: none !important;
             text-transform: uppercase;
@@ -4071,38 +4063,62 @@ def create_ui():
             text-shadow: none !important;
         }
         button.primary:hover {
-            background: #d633ff !important;
-            box-shadow: 0 0 20px rgba(191, 0, 255, 0.5) !important;
+            background: #ff6600 !important;
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.5) !important;
         }
 
         /* Secondary buttons */
         button.secondary {
-            background: #1a0a30 !important;
-            color: #bf00ff !important;
-            border: 1px solid #bf00ff !important;
+            background: #331100 !important;
+            color: #ff4500 !important;
+            border: 1px solid #ff4500 !important;
         }
         button.secondary:hover {
-            background: #bf00ff !important;
+            background: #ff4500 !important;
             color: #000000 !important;
         }
 
-        /* VAD Indicator - Neon pulse style */
+        /* VAD Indicator - Heater coil style */
         .vad-indicator {
             background: repeating-linear-gradient(
                 45deg,
-                #0a0518,
-                #0a0518 10px,
-                #140828 10px,
-                #140828 20px
+                #1a0500,
+                #1a0500 10px,
+                #330a00 10px,
+                #330a00 20px
             );
-            border: 1px solid #3d1a66;
-            color: #6b3d99;
+            border: 1px solid #551a00;
+            color: #883300;
         }
         .vad-indicator.active {
-            background: #bf00ff;
-            box-shadow: 0 0 30px #bf00ff;
+            background: #ff4500;
+            box-shadow: 0 0 30px #ff4500;
             color: #000;
             font-weight: bold;
+        }
+
+        /* ============================================
+           PHYSICAL SWITCH CHECKBOXES
+           Large, clicky industrial toggles
+           ============================================ */
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-500);
+            border-radius: 0 !important;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            background: transparent;
+            transition: all 0.15s ease;
+        }
+        input[type="checkbox"]:checked {
+            background: var(--primary-500);
+            box-shadow: 0 0 10px var(--primary-500);
+        }
+        input[type="checkbox"]:hover {
+            border-color: #ff6600;
+            box-shadow: 0 0 5px rgba(255, 69, 0, 0.5);
         }
     """
     
@@ -4257,8 +4273,8 @@ def create_ui():
         current_provider = gr.State(value=initial_provider)
         
         gr.HTML(f"""
-        <div style="border: 3px solid #bf00ff; background: #05000a; padding: 15px 20px; margin-bottom: 15px; box-shadow: 0 0 25px rgba(191, 0, 255, 0.4), inset 0 0 30px rgba(191, 0, 255, 0.08);">
-            <pre style="color: #bf00ff; font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; font-size: 16px; line-height: 1.15; margin: 0; text-align: center; letter-spacing: 0px; text-shadow: 0 0 10px rgba(191, 0, 255, 0.6);">
+        <div style="border: 3px solid #ff4500; background: #050200; padding: 15px 20px; margin-bottom: 15px; box-shadow: 0 0 25px rgba(255, 69, 0, 0.4), inset 0 0 30px rgba(255, 69, 0, 0.08);">
+            <pre style="color: #ff4500; font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; font-size: 16px; line-height: 1.15; margin: 0; text-align: center; letter-spacing: 0px; text-shadow: 0 0 10px rgba(255, 69, 0, 0.6);">
 ╔════════════════════════════════════════════════════════════════════════════════════╗
 ║  ████████╗████████╗ ███████╗ ██████╗    ██╗   ██╗ ██████╗ ██╗ ██████╗███████╗      ║
 ║  ╚══██╔══╝╚══██╔══╝ ██╔════╝ ╚════██╗   ██║   ██║██╔═══██╗██║██╔════╝██╔════╝      ║
@@ -4268,8 +4284,8 @@ def create_ui():
 ║     ╚═╝      ╚═╝    ╚══════╝ ╚══════╝     ╚═══╝   ╚═════╝ ╚═╝ ╚═════╝╚══════╝      ║
 ╚════════════════════════════════════════════════════════════════════════════════════╝
             </pre>
-            <div style="text-align: center; color: #e6d9ff; font-size: 0.9em; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">
-                Multi-Character • Memory • Tools • Vision • MCP &nbsp;|&nbsp; <span style="color: #d0b3ff;">Running on {PLATFORM.title()}{" (WSL)" if IS_WSL else ""}</span>
+            <div style="text-align: center; color: #ffcc99; font-size: 0.9em; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">
+                Multi-Character • Memory • Tools • Vision • MCP &nbsp;|&nbsp; <span style="color: #ffcc99;">Running on {PLATFORM.title()}{" (WSL)" if IS_WSL else ""}</span>
             </div>
         </div>
         """)
