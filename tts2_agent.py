@@ -3430,44 +3430,32 @@ def create_ui():
            Split Toning: Neon Orange (structure) + Soft Amber (reading)
            ============================================ */
 
-        /* CSS Variables - Split Toning Palette */
+        /* CSS Variables - Clean Black + Lapis Lazuli */
         :root {
-            /* FORCE GRADIO INTERNAL VARIABLES TO ORANGE */
-            --color-accent: #ff4500 !important;
+            /* FORCE GRADIO INTERNAL VARIABLES TO LAPIS LAZULI */
+            --color-accent: #00BFFF !important;
             --slider-color: #00BFFF !important;
             --loader-color: #00BFFF !important;
 
-            /* 1. Structure (Borders/Glows) - Aggressive Neon */
-            --primary-500: #ff4500;
-            --plasma-primary: #ff4500;
-            --plasma-glow: rgba(255, 69, 0, 0.4);
+            /* Structure - Lapis Lazuli */
+            --primary-500: #00BFFF;
+            --plasma-primary: #00BFFF;
+            --plasma-glow: rgba(0, 191, 255, 0.4);
 
-            /* 2. Text - Lapis Lazuli Glowing */
+            /* Text - Lapis Lazuli Glowing */
             --body-text-color: #00BFFF;
             --block-label-text-color: #00BFFF;
             --plasma-text: #00BFFF;
-            --plasma-dim: #006699;
-            --plasma-border-dim: #551a00;
 
-            /* 3. Background Tints */
+            /* Backgrounds - Pure Black */
             --plasma-bg: #000000;
-            --plasma-bg-light: #000000;
-            --bg-overlay: rgba(0, 0, 0, 0.6);
-            --panel-bg: rgba(20, 10, 5, 0.7);
-
-            /* Carbon Fiber Colors (tinted toward burnt orange) */
-            --carbon-dark-1: #0a0400;
-            --carbon-dark-2: #0f0600;
-            --carbon-dark-3: #080300;
-            --carbon-light-1: #151008;
-            --carbon-light-2: #1a1208;
-            --carbon-light-3: #120c05;
+            --panel-bg: #000000;
         }
 
         /* Import monospace fonts */
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fira+Code:wght@400;500;700&display=swap');
 
-        /* SOLID BASE - Prevent desktop/browser background from showing through */
+        /* SOLID BLACK BASE */
         html, body {
             background-color: #000000 !important;
             min-height: 100vh;
@@ -3484,35 +3472,35 @@ def create_ui():
             text-shadow: 0 0 4px rgba(0, 191, 255, 0.5);
         }
 
-        /* Main container - Black with orange border */
+        /* Main container - Black with lapis lazuli border */
         .gradio-container {
             background-color: #000000 !important;
-            border: 2px solid #ff4500 !important;
-            box-shadow: 0 0 20px rgba(255, 69, 0, 0.3) !important;
+            border: 2px solid #00BFFF !important;
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.3) !important;
         }
 
-        /* Scrollbars - Burnt Orange */
+        /* Scrollbars - Lapis Lazuli */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         ::-webkit-scrollbar-track {
             background: #000000;
-            border: 1px solid #551a00;
+            border: 1px solid #006699;
         }
         ::-webkit-scrollbar-thumb {
-            background: #ff4500;
+            background: #00BFFF;
             border: none;
-            filter: drop-shadow(0 0 5px #ff4500);
+            filter: drop-shadow(0 0 5px #00BFFF);
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #ff6600;
+            background: #33CCFF;
         }
 
         /* Force slider accent color */
         input[type="range"] {
             accent-color: #00BFFF !important;
-            filter: drop-shadow(0 0 5px #ff4500);
+            filter: drop-shadow(0 0 5px #00BFFF);
         }
 
         /* ============================================
@@ -3524,12 +3512,12 @@ def create_ui():
             align-items: center;
             padding: 8px 16px;
             background: #000000;
-            border: 2px solid #ff4500;
+            border: 2px solid #00BFFF;
             margin-bottom: 10px;
             font-size: 0.85em;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 0 15px rgba(255, 69, 0, 0.3);
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.3);
         }
         .hud-item {
             display: flex;
@@ -3543,7 +3531,7 @@ def create_ui():
         .hud-value {
             color: #00BFFF;
             font-weight: bold;
-            text-shadow: 0 0 5px #ff4500;
+            text-shadow: 0 0 5px #00BFFF;
         }
         .hud-value.warning { color: #00BFFF; }
         .hud-value.danger { color: #00BFFF; }
@@ -3557,7 +3545,7 @@ def create_ui():
             gap: 10px;
             padding: 6px 12px;
             background: #000000;
-            border: 1px solid #ff4500;
+            border: 1px solid #00BFFF;
         }
         #emotion-meter .meter-label {
             color: #006699;
@@ -3569,7 +3557,7 @@ def create_ui():
             flex: 1;
             height: 12px;
             background: #000000;
-            border: 1px solid #551a00;
+            border: 1px solid #006699;
             position: relative;
             overflow: hidden;
         }
@@ -3578,7 +3566,7 @@ def create_ui():
             transition: width 0.3s, background 0.3s;
         }
         #emotion-meter .meter-fill.happy { background: #00ff41; }
-        #emotion-meter .meter-fill.neutral { background: #ff4500; }
+        #emotion-meter .meter-fill.neutral { background: #00BFFF; }
         #emotion-meter .meter-fill.sad { background: #0066ff; }
         #emotion-meter .meter-fill.angry { background: #ff0040; }
         #emotion-meter .meter-fill.fear { background: #9933ff; }
@@ -3599,11 +3587,11 @@ def create_ui():
             font-weight: bold;
             transition: all 0.2s ease;
             background: #000000;
-            border: 2px solid #ff4500;
+            border: 2px solid #00BFFF;
             color: #00BFFF;
             text-transform: uppercase;
             letter-spacing: 2px;
-            text-shadow: 0 0 10px #ff4500;
+            text-shadow: 0 0 10px #00BFFF;
         }
 
         /* RECORDING STATE - Bright red pulse */
@@ -3623,15 +3611,15 @@ def create_ui():
             animation: pulse-recording 0.8s ease-in-out infinite;
         }
 
-        /* PROCESSING STATE - Heater coil warming up */
+        /* PROCESSING STATE - Lapis pulse */
         @keyframes pulse-processing {
             0%, 100% {
-                box-shadow: 0 0 10px #ff4500;
+                box-shadow: 0 0 10px #00BFFF;
                 border-color: #00BFFF;
             }
             50% {
-                box-shadow: 0 0 25px #ff8800;
-                border-color: #ff8800;
+                box-shadow: 0 0 25px #33CCFF;
+                border-color: #33CCFF;
             }
         }
         .processing {
@@ -3639,16 +3627,16 @@ def create_ui():
             border-color: #00BFFF !important;
         }
 
-        /* SPEAKING STATE - Full plasma burn */
+        /* SPEAKING STATE - Full lapis glow */
         @keyframes pulse-burn {
-            from { box-shadow: 0 0 10px #ff4500; }
-            to { box-shadow: 0 0 25px #ff8800; }
+            from { box-shadow: 0 0 10px #00BFFF; }
+            to { box-shadow: 0 0 25px #33CCFF; }
         }
         .speaking {
             animation: pulse-burn 0.5s infinite alternate;
             border-color: #00BFFF !important;
             color: #00BFFF !important;
-            text-shadow: 0 0 15px #ff4500 !important;
+            text-shadow: 0 0 15px #00BFFF !important;
         }
 
         #tts-warning {
@@ -3658,7 +3646,7 @@ def create_ui():
         }
         #audio-response {
             min-height: 60px;
-            border: 1px solid #ff4500;
+            border: 1px solid #00BFFF;
             background: #000000;
         }
         #audio-response audio {
@@ -3680,21 +3668,21 @@ def create_ui():
             top: 0;
             bottom: 0;
             width: 3px;
-            background: linear-gradient(to bottom, #ff4500, #ff8800);
+            background: linear-gradient(to bottom, #00BFFF, #33CCFF);
         }
 
-        /* Protocol Block - Black text on Orange header */
+        /* Protocol Block - Black text on Lapis header */
         .tool-call-block,
         #main-chatbot .tool-call-block,
         #main-chatbot [role="assistant"] .tool-call-block {
             background: #000000 !important;
-            border: 2px solid #ff4500 !important;
+            border: 2px solid #00BFFF !important;
             padding: 0 !important;
             margin: 8px 0 !important;
             font-size: 0.9em !important;
             position: relative !important;
             z-index: 10 !important;
-            box-shadow: 0 0 10px rgba(255, 69, 0, 0.3) !important;
+            box-shadow: 0 0 10px rgba(0, 191, 255, 0.3) !important;
             isolation: isolate;
         }
         .tool-call-block.tool-chain-continues::after {
@@ -3708,12 +3696,12 @@ def create_ui():
             z-index: 1;
             background: #000000;
             padding: 2px 8px;
-            border: 1px solid #ff4500;
+            border: 1px solid #00BFFF;
         }
 
-        /* Protocol Step Badge - CAUTION TAPE style */
+        /* Protocol Step Badge - Lapis style */
         .tool-step-badge {
-            background: #ff4500 !important;
+            background: #00BFFF !important;
             color: #000000 !important;
             padding: 4px 10px !important;
             font-size: 0.75em !important;
@@ -3724,10 +3712,10 @@ def create_ui():
             letter-spacing: 1px;
         }
 
-        /* Protocol Header - Orange bar */
+        /* Protocol Header - Lapis bar */
         .tool-call-header,
         #main-chatbot .tool-call-header {
-            background: #ff4500 !important;
+            background: #00BFFF !important;
             color: #000000 !important;
             font-weight: bold !important;
             margin: 0 !important;
@@ -3739,7 +3727,7 @@ def create_ui():
             letter-spacing: 1px;
         }
 
-        /* Protocol Args - Amber text on burnt black */
+        /* Protocol Args - Lapis text on black */
         .tool-call-args,
         #main-chatbot .tool-call-args {
             color: #00BFFF !important;
@@ -3750,17 +3738,17 @@ def create_ui():
             text-shadow: none !important;
             font-weight: normal !important;
             background: #000000 !important;
-            border-top: 1px solid #331100 !important;
+            border-top: 1px solid #006699 !important;
         }
 
-        /* Protocol Result - Lighter amber output */
+        /* Protocol Result - Dim lapis output */
         .tool-call-result,
         #main-chatbot .tool-call-result,
         #main-chatbot [role="assistant"] .tool-call-result {
             background: #000000 !important;
-            border-top: 2px solid #cc6600 !important;
+            border-top: 2px solid #0088AA !important;
             border-left: none !important;
-            color: #cc6600 !important;
+            color: #0088AA !important;
             margin: 0 !important;
             padding: 8px 12px !important;
             font-size: 0.85em !important;
@@ -3771,13 +3759,13 @@ def create_ui():
             font-weight: normal !important;
         }
 
-        /* Copy button - Plasma style */
+        /* Copy button - Lapis style */
         .message-copy-btn {
             position: absolute;
             top: 8px;
             right: 8px;
             background: #000000;
-            border: 1px solid #ff4500;
+            border: 1px solid #00BFFF;
             color: #00BFFF;
             cursor: pointer;
             padding: 4px 8px;
@@ -3789,11 +3777,11 @@ def create_ui():
             opacity: 1;
         }
         .message-copy-btn:hover {
-            background: #ff4500;
+            background: #00BFFF;
             color: #000000;
         }
         .message-copy-btn.copied {
-            background: #ff4500;
+            background: #00BFFF;
             color: #000000;
         }
 
@@ -3826,12 +3814,12 @@ def create_ui():
             background: #000000;
             margin-top: 4px;
             transition: background 0.2s;
-            border: 1px solid #ff4500;
+            border: 1px solid #00BFFF;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
         .expand-btn:hover {
-            background: #ff4500;
+            background: #00BFFF;
             color: #000000;
         }
 
@@ -3859,7 +3847,7 @@ def create_ui():
             width: 150px;
             height: 6px;
             background: #000000;
-            border: 1px solid #ff4500;
+            border: 1px solid #00BFFF;
             overflow: hidden;
             position: relative;
         }
@@ -3869,7 +3857,7 @@ def create_ui():
             left: 0;
             height: 100%;
             width: 40%;
-            background: linear-gradient(90deg, transparent, #ff4500, #ff8800, transparent);
+            background: linear-gradient(90deg, transparent, #00BFFF, #33CCFF, transparent);
             animation: thinking-slide 1.2s infinite linear;
         }
         @keyframes thinking-slide {
@@ -3885,7 +3873,7 @@ def create_ui():
             background: #000000;
             display: inline-flex;
             gap: 16px;
-            border: 1px solid #ff4500;
+            border: 1px solid #00BFFF;
             text-transform: uppercase;
         }
         .token-usage span {
@@ -3895,7 +3883,7 @@ def create_ui():
         }
         .token-usage .token-in { color: #00BFFF; }
         .token-usage .token-out { color: #00BFFF; }
-        .token-usage .token-total { color: #cc6600; }
+        .token-usage .token-total { color: #0088AA; }
 
         /* Mood indicator - HUD style */
         .mood-indicator {
@@ -3905,13 +3893,13 @@ def create_ui():
             padding: 6px 12px;
             background: #000000;
             font-size: 0.8em;
-            border: 1px solid #ff4500;
+            border: 1px solid #00BFFF;
             text-transform: uppercase;
         }
         .mood-indicator .mood-text { color: #00BFFF; }
 
         /* ============================================
-           PANELS - Black with Orange Borders
+           PANELS - Black with Lapis Lazuli Borders
            ============================================ */
 
         /* All panels - Solid black */
@@ -3919,7 +3907,7 @@ def create_ui():
         .gradio-accordion,
         .gradio-group {
             background-color: #000000 !important;
-            border: 1px solid #ff4500 !important;
+            border: 1px solid #00BFFF !important;
         }
 
         /* Input areas - Black */
@@ -3933,13 +3921,12 @@ def create_ui():
            CHATBOT MESSAGE STYLING - Plasma Borders
            ============================================ */
 
-        /* User messages - Lighter amber border */
+        /* User messages - Black with lapis border */
         #main-chatbot [role="user"],
         #main-chatbot .role-user,
         #main-chatbot .user {
             background: #000000 !important;
-            border: 2px solid #cc6600 !important;
-            box-shadow: 0 0 10px rgba(204, 102, 0, 0.3);
+            border: 1px solid #0088AA !important;
         }
         #main-chatbot [role="user"] > p,
         #main-chatbot [role="user"] > span,
@@ -3947,21 +3934,17 @@ def create_ui():
             color: #00BFFF !important;
         }
 
-        /* Assistant messages - Full plasma orange border */
+        /* Assistant messages - Black with lapis border */
         #main-chatbot [role="assistant"],
         #main-chatbot .role-assistant,
         #main-chatbot .bot {
             background: #000000 !important;
-            border: 2px solid #ff4500 !important;
-            box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
+            border: 1px solid #00BFFF !important;
         }
         #main-chatbot [role="assistant"] > p,
         #main-chatbot [role="assistant"] > span,
         #main-chatbot [role="assistant"] > div:not(.tool-call-block):not(.tool-chain-container):not(.message-expandable) {
             color: #00BFFF !important;
-            font-weight: 500 !important;
-            text-shadow: 0 0 3px rgba(255, 69, 0, 0.4) !important;
-            letter-spacing: 0.5px;
         }
         #main-chatbot [role="assistant"] .message-expandable {
             color: #00BFFF !important;
@@ -3978,21 +3961,21 @@ def create_ui():
         }
 
         /* ============================================
-           INPUT AREA - Plasma Border Active
+           INPUT AREA - Lapis Border Active
            ============================================ */
         #msg-input,
         #msg-input textarea {
             background: #000000 !important;
-            border: 2px solid #ff4500 !important;
+            border: 2px solid #00BFFF !important;
             color: #00BFFF !important;
         }
         #msg-input:focus-within,
         #msg-input textarea:focus {
-            box-shadow: 0 0 15px rgba(255, 69, 0, 0.4) !important;
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.4) !important;
         }
 
         /* ============================================
-           TAB AND ACCORDION BORDERS - Plasma
+           TAB AND ACCORDION BORDERS - Lapis Lazuli
            ============================================ */
 
         .tabs, .tab-nav, .tabitem {
@@ -4000,25 +3983,25 @@ def create_ui():
         }
 
         .gradio-accordion {
-            border: 1px solid #ff4500 !important;
+            border: 1px solid #00BFFF !important;
         }
         .gradio-accordion > .label-wrap {
-            border-bottom: 1px solid #ff4500 !important;
+            border-bottom: 1px solid #00BFFF !important;
             background: #000000 !important;
             color: #00BFFF !important;
         }
 
         .gradio-group {
-            border: 1px solid #ff4500 !important;
+            border: 1px solid #00BFFF !important;
         }
 
-        /* All inputs - Plasma focus */
+        /* All inputs - Lapis focus */
         .gradio-dropdown, .gradio-textbox, .gradio-slider {
-            border-color: #551a00 !important;
+            border-color: #006699 !important;
         }
         .gradio-dropdown:focus-within, .gradio-textbox:focus-within {
             border-color: #00BFFF !important;
-            box-shadow: 0 0 10px rgba(255, 69, 0, 0.3) !important;
+            box-shadow: 0 0 10px rgba(0, 191, 255, 0.3) !important;
         }
 
         /* Labels - Amber */
@@ -4026,103 +4009,113 @@ def create_ui():
             color: #00BFFF !important;
         }
 
-        /* Button styling - Plasma */
+        /* Button styling - Lapis */
         button.primary {
-            background: #ff4500 !important;
-            color: #000000 !important;
-            border: none !important;
+            background: #000000 !important;
+            color: #00BFFF !important;
+            border: 2px solid #00BFFF !important;
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: bold;
             text-shadow: none !important;
         }
         button.primary:hover {
-            background: #ff6600 !important;
-            box-shadow: 0 0 20px rgba(255, 69, 0, 0.5) !important;
+            background: #00BFFF !important;
+            color: #000000 !important;
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.5) !important;
         }
 
         /* Secondary buttons */
         button.secondary {
-            background: #331100 !important;
+            background: #000000 !important;
             color: #00BFFF !important;
-            border: 1px solid #ff4500 !important;
+            border: 1px solid #00BFFF !important;
         }
         button.secondary:hover {
-            background: #ff4500 !important;
+            background: #00BFFF !important;
             color: #000000 !important;
         }
 
-        /* VAD Indicator - Heater coil style */
+        /* VAD Indicator - Lapis style */
         .vad-indicator {
             background: repeating-linear-gradient(
                 45deg,
                 #000000,
                 #000000 10px,
-                #330a00 10px,
-                #330a00 20px
+                #003344 10px,
+                #003344 20px
             );
-            border: 1px solid #551a00;
+            border: 1px solid #006699;
             color: #006699;
         }
         .vad-indicator.active {
-            background: #ff4500;
-            box-shadow: 0 0 30px #ff4500;
+            background: #00BFFF;
+            box-shadow: 0 0 30px #00BFFF;
             color: #000;
             font-weight: bold;
         }
 
         /* ============================================
            PHYSICAL SWITCH CHECKBOXES
-           Large, clicky industrial toggles
+           Black unchecked, grey hover, lapis filled
            ============================================ */
         input[type="checkbox"] {
             width: 20px;
             height: 20px;
-            border: 2px solid var(--primary-500);
+            border: 2px solid #00BFFF;
             border-radius: 0 !important;
             appearance: none;
             -webkit-appearance: none;
             cursor: pointer;
-            background: transparent;
+            background: #000000 !important;
+            background-color: #000000 !important;
             transition: all 0.15s ease;
         }
         input[type="checkbox"]:checked {
-            background: #ff4500 !important;
+            background: #00BFFF !important;
             background-color: #00BFFF !important;
             border-color: #00BFFF !important;
-            box-shadow: 0 0 10px #ff4500;
+            box-shadow: 0 0 10px #00BFFF;
         }
-        input[type="checkbox"]:hover {
-            border-color: #ff6600;
-            box-shadow: 0 0 5px rgba(255, 69, 0, 0.5);
+        input[type="checkbox"]:hover:not(:checked) {
+            background: #333333 !important;
+            background-color: #333333 !important;
+            border-color: #00BFFF;
+            box-shadow: 0 0 5px rgba(0, 191, 255, 0.5);
         }
 
-        /* Force Radio Buttons to Orange */
+        /* Force Radio Buttons to Lapis */
+        input[type="radio"] {
+            background: #000000 !important;
+            background-color: #000000 !important;
+        }
         input[type="radio"]:checked {
-            background: #ff4500 !important;
+            background: #00BFFF !important;
             background-color: #00BFFF !important;
             border-color: #00BFFF !important;
-            box-shadow: 0 0 10px #ff4500;
+            box-shadow: 0 0 10px #00BFFF;
         }
-        input[type="radio"]:hover {
-            border-color: #ff6600;
-            box-shadow: 0 0 5px rgba(255, 69, 0, 0.5);
+        input[type="radio"]:hover:not(:checked) {
+            background: #333333 !important;
+            background-color: #333333 !important;
+            border-color: #00BFFF;
+            box-shadow: 0 0 5px rgba(0, 191, 255, 0.5);
         }
 
-        /* Force Gradio Slider Track and Thumb to Orange */
+        /* Force Gradio Slider Track and Thumb to Lapis Lazuli */
         input[type="range"]::-webkit-slider-runnable-track {
-            background: linear-gradient(to right, #ff4500, #ff4500) !important;
+            background: linear-gradient(to right, #00BFFF, #00BFFF) !important;
         }
         input[type="range"]::-webkit-slider-thumb {
-            background: #ff4500 !important;
-            box-shadow: 0 0 8px #ff4500;
+            background: #00BFFF !important;
+            box-shadow: 0 0 8px #00BFFF;
         }
         input[type="range"]::-moz-range-track {
-            background: #ff4500 !important;
+            background: #00BFFF !important;
         }
         input[type="range"]::-moz-range-thumb {
-            background: #ff4500 !important;
-            box-shadow: 0 0 8px #ff4500;
+            background: #00BFFF !important;
+            box-shadow: 0 0 8px #00BFFF;
         }
 
         /* Override Gradio's internal toggle/switch styling */
@@ -4138,7 +4131,7 @@ def create_ui():
            Black text on orange background when selected
            ============================================ */
 
-        /* Radio button labels - purple text by default */
+        /* Radio button labels - bright yellow text by default */
         .gr-radio label,
         [data-testid="radio"] label,
         .wrap label span,
@@ -4159,7 +4152,7 @@ def create_ui():
         .gr-radio .selected,
         label.selected span,
         label[data-selected="true"] span {
-            background: #ff4500 !important;
+            background: #00BFFF !important;
             color: #000000 !important;
         }
 
@@ -4178,7 +4171,7 @@ def create_ui():
         button[role="radio"][aria-checked="true"],
         [role="radiogroup"] button[aria-checked="true"],
         [role="radiogroup"] label.selected {
-            background: #ff4500 !important;
+            background: #00BFFF !important;
             color: #000000 !important;
         }
 
@@ -4190,45 +4183,45 @@ def create_ui():
             color: #000000 !important;
         }
 
-        /* Unselected radio buttons - black bg with orange border */
+        /* Unselected radio buttons - black bg with lapis border */
         .gr-radio label:not(.selected),
         [data-testid="radio"] label:not(.selected),
         button[role="radio"][aria-checked="false"],
         [role="radiogroup"] button[aria-checked="false"],
         [role="radiogroup"] label:not(.selected) {
             background: #000000 !important;
-            border: 1px solid #ff4500 !important;
+            border: 1px solid #00BFFF !important;
             color: #00BFFF !important;
         }
 
         /* ============================================
-           BUTTON FIXES - Black bg with orange outline
+           BUTTON FIXES - Black bg with lapis outline
            ============================================ */
 
-        /* Primary buttons - now black with orange border */
+        /* Primary buttons - black with lapis border */
         button.primary {
             background: #000000 !important;
             color: #00BFFF !important;
-            border: 2px solid #ff4500 !important;
+            border: 2px solid #00BFFF !important;
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: bold;
             text-shadow: none !important;
         }
         button.primary:hover {
-            background: #ff4500 !important;
+            background: #00BFFF !important;
             color: #000000 !important;
-            box-shadow: 0 0 20px rgba(255, 69, 0, 0.5) !important;
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.5) !important;
         }
 
-        /* Secondary buttons - black with orange border */
+        /* Secondary buttons - black with lapis border */
         button.secondary {
             background: #000000 !important;
             color: #00BFFF !important;
-            border: 1px solid #ff4500 !important;
+            border: 1px solid #00BFFF !important;
         }
         button.secondary:hover {
-            background: #ff4500 !important;
+            background: #00BFFF !important;
             color: #000000 !important;
         }
 
@@ -4236,18 +4229,18 @@ def create_ui():
         button:not(.primary):not(.secondary) {
             background: #000000 !important;
             color: #00BFFF !important;
-            border: 1px solid #ff4500 !important;
+            border: 1px solid #00BFFF !important;
         }
         button:not(.primary):not(.secondary):hover {
-            background: #ff4500 !important;
+            background: #00BFFF !important;
             color: #000000 !important;
         }
 
         /* ============================================
-           TEXT COLOR FIX - Lightsaber Purple
+           TEXT COLOR FIX - Soft gold (like Tips box)
            ============================================ */
 
-        /* Override body text to purple */
+        /* Override body text to soft gold */
         body, p, span, div {
             color: #00BFFF !important;
         }
@@ -4257,7 +4250,7 @@ def create_ui():
             color: #00BFFF !important;
         }
 
-        /* Input text - purple */
+        /* Input text - soft gold */
         input, textarea, select {
             color: #00BFFF !important;
         }
@@ -4290,22 +4283,22 @@ def create_ui():
         }
 
         /* ============================================
-           FORCE ALL BUTTONS BLACK WITH ORANGE OUTLINE
+           FORCE ALL BUTTONS BLACK WITH LAPIS OUTLINE
            Override Gradio's default button styling completely
            ============================================ */
         button, .gr-button, [class*="button"] {
             background: #000000 !important;
             background-color: #000000 !important;
             color: #00BFFF !important;
-            border: 1px solid #ff4500 !important;
+            border: 1px solid #00BFFF !important;
         }
         button:hover, .gr-button:hover, [class*="button"]:hover {
-            background: #ff4500 !important;
+            background: #00BFFF !important;
             background-color: #00BFFF !important;
             color: #000000 !important;
         }
     """
-
+    
     # JavaScript for keyboard shortcuts, copy buttons, HUD updates, and expandable messages
     keyboard_js = """
     function() {
@@ -4457,8 +4450,8 @@ def create_ui():
         current_provider = gr.State(value=initial_provider)
         
         gr.HTML(f"""
-        <div style="border: 3px solid #ff4500; background: #000000; padding: 15px 20px; margin-bottom: 15px; box-shadow: 0 0 25px rgba(255, 69, 0, 0.4), inset 0 0 30px rgba(255, 69, 0, 0.08);">
-            <pre style="color: #00BFFF; font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; font-size: 16px; line-height: 1.15; margin: 0; text-align: center; letter-spacing: 0px; text-shadow: 0 0 10px rgba(255, 69, 0, 0.6);">
+        <div style="border: 3px solid #00BFFF; background: #000000; padding: 15px 20px; margin-bottom: 15px; box-shadow: 0 0 25px rgba(0, 191, 255, 0.4), inset 0 0 30px rgba(0, 191, 255, 0.08);">
+            <pre style="color: #00BFFF; font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; font-size: 16px; line-height: 1.15; margin: 0; text-align: center; letter-spacing: 0px; text-shadow: 0 0 10px rgba(0, 191, 255, 0.6);">
 ╔════════════════════════════════════════════════════════════════════════════════════╗
 ║  ████████╗████████╗ ███████╗ ██████╗    ██╗   ██╗ ██████╗ ██╗ ██████╗███████╗      ║
 ║  ╚══██╔══╝╚══██╔══╝ ██╔════╝ ╚════██╗   ██║   ██║██╔═══██╗██║██╔════╝██╔════╝      ║
@@ -5774,7 +5767,7 @@ def process_group_chat_wrapper(user_message, chat_history, character_id, voice_f
 
 
 if __name__ == "__main__":
-    # Force orange color at very start of execution
+    # Force orange color at very start of execution (Engineered Amber theme)
     sys.stdout.write("\033[38;2;255;69;0m")
     sys.stderr.write("\033[38;2;255;69;0m")
     sys.stdout.flush()
@@ -5785,7 +5778,7 @@ if __name__ == "__main__":
     print("   Multi-Character • Memory • Tools • Vision • MCP")
     print(f"   Platform: {PLATFORM.title()}" + (" (WSL)" if IS_WSL else ""))
     print("="*60)
-    
+
     # Ensure orange stays active
     sys.stdout.write("\033[38;2;255;69;0m")
 
