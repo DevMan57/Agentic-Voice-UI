@@ -24,76 +24,79 @@ import hashlib
 # ============================================================================
 
 def create_dark_theme():
-    """Create a sleek dark theme matching the batch file color scheme"""
+    """Create NEON VIOLET theme - Synthwave / Cyberpunk Purple"""
     return gr.themes.Soft(
-        primary_hue="emerald",  # Closest to our green
-        secondary_hue="cyan",   # Closest to our teal
+        primary_hue="purple",
+        secondary_hue="violet",
         neutral_hue="slate",
-        font=gr.themes.GoogleFont("Inter"),
+        font=gr.themes.GoogleFont("Fira Code"),
     ).set(
-        # Base colors
-        body_background_fill="#0f0f0f",
-        body_background_fill_dark="#0f0f0f",
-        background_fill_primary="#1a1a1a",
-        background_fill_primary_dark="#1a1a1a",
-        background_fill_secondary="#252525",
-        background_fill_secondary_dark="#252525",
-        
-        # Block colors
-        block_background_fill="#1a1a1a",
-        block_background_fill_dark="#1a1a1a",
-        block_border_color="#00645A",  # Teal-green for visibility
-        block_border_color_dark="#00645A",
-        block_label_background_fill="#252525",
-        block_label_background_fill_dark="#252525",
-        block_title_text_color="#ffffff",
-        block_title_text_color_dark="#ffffff",
-        
-        # Input colors
-        input_background_fill="#252525",
-        input_background_fill_dark="#252525",
-        input_border_color="#404040",
-        input_border_color_dark="#404040",
-        input_placeholder_color="#808080",
-        input_placeholder_color_dark="#808080",
-        
-        # Button colors - Exact batch file green rgb(0, 120, 70)
-        button_primary_background_fill="#007846",  # Exact batch file C_GREEN
-        button_primary_background_fill_dark="#007846",
-        button_primary_background_fill_hover="#00A05C",  # Lighter green on hover
-        button_primary_background_fill_hover_dark="#00A05C",
-        button_primary_text_color="#ffffff",
-        button_primary_text_color_dark="#ffffff",
-        # Secondary buttons - Same green scheme
-        button_secondary_background_fill="#007846",  # Same as primary
-        button_secondary_background_fill_dark="#007846",
-        button_secondary_background_fill_hover="#00A05C",  # Lighter on hover
-        button_secondary_background_fill_hover_dark="#00A05C",
-        button_secondary_text_color="#ffffff",
-        button_secondary_text_color_dark="#ffffff",
-        
-        # Slider colors - Green accent
-        slider_color="#007846",  # Green from batch file
-        slider_color_dark="#007846",
-        
-        # Checkbox colors - Green accent
-        checkbox_background_color_selected="#007846",
-        checkbox_background_color_selected_dark="#007846",
-        checkbox_border_color_selected="#007846",
-        checkbox_border_color_selected_dark="#007846",
-        
-        # Text colors
-        body_text_color="#e5e5e5",
-        body_text_color_dark="#e5e5e5",
-        body_text_color_subdued="#a0a0a0",
-        body_text_color_subdued_dark="#a0a0a0",
-        
-        # Border radius
-        block_radius="12px",
-        container_radius="12px",
-        input_radius="8px",
-        button_large_radius="8px",
-        
+        # Base colors - Deep violet-black
+        body_background_fill="#05000a",
+        body_background_fill_dark="#05000a",
+        background_fill_primary="#0f0520",
+        background_fill_primary_dark="#0f0520",
+        background_fill_secondary="#1a0a30",
+        background_fill_secondary_dark="#1a0a30",
+
+        # Block colors - Deep purple with neon borders
+        block_background_fill="#0f0520",
+        block_background_fill_dark="#0f0520",
+        block_border_color="#bf00ff",  # Electric Purple
+        block_border_color_dark="#bf00ff",
+        block_label_background_fill="#1a0a30",
+        block_label_background_fill_dark="#1a0a30",
+        block_title_text_color="#d0b3ff",  # Pale lavender for readability
+        block_title_text_color_dark="#d0b3ff",
+
+        # Input colors - Deep purple
+        input_background_fill="#1a0a30",
+        input_background_fill_dark="#1a0a30",
+        input_border_color="#3d1a66",
+        input_border_color_dark="#3d1a66",
+        input_placeholder_color="#6b3d99",
+        input_placeholder_color_dark="#6b3d99",
+
+        # Button colors - NEON VIOLET Purple
+        button_primary_background_fill="#bf00ff",
+        button_primary_background_fill_dark="#bf00ff",
+        button_primary_background_fill_hover="#d633ff",
+        button_primary_background_fill_hover_dark="#d633ff",
+        button_primary_text_color="#000000",  # Black text on purple = high vis
+        button_primary_text_color_dark="#000000",
+        # Secondary buttons
+        button_secondary_background_fill="#1a0a30",
+        button_secondary_background_fill_dark="#1a0a30",
+        button_secondary_background_fill_hover="#bf00ff",
+        button_secondary_background_fill_hover_dark="#bf00ff",
+        button_secondary_text_color="#bf00ff",
+        button_secondary_text_color_dark="#bf00ff",
+
+        # Slider colors - NEON VIOLET Purple
+        slider_color="#bf00ff",
+        slider_color_dark="#bf00ff",
+
+        # Checkbox colors - Electric Purple
+        checkbox_background_color_selected="#bf00ff",
+        checkbox_background_color_selected_dark="#bf00ff",
+        checkbox_border_color_selected="#bf00ff",
+        checkbox_border_color_selected_dark="#bf00ff",
+
+        # Text colors - Pale Lavender for easy reading
+        body_text_color="#e6d9ff",
+        body_text_color_dark="#e6d9ff",
+        body_text_color_subdued="#8c00bd",
+        body_text_color_subdued_dark="#8c00bd",
+
+        # Border radius - CYBERDECK: Sharp corners
+        block_radius="0px",
+        container_radius="0px",
+        input_radius="0px",
+        button_large_radius="0px",
+        button_small_radius="0px",
+        checkbox_border_radius="0px",
+        table_radius="0px",
+
         # Spacing
         block_padding="16px",
     )

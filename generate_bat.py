@@ -4,17 +4,17 @@ import os
 TARGET_FILE = "VoiceChat.bat"
 DELETE_FILE = "VoiceChat_new.bat"
 
-# --- ANSI Colors (direct ESC byte - works on Windows 10+ with ANSI enabled) ---
+# --- ANSI Colors (Synthwave Purple Theme - TrueColor) ---
 ESC = "\x1b"
 C_RESET   = f"{ESC}[0m"
 C_GREY    = f"{ESC}[90m"
-C_WHITE   = f"{ESC}[97m"
-C_CYAN    = f"{ESC}[96m"
+C_WHITE   = f"{ESC}[38;2;230;217;255m"  # Pale Lavender #e6d9ff
+C_CYAN    = f"{ESC}[38;2;0;255;255m"    # Neon Cyan #00ffff (synthwave accent)
 C_RED     = f"{ESC}[91m"
-C_ORANGE  = f"{ESC}[38;2;255;106;0m"
-C_VIOLET  = f"{ESC}[38;2;160;60;255m"
-C_GREEN   = f"{ESC}[38;2;0;120;70m"
-C_TEAL    = f"{ESC}[38;2;0;180;220m"
+C_HOTPINK = f"{ESC}[38;2;255;20;147m"   # Hot Pink #ff1493 (synthwave accent)
+C_VIOLET  = f"{ESC}[38;2;191;0;255m"    # Electric Purple #bf00ff (primary)
+C_PURPLE  = f"{ESC}[38;2;191;0;255m"    # Electric Purple #bf00ff (primary)
+C_TEAL    = f"{ESC}[38;2;0;200;255m"    # Bright Teal #00c8ff (MCP)
 
 # --- ASCII Art (TTS2 VOICE - big 8-line chunky style for home screen) ---
 HEADER_ART = [
@@ -39,12 +39,12 @@ def make_item(key, label, status="", color_main=C_WHITE):
     label_part = f"[{key}] {label}"
     if status:
         padding = 55 - len(label_part)
-        return f"{C_GREEN}:{C_RESET}  {color_main}{label_part}{' ' * padding}{C_GREY}{status}{C_RESET}"
+        return f"{C_PURPLE}:{C_RESET}  {color_main}{label_part}{' ' * padding}{C_GREY}{status}{C_RESET}"
     else:
-        return f"{C_GREEN}:{C_RESET}  {color_main}{label_part}{C_RESET}"
+        return f"{C_PURPLE}:{C_RESET}  {color_main}{label_part}{C_RESET}"
 
 def make_sub(label, info=""):
-    return f"{C_GREEN}:{C_RESET}       {C_GREY}+-- {label}{C_RESET}"
+    return f"{C_PURPLE}:{C_RESET}       {C_GREY}+-- {label}{C_RESET}"
 
 def get_batch_content():
     lines = []
@@ -76,46 +76,46 @@ def get_batch_content():
     # --- MENU LOOP ---
     lines.append(":MENU")
     lines.append("cls")
-    lines.append(f"echo {C_GREEN}")
-    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_GREEN)}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}")
+    lines.append(f"echo {C_PURPLE}")
+    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_PURPLE)}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}")
     for line in HEADER_ART:
         safe_line = line.replace("|", "^|").replace("%", "%%")
-        lines.append(f"echo {C_GREEN}:{C_RESET} {C_GREEN}{safe_line}{C_RESET}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}                       {C_WHITE}Multi-Character Memory System{C_RESET}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}")
-    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_GREEN)}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}")
+        lines.append(f"echo {C_PURPLE}:{C_RESET} {C_PURPLE}{safe_line}{C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}                       {C_WHITE}Multi-Character Memory System{C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}")
+    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_PURPLE)}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}")
 
     # Menu Items
-    lines.append(f"echo {make_item('1', 'Voice Agent', 'Port: 7861', C_GREEN)}")
+    lines.append(f"echo {make_item('1', 'Voice Agent', 'Port: 7861', C_PURPLE)}")
     lines.append(f"echo {make_sub('PTT/VAD + Tools + Memory + Vision')}")
     lines.append(f"echo {make_sub('Docs: PDF,TXT,MD,DOCX,CSV,JSON,Code')}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}")
 
-    lines.append(f"echo {make_item('2', 'Character and Memory Manager', 'Port: 7863', C_ORANGE)}")
+    lines.append(f"echo {make_item('2', 'Character and Memory Manager', 'Port: 7863', C_HOTPINK)}")
     lines.append(f"echo {make_sub('Create/Edit Personalities')}")
     lines.append(f"echo {make_sub('Manage Knowledge Graph')}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}")
 
     lines.append(f"echo {make_item('3', 'MCP Server Manager', 'Port: 7864', C_TEAL)}")
     lines.append(f"echo {make_sub('Configure Agent Tools')}")
     lines.append(f"echo {make_sub('Install MCP Servers')}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}")
 
     lines.append(f"echo {make_item('4', 'Install Dependencies', '', C_VIOLET)}")
     lines.append(f"echo {make_sub('Python + Node.js (v20)')}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}")
 
     lines.append(f"echo {make_item('5', 'Calibrate Emotion Detection', '', C_CYAN)}")
     lines.append(f"echo {make_sub('Personalize SER to your voice')}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}")
 
     lines.append(f"echo {make_item('6', 'Exit', '', C_RED)}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}")
 
-    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_GREEN)}")
+    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_PURPLE)}")
     lines.append("echo.")
     lines.append(f'set /p "choice={C_WHITE}Select option [1-6]: {C_RESET}"')
 
@@ -130,19 +130,19 @@ def get_batch_content():
     # --- VOICE CHAT ---
     lines.append(":VOICECHAT")
     lines.append("cls")
-    lines.append(f"echo {C_GREEN}")
-    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_GREEN)}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}   {C_GREEN}██╗   ██╗ ██████╗ ██╗ ██████╗███████╗     █████╗  ██████╗ ███████╗███╗   ██╗████████╗{C_RESET}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}   {C_GREEN}██║   ██║██╔═══██╗██║██╔════╝██╔════╝    ██╔══██╗██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝{C_RESET}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}   {C_GREEN}██║   ██║██║   ██║██║██║     █████╗      ███████║██║  ███╗█████╗  ██╔██╗ ██║   ██║   {C_RESET}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}   {C_GREEN}╚██╗ ██╔╝██║   ██║██║██║     ██╔══╝      ██╔══██║██║   ██║██╔══╝  ██║╚██╗██║   ██║   {C_RESET}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}   {C_GREEN} ╚████╔╝ ╚██████╔╝██║╚██████╗███████╗    ██║  ██║╚██████╔╝███████╗██║ ╚████║   ██║   {C_RESET}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}   {C_GREEN}  ╚═══╝   ╚═════╝ ╚═╝ ╚═════╝╚══════╝    ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝   {C_RESET}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}                              {C_GREY}PTT + VAD + Memory + Tools + Vision{C_RESET}")
-    lines.append(f"echo {C_GREEN}:{C_RESET}")
-    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_GREEN)}")
+    lines.append(f"echo {C_PURPLE}")
+    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_PURPLE)}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}   {C_PURPLE}██╗   ██╗ ██████╗ ██╗ ██████╗███████╗     █████╗  ██████╗ ███████╗███╗   ██╗████████╗{C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}   {C_PURPLE}██║   ██║██╔═══██╗██║██╔════╝██╔════╝    ██╔══██╗██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝{C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}   {C_PURPLE}██║   ██║██║   ██║██║██║     █████╗      ███████║██║  ███╗█████╗  ██╔██╗ ██║   ██║   {C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}   {C_PURPLE}╚██╗ ██╔╝██║   ██║██║██║     ██╔══╝      ██╔══██║██║   ██║██╔══╝  ██║╚██╗██║   ██║   {C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}   {C_PURPLE} ╚████╔╝ ╚██████╔╝██║╚██████╗███████╗    ██║  ██║╚██████╔╝███████╗██║ ╚████║   ██║   {C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}   {C_PURPLE}  ╚═══╝   ╚═════╝ ╚═╝ ╚═════╝╚══════╝    ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝   {C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}                              {C_GREY}PTT + VAD + Memory + Tools + Vision{C_RESET}")
+    lines.append(f"echo {C_PURPLE}:{C_RESET}")
+    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_PURPLE)}")
     lines.append(f"echo.")
     lines.append(f"echo   {C_WHITE}URL:{C_RESET} {C_CYAN}http://localhost:7861{C_RESET}")
     lines.append(f"echo.")
@@ -162,7 +162,7 @@ def get_batch_content():
     lines.append(')')
     lines.append('start "" /min wscript.exe scripts\\ptt_hidden.vbs')
     lines.append('start "" /min pythonw audio\\vad_windows.py')
-    lines.append(f'echo {C_GREEN}')
+    lines.append(f'echo {C_PURPLE}')
     lines.append(f'wsl -d %WSL_DISTRO% -e bash -c "{nvm_load} cd %WSL_WIN_PATH% && source .venv/bin/activate && python -W ignore tts2_agent.py"')
     lines.append("taskkill /f /im pythonw.exe 2>nul")
     lines.append("echo.")
@@ -175,25 +175,25 @@ def get_batch_content():
     lines.append("cls")
     lines.append("color 06")
     lines.append("chcp 65001 >nul")
-    lines.append(f"echo {C_ORANGE}")
-    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_ORANGE)}")
-    lines.append(f"echo {C_ORANGE}:{C_RESET}")
-    lines.append(f"echo {C_ORANGE}:{C_RESET}   {C_ORANGE} ██████╗██╗  ██╗ █████╗ ██████╗  █████╗  ██████╗████████╗███████╗██████╗ ███████╗{C_RESET}")
-    lines.append(f"echo {C_ORANGE}:{C_RESET}   {C_ORANGE}██╔════╝██║  ██║██╔══██╗██╔══██╗██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗██╔════╝{C_RESET}")
-    lines.append(f"echo {C_ORANGE}:{C_RESET}   {C_ORANGE}██║     ███████║███████║██████╔╝███████║██║        ██║   █████╗  ██████╔╝███████╗{C_RESET}")
-    lines.append(f"echo {C_ORANGE}:{C_RESET}   {C_ORANGE}██║     ██╔══██║██╔══██║██╔══██╗██╔══██║██║        ██║   ██╔══╝  ██╔══██╗╚════██║{C_RESET}")
-    lines.append(f"echo {C_ORANGE}:{C_RESET}   {C_ORANGE}╚██████╗██║  ██║██║  ██║██║  ██║██║  ██║╚██████╗   ██║   ███████╗██║  ██║███████║{C_RESET}")
-    lines.append(f"echo {C_ORANGE}:{C_RESET}   {C_ORANGE} ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚══════╝{C_RESET}")
-    lines.append(f"echo {C_ORANGE}:{C_RESET}")
-    lines.append(f"echo {C_ORANGE}:{C_RESET}                        {C_GREY}Personalities + Memory + Knowledge Graph{C_RESET}")
-    lines.append(f"echo {C_ORANGE}:{C_RESET}")
-    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_ORANGE)}")
+    lines.append(f"echo {C_HOTPINK}")
+    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_HOTPINK)}")
+    lines.append(f"echo {C_HOTPINK}:{C_RESET}")
+    lines.append(f"echo {C_HOTPINK}:{C_RESET}   {C_HOTPINK} ██████╗██╗  ██╗ █████╗ ██████╗  █████╗  ██████╗████████╗███████╗██████╗ ███████╗{C_RESET}")
+    lines.append(f"echo {C_HOTPINK}:{C_RESET}   {C_HOTPINK}██╔════╝██║  ██║██╔══██╗██╔══██╗██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗██╔════╝{C_RESET}")
+    lines.append(f"echo {C_HOTPINK}:{C_RESET}   {C_HOTPINK}██║     ███████║███████║██████╔╝███████║██║        ██║   █████╗  ██████╔╝███████╗{C_RESET}")
+    lines.append(f"echo {C_HOTPINK}:{C_RESET}   {C_HOTPINK}██║     ██╔══██║██╔══██║██╔══██╗██╔══██║██║        ██║   ██╔══╝  ██╔══██╗╚════██║{C_RESET}")
+    lines.append(f"echo {C_HOTPINK}:{C_RESET}   {C_HOTPINK}╚██████╗██║  ██║██║  ██║██║  ██║██║  ██║╚██████╗   ██║   ███████╗██║  ██║███████║{C_RESET}")
+    lines.append(f"echo {C_HOTPINK}:{C_RESET}   {C_HOTPINK} ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚══════╝{C_RESET}")
+    lines.append(f"echo {C_HOTPINK}:{C_RESET}")
+    lines.append(f"echo {C_HOTPINK}:{C_RESET}                        {C_GREY}Personalities + Memory + Knowledge Graph{C_RESET}")
+    lines.append(f"echo {C_HOTPINK}:{C_RESET}")
+    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_HOTPINK)}")
     lines.append(f"echo.")
     lines.append(f"echo   {C_WHITE}URL:{C_RESET} {C_CYAN}http://localhost:7863{C_RESET}")
     lines.append(f"echo.")
     lines.append(f"echo {make_bar('-', TERM_WIDTH, C_GREY)}")
     lines.append(f"echo.")
-    lines.append(f'echo {C_ORANGE}')
+    lines.append(f'echo {C_HOTPINK}')
     lines.append(f'wsl -d %WSL_DISTRO% -e bash -c "{nvm_load} cd %WSL_WIN_PATH% && source .venv/bin/activate 2>/dev/null; python character_manager_ui.py"')
     lines.append("goto MENU")
 

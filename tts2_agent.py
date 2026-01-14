@@ -29,21 +29,21 @@ warnings.filterwarnings("ignore", message=".*WebSocketServerProtocol.*")
 # Silence noisy loggers
 import logging
 
-# Force all output to match the green theme (RGB 0, 120, 70)
-GREEN = "\033[38;2;0;120;70m"
+# Force all output to match the neon violet theme (RGB 191, 0, 255)
+PURPLE = "\033[38;2;191;0;255m"
 RESET = "\033[0m"
 
-# Wrap stdout/stderr to always output green
-class GreenStream:
+# Wrap stdout/stderr to always output purple
+class PurpleStream:
     def __init__(self, stream):
         self._stream = stream
         self._at_line_start = True
 
     def write(self, text):
         if text:
-            # Add green color code at the start of each line
+            # Add purple color code at the start of each line
             if self._at_line_start and text.strip():
-                self._stream.write(GREEN)
+                self._stream.write(PURPLE)
             self._stream.write(text)
             self._at_line_start = text.endswith('\n')
 
@@ -53,17 +53,17 @@ class GreenStream:
     def __getattr__(self, name):
         return getattr(self._stream, name)
 
-# Apply green wrapper to stdout/stderr
-sys.stdout = GreenStream(sys.__stdout__)
-sys.stderr = GreenStream(sys.__stderr__)
+# Apply purple wrapper to stdout/stderr
+sys.stdout = PurpleStream(sys.__stdout__)
+sys.stderr = PurpleStream(sys.__stderr__)
 
-class GreenFormatter(logging.Formatter):
+class PurpleFormatter(logging.Formatter):
     def format(self, record):
-        return f"{GREEN}{super().format(record)}"
+        return f"{PURPLE}{super().format(record)}"
 
-# Apply green formatter to all existing and future handlers
-def apply_green_formatter():
-    formatter = GreenFormatter("%(message)s")
+# Apply purple formatter to all existing and future handlers
+def apply_purple_formatter():
+    formatter = PurpleFormatter("%(message)s")
     root_logger = logging.getLogger()
 
     # Apply to root logger
@@ -82,9 +82,9 @@ def apply_green_formatter():
             handler.setFormatter(formatter)
             handler.stream = sys.stdout
 
-apply_green_formatter()
+apply_purple_formatter()
 
-# Silence noisy loggers (but keep them green when they do speak)
+# Silence noisy loggers (but keep them purple when they do speak)
 logging.getLogger("transformers").setLevel(logging.ERROR)
 logging.getLogger("httpx").setLevel(logging.ERROR)
 logging.getLogger("uvicorn").setLevel(logging.WARNING)  # Allow startup messages
@@ -2701,18 +2701,18 @@ def format_memory_for_ui(context: Dict[str, Any]) -> str:
 
 def format_tool_call_html(tool_name: str, arguments: Dict[str, Any], result: str = None,
                          step: int = None, total: int = None, status: str = "complete") -> str:
-    """Format a tool call as HTML for Claude Desktop-style display with chain visualization"""
+    """Format a tool call as HTML for CYBERDECK System Protocol display"""
     args_str = ", ".join([f"{k}: {v}" for k, v in arguments.items()])
 
-    # Status indicator
-    status_icons = {"pending": "⏳", "complete": "✅", "failed": "❌"}
-    status_icon = status_icons.get(status, "✅")
+    # Status indicator - Military style
+    status_icons = {"pending": "[ EXEC ]", "complete": "[ OK ]", "failed": "[ FAIL ]"}
+    status_icon = status_icons.get(status, "[ OK ]")
 
-    # Step indicator for chains
+    # Protocol indicator for chains
     step_html = ""
     chain_class = ""
     if step is not None and total is not None and total > 1:
-        step_html = f'<span class="tool-step-badge">🔗 Step {step}/{total}</span>'
+        step_html = f'<span class="tool-step-badge">PROTOCOL {step:02d}</span>'
         if step < total:
             chain_class = " tool-chain-continues"
         if step > 1:
@@ -3246,9 +3246,9 @@ def get_ptt_status() -> Tuple[str, str, float, str]:
             extra = parts[2] if len(parts) > 2 else ""
             
             status_map = {
-                "ready": ("🎤 PTT Ready (Right Shift)", "#4ade80", "green"),
+                "ready": ("🎤 PTT Ready (Right Shift)", "#bf00ff", "purple"),
                 "recording": (f"🔴 RECORDING ({duration:.1f}s)", "#ef4444", "red"),
-                "processing": (f"⏳ Processing...", "#f59e0b", "orange"),
+                "processing": (f"⏳ Processing...", "#d633ff", "purple"),
                 "sent": ("✅ Sent!", "#3b82f6", "blue"),
                 "error": (f"❌ Error: {extra}", "#ef4444", "red"),
                 "offline": ("⚫ Offline", "#6b7280", "gray"),
@@ -3424,156 +3424,362 @@ def create_ui():
         ptt_tip = "Run ptt_linux.py for Push-to-Talk (requires root)"
     
     custom_css = """
-        /* Global Font - Match Batch File / Terminal */
-        * {
-            font-family: 'Consolas', 'Lucida Console', 'Courier New', monospace !important;
+        /* ============================================
+           NEON VIOLET THEME
+           Synthwave / Cyberpunk Purple
+           Electric Purple + Pale Lavender + Deep Grape
+           ============================================ */
+
+        /* CSS Variables for Neon Violet */
+        :root {
+            --neon-bg: #05000a;
+            --neon-bg-light: #0f0520;
+            --neon-primary: #bf00ff;
+            --neon-primary-dark: #8c00bd;
+            --neon-glow: rgba(191, 0, 255, 0.5);
+            --neon-text: #e6d9ff;
+            --neon-text-dim: #d0b3ff;
+            --neon-dim: #6b3d99;
+            --neon-border-dim: #3d1a66;
+            /* Carbon Fiber Colors (tinted toward violet) */
+            --carbon-dark-1: #08001a;
+            --carbon-dark-2: #0a0020;
+            --carbon-dark-3: #060015;
+            --carbon-light-1: #140828;
+            --carbon-light-2: #1a0a30;
+            --carbon-light-3: #100620;
         }
 
-        /* Scrollbars - Darker Theme */
+        /* Import monospace fonts */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fira+Code:wght@400;500;700&display=swap');
+
+        /* Global Font - Full Monospace Terminal */
+        * {
+            font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', 'Lucida Console', monospace !important;
+            border-radius: 0px !important;
+        }
+
+        /* Text glow effect */
+        body, button, input, textarea {
+            text-shadow: 0 0 2px #8c00bd;
+        }
+
+        /* SCANLINES OVERLAY - CRT Effect (Purple tint) */
+        .gradio-container::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(191, 0, 255, 0.03) 0px,
+                rgba(191, 0, 255, 0.03) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* NEON GLOW - Main container border/shadow only (background set in carbon fiber section) */
+        .gradio-container {
+            border: 2px solid #bf00ff !important;
+            box-shadow:
+                inset 0 0 100px rgba(191, 0, 255, 0.08),
+                0 0 30px rgba(191, 0, 255, 0.5),
+                inset 0 0 10px rgba(191, 0, 255, 0.3) !important;
+        }
+
+        /* Scrollbars - Neon Violet */
         ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #0a0a0a; 
+            background: #05000a;
+            border: 1px solid #3d1a66;
         }
         ::-webkit-scrollbar-thumb {
-            background: #374151; 
-            border-radius: 0px; /* Square for terminal look */
-            border: 1px solid #1f2937;
+            background: #bf00ff;
+            border: none;
+            filter: drop-shadow(0 0 5px #bf00ff);
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #4b5563; 
+            background: #d633ff;
         }
 
-        /* PTT Status Box - Racecar Green Theme */
+        /* Force slider accent color */
+        input[type="range"] {
+            accent-color: #bf00ff !important;
+            filter: drop-shadow(0 0 8px #bf00ff);
+        }
+
+        /* ============================================
+           HUD HEADER - Latency/Token/Memory Counters
+           ============================================ */
+        #hud-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            background: #05000a;
+            border: 2px solid #bf00ff;
+            margin-bottom: 10px;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(191, 0, 255, 0.3);
+        }
+        .hud-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #e6d9ff;
+        }
+        .hud-label {
+            color: #6b3d99;
+        }
+        .hud-value {
+            color: #bf00ff;
+            font-weight: bold;
+            text-shadow: 0 0 5px #bf00ff;
+        }
+        .hud-value.warning { color: #ffff00; }
+        .hud-value.danger { color: #ff0040; }
+
+        /* ============================================
+           EMOTION METER - HUD Bar Gauge
+           ============================================ */
+        #emotion-meter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 12px;
+            background: #05000a;
+            border: 1px solid #bf00ff;
+        }
+        #emotion-meter .meter-label {
+            color: #6b3d99;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            min-width: 60px;
+        }
+        #emotion-meter .meter-bar {
+            flex: 1;
+            height: 12px;
+            background: #0f0520;
+            border: 1px solid #3d1a66;
+            position: relative;
+            overflow: hidden;
+        }
+        #emotion-meter .meter-fill {
+            height: 100%;
+            transition: width 0.3s, background 0.3s;
+        }
+        #emotion-meter .meter-fill.happy { background: #00ff41; }
+        #emotion-meter .meter-fill.neutral { background: #bf00ff; }
+        #emotion-meter .meter-fill.sad { background: #0066ff; }
+        #emotion-meter .meter-fill.angry { background: #ff0040; }
+        #emotion-meter .meter-fill.fear { background: #9933ff; }
+        #emotion-meter .meter-value {
+            color: #bf00ff;
+            font-size: 0.8em;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        /* ============================================
+           PTT STATUS BOX - Active State Indicators
+           ============================================ */
         #ptt-status-box {
-            border-radius: 0px; /* Square */
             padding: 12px;
             text-align: center;
             font-size: 1.2em;
             font-weight: bold;
             transition: all 0.2s ease;
-            background: #0a0a0a;
-            border: 2px solid #007846; /* Racecar Green */
-            color: #007846;
+            background: #05000a;
+            border: 2px solid #bf00ff;
+            color: #bf00ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #bf00ff;
         }
+
+        /* RECORDING STATE - Bright red pulse */
         @keyframes pulse-recording {
-            0%, 100% { opacity: 1; box-shadow: 0 0 10px #ef4444; border-color: #ef4444; color: #ef4444; }
-            50% { opacity: 0.85; box-shadow: 0 0 20px #ef4444; border-color: #ef4444; color: #ef4444; }
+            0%, 100% {
+                box-shadow: 0 0 10px #ff0040, inset 0 0 20px rgba(255, 0, 64, 0.1);
+                border-color: #ff0040;
+                color: #ff0040;
+            }
+            50% {
+                box-shadow: 0 0 30px #ff0040, inset 0 0 40px rgba(255, 0, 64, 0.2);
+                border-color: #ff0040;
+                color: #ff0040;
+            }
         }
         .recording {
             animation: pulse-recording 0.8s ease-in-out infinite;
         }
+
+        /* PROCESSING STATE - Purple pulse */
+        @keyframes pulse-processing {
+            0%, 100% {
+                box-shadow: 0 0 10px #bf00ff;
+                border-color: #bf00ff;
+            }
+            50% {
+                box-shadow: 0 0 25px #d633ff;
+                border-color: #d633ff;
+            }
+        }
+        .processing {
+            animation: pulse-processing 1s ease-in-out infinite;
+            border-color: #bf00ff !important;
+        }
+
+        /* SPEAKING STATE - Full neon glow */
+        @keyframes pulse-neon {
+            from { box-shadow: 0 0 10px #bf00ff; }
+            to { box-shadow: 0 0 25px #d633ff; }
+        }
+        .speaking {
+            animation: pulse-neon 0.5s infinite alternate;
+            border-color: #bf00ff !important;
+            color: #bf00ff !important;
+            text-shadow: 0 0 15px #bf00ff !important;
+        }
+
         #tts-warning {
-            color: #FF6A00; /* Grok Orange */
+            color: #e6d9ff;
             font-size: 0.9em;
+            text-transform: uppercase;
         }
         #audio-response {
             min-height: 60px;
+            border: 1px solid #bf00ff;
+            background: #05000a;
         }
         #audio-response audio {
             width: 100%;
         }
 
-        /* Tool Chain Container */
+        /* ============================================
+           SYSTEM PROTOCOLS - Tool Chain Styling
+           ============================================ */
         .tool-chain-container {
             position: relative;
-            padding-left: 8px;
+            padding-left: 12px;
+            margin: 8px 0;
         }
         .tool-chain-container::before {
             content: '';
             position: absolute;
             left: 0;
-            top: 20px;
-            bottom: 20px;
-            width: 2px;
-            /* Gradient from Violet to Green (Batch colors) */
-            background: linear-gradient(to bottom, #A03CFF, #007846);
-            border-radius: 0px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, #bf00ff, #d633ff);
         }
 
-        /* Tool Call Blocks - Racecar Green Border - Fully isolated from parent */
+        /* Protocol Block - Black text on Purple header */
         .tool-call-block,
         #main-chatbot .tool-call-block,
         #main-chatbot [role="assistant"] .tool-call-block {
-            background: #0d0d0d !important; /* Solid dark background */
-            border-left: 3px solid #007846 !important; /* Racecar Green */
-            border-radius: 0px !important;
-            padding: 10px 12px !important;
+            background: #05000a !important;
+            border: 2px solid #bf00ff !important;
+            padding: 0 !important;
             margin: 8px 0 !important;
             font-size: 0.9em !important;
             position: relative !important;
-            z-index: 10 !important; /* Sit on top */
-            border: 1px solid #1f2937 !important;
-            border-left-width: 3px !important;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5) !important; /* Lift off page */
-            isolation: isolate; /* CSS isolation */
+            z-index: 10 !important;
+            box-shadow: 0 0 10px rgba(191, 0, 255, 0.3) !important;
+            isolation: isolate;
         }
         .tool-call-block.tool-chain-continues::after {
-            content: '↓';
+            content: '▼ CHAIN';
             position: absolute;
-            bottom: -14px;
+            bottom: -18px;
             left: 50%;
             transform: translateX(-50%);
-            color: #007846;
-            font-size: 12px;
+            color: #bf00ff;
+            font-size: 10px;
             z-index: 1;
-        }
-        .tool-step-badge {
-            background: rgba(0, 120, 70, 0.2);
-            color: #007846; /* Racecar Green */
+            background: #05000a;
             padding: 2px 8px;
-            border-radius: 0px;
-            font-size: 0.75em;
-            margin-right: 8px;
-            font-weight: bold;
-            border: 1px solid #007846;
+            border: 1px solid #bf00ff;
         }
+
+        /* Protocol Step Badge - Neon style */
+        .tool-step-badge {
+            background: #bf00ff !important;
+            color: #000000 !important;
+            padding: 4px 10px !important;
+            font-size: 0.75em !important;
+            margin-right: 8px !important;
+            font-weight: bold !important;
+            border: none !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Protocol Header - Purple bar */
         .tool-call-header,
         #main-chatbot .tool-call-header {
+            background: #bf00ff !important;
+            color: #000000 !important;
             font-weight: bold !important;
-            color: #007846 !important; /* Racecar Green */
-            margin-bottom: 4px !important;
+            margin: 0 !important;
+            padding: 8px 12px !important;
             display: flex !important;
             align-items: center !important;
             text-shadow: none !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
+
+        /* Protocol Args - Lavender text on deep purple */
         .tool-call-args,
         #main-chatbot .tool-call-args {
-            color: #d1d5db !important; /* Light gray */
-            margin-left: 16px !important;
+            color: #e6d9ff !important;
+            margin: 0 !important;
+            padding: 8px 12px !important;
             font-size: 0.85em !important;
             word-break: break-word !important;
             text-shadow: none !important;
             font-weight: normal !important;
+            background: #05000a !important;
+            border-top: 1px solid #3d1a66 !important;
         }
+
+        /* Protocol Result - Lighter lavender output */
         .tool-call-result,
         #main-chatbot .tool-call-result,
         #main-chatbot [role="assistant"] .tool-call-result {
-            background: #1a0525 !important; /* Solid dark purple */
-            border-left: 3px solid #A03CFF !important; /* Mace Windu Violet */
-            color: #A03CFF !important; /* Violet text - override parent white */
-            margin-top: 4px !important;
-            padding: 6px 10px !important;
-            border-radius: 0px !important;
+            background: #0f0520 !important;
+            border-top: 2px solid #8c00bd !important;
+            border-left: none !important;
+            color: #d0b3ff !important;
+            margin: 0 !important;
+            padding: 8px 12px !important;
             font-size: 0.85em !important;
             word-break: break-word !important;
             position: relative !important;
             z-index: 10 !important;
-            text-shadow: none !important; /* Remove parent text-shadow */
-            font-weight: normal !important; /* Override parent font-weight */
+            text-shadow: none !important;
+            font-weight: normal !important;
         }
 
-        /* Copy button */
+        /* Copy button - Neon style */
         .message-copy-btn {
             position: absolute;
             top: 8px;
             right: 8px;
-            background: #0a0a0a;
-            border: 1px solid #374151;
-            border-radius: 0px;
-            color: #9ca3af;
+            background: #05000a;
+            border: 1px solid #bf00ff;
+            color: #bf00ff;
             cursor: pointer;
             padding: 4px 8px;
             font-size: 12px;
@@ -3584,14 +3790,12 @@ def create_ui():
             opacity: 1;
         }
         .message-copy-btn:hover {
-            background: #1f2937;
-            color: #fff;
-            border-color: #007846;
+            background: #bf00ff;
+            color: #000000;
         }
         .message-copy-btn.copied {
-            background: rgba(0, 120, 70, 0.2);
-            color: #007846;
-            border-color: #007846;
+            background: #bf00ff;
+            color: #000000;
         }
 
         /* Expandable messages */
@@ -3610,49 +3814,53 @@ def create_ui():
             left: 0;
             right: 0;
             height: 60px;
-            background: linear-gradient(transparent, #0b0f19); /* Dark background match */
+            background: linear-gradient(transparent, #05000a);
             pointer-events: none;
         }
         .expand-btn {
             display: block;
             text-align: center;
             padding: 8px;
-            color: #FF6A00; /* Grok Orange */
+            color: #bf00ff;
             cursor: pointer;
             font-size: 0.9em;
-            background: rgba(255, 106, 0, 0.1);
-            border-radius: 0px;
+            background: #05000a;
             margin-top: 4px;
             transition: background 0.2s;
-            border: 1px solid rgba(255, 106, 0, 0.3);
+            border: 1px solid #bf00ff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .expand-btn:hover {
-            background: rgba(255, 106, 0, 0.2);
+            background: #bf00ff;
+            color: #000000;
         }
 
         /* Message timestamps */
         .message-timestamp {
             font-size: 0.7em;
-            color: #6b7280;
+            color: #6b3d99;
             margin-top: 4px;
             text-align: right;
+            opacity: 0.7;
         }
 
-        /* Thinking indicator - Grok Style Bar (Orange) */
+        /* Thinking indicator - Neon pulse bar */
         .thinking-indicator {
-            color: #9ca3af;
-            font-style: italic;
+            color: #e6d9ff;
+            font-style: normal;
             font-size: 0.9em;
             margin: 4px 0;
             display: flex;
             align-items: center;
             gap: 12px;
+            text-transform: uppercase;
         }
         .thinking-bar-container {
-            width: 100px;
-            height: 4px;
-            background: #374151;
-            border-radius: 0px;
+            width: 150px;
+            height: 6px;
+            background: #0f0520;
+            border: 1px solid #bf00ff;
             overflow: hidden;
             position: relative;
         }
@@ -3661,101 +3869,139 @@ def create_ui():
             top: 0;
             left: 0;
             height: 100%;
-            width: 50%;
-            /* Mace Windu Violet Gradient */
-            background: linear-gradient(90deg, transparent, #A03CFF, #A03CFF, transparent);
-            animation: thinking-slide 1.5s infinite linear;
+            width: 40%;
+            background: linear-gradient(90deg, transparent, #bf00ff, #d633ff, transparent);
+            animation: thinking-slide 1.2s infinite linear;
         }
         @keyframes thinking-slide {
             0% { transform: translateX(-100%); }
-            100% { transform: translateX(200%); }
+            100% { transform: translateX(250%); }
         }
 
-        /* Token usage */
+        /* Token usage - HUD style */
         .token-usage {
             font-size: 0.75em;
-            color: #9ca3af;
-            padding: 4px 12px;
-            background: #0a0a0a;
-            border-radius: 0px;
+            color: #e6d9ff;
+            padding: 6px 12px;
+            background: #05000a;
             display: inline-flex;
-            gap: 12px;
-            border: 1px solid #374151;
+            gap: 16px;
+            border: 1px solid #bf00ff;
+            text-transform: uppercase;
         }
         .token-usage span {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
-        .token-usage .token-in { color: #A03CFF; } /* Violet */
-        .token-usage .token-out { color: #007846; } /* Green */
+        .token-usage .token-in { color: #bf00ff; }
+        .token-usage .token-out { color: #e6d9ff; }
+        .token-usage .token-total { color: #8c00bd; }
 
-        /* Mood indicator */
+        /* Mood indicator - HUD style */
         .mood-indicator {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 4px 10px;
-            background: #0a0a0a;
-            border-radius: 0px;
+            gap: 8px;
+            padding: 6px 12px;
+            background: #05000a;
             font-size: 0.8em;
-            border: 1px solid #374151;
+            border: 1px solid #bf00ff;
+            text-transform: uppercase;
         }
-        .mood-indicator .mood-text { color: #d1d5db; }
+        .mood-indicator .mood-text { color: #bf00ff; }
 
-        /* Fix weird black box in top left (Gradio container issue) */
+        /* ============================================
+           CARBON FIBER BACKGROUNDS (Violet Tinted)
+           ============================================ */
+
+        /* Main container - Forged carbon fiber (irregular swirl pattern, purple tinted) */
         .gradio-container {
-            background-color: #0a0a0a !important;
+            background:
+                radial-gradient(ellipse 120% 80% at 10% 20%, #140828 0%, transparent 50%),
+                radial-gradient(ellipse 80% 60% at 90% 80%, #0a0518 0%, transparent 45%),
+                radial-gradient(ellipse 100% 70% at 50% 50%, #100620 0%, transparent 55%),
+                radial-gradient(ellipse 60% 90% at 30% 70%, #08041a 0%, transparent 40%),
+                radial-gradient(ellipse 90% 50% at 70% 30%, #0c0620 0%, transparent 50%),
+                radial-gradient(ellipse 50% 80% at 85% 15%, #0a0418 0%, transparent 45%),
+                radial-gradient(ellipse 70% 40% at 15% 85%, #0e0622 0%, transparent 40%) !important;
+            background-color: #05000a !important;
         }
-        
-        /* Darken all blocks to match background */
-        .block, .panel {
-            background-color: #0a0a0a !important;
-            border-color: #1f2937 !important;
+
+        /* Panels - Lighter carbon weave to stand out (purple tinted) */
+        .block, .panel,
+        .gradio-accordion,
+        .gradio-group {
+            background:
+                linear-gradient(27deg, #1a0a30 5px, transparent 5px) 0 5px,
+                linear-gradient(207deg, #1a0a30 5px, transparent 5px) 10px 0px,
+                linear-gradient(27deg, #200c38 5px, transparent 5px) 0px 10px,
+                linear-gradient(207deg, #200c38 5px, transparent 5px) 10px 5px,
+                linear-gradient(90deg, #160828 10px, transparent 10px),
+                linear-gradient(#180a2c 25%, #140826 25%, #140826 50%, transparent 50%, transparent 75%, #1c0c32 75%, #1c0c32) !important;
+            background-color: #0f0520 !important;
+            background-size: 20px 20px !important;
+            border-color: #bf00ff !important;
+        }
+
+        /* Input areas - Solid dark for contrast */
+        .gradio-dropdown,
+        .gradio-textbox,
+        .gradio-chatbot {
+            background-color: #05000a !important;
+        }
+
+        /* FORGED CARBON FIBER - Irregular swirl pattern (use .forged-carbon class) */
+        .forged-carbon {
+            background:
+                radial-gradient(ellipse 80% 50% at 20% 30%, #1a0a30 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 70%, #160828 0%, transparent 40%),
+                radial-gradient(ellipse 50% 60% at 40% 60%, #1c0c32 0%, transparent 45%),
+                radial-gradient(ellipse 70% 30% at 60% 20%, #140826 0%, transparent 35%),
+                radial-gradient(ellipse 40% 50% at 90% 40%, #200c38 0%, transparent 50%),
+                linear-gradient(135deg, #08001a 25%, #0a0020 50%, #060015 75%) !important;
+            background-color: #08001a !important;
         }
 
         /* ============================================
-           CHATBOT MESSAGE STYLING
+           CHATBOT MESSAGE STYLING - Neon Borders
            ============================================ */
-        
-        /* User messages - Orange background/border, Purple text */
+
+        /* User messages - Lighter purple border */
         #main-chatbot [role="user"],
         #main-chatbot .role-user,
         #main-chatbot .user {
-            background: linear-gradient(135deg, rgba(255, 106, 0, 0.35) 0%, rgba(255, 106, 0, 0.20) 100%) !important;
-            border: 2px solid #FF6A00 !important;
-            border-radius: 8px !important;
+            background: #0f0520 !important;
+            border: 2px solid #8c00bd !important;
+            box-shadow: 0 0 10px rgba(140, 0, 189, 0.3);
         }
-        /* Only target direct text content, not tool blocks */
         #main-chatbot [role="user"] > p,
         #main-chatbot [role="user"] > span,
         #main-chatbot [role="user"] > div:not(.tool-call-block):not(.tool-chain-container) {
-            color: #A03CFF !important;
+            color: #e6d9ff !important;
         }
-        
-        /* Assistant messages - Subtle dark background with green border, white text */
+
+        /* Assistant messages - Full neon purple border */
         #main-chatbot [role="assistant"],
         #main-chatbot .role-assistant,
         #main-chatbot .bot {
-            background: linear-gradient(135deg, rgba(0, 40, 30, 0.6) 0%, rgba(10, 20, 18, 0.8) 100%) !important;
-            border: 2px solid #007846 !important;
-            border-radius: 8px !important;
+            background: #05000a !important;
+            border: 2px solid #bf00ff !important;
+            box-shadow: 0 0 10px rgba(191, 0, 255, 0.3);
         }
-        /* Target direct text for brightness - exclude tool blocks */
         #main-chatbot [role="assistant"] > p,
         #main-chatbot [role="assistant"] > span,
         #main-chatbot [role="assistant"] > div:not(.tool-call-block):not(.tool-chain-container):not(.message-expandable) {
-            color: #FFFFFF !important;
+            color: #e6d9ff !important;
             font-weight: 500 !important;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
-            letter-spacing: 0.3px;
+            text-shadow: 0 0 3px rgba(191, 0, 255, 0.3) !important;
+            letter-spacing: 0.5px;
         }
-        /* Ensure text inside expandable containers is also white */
         #main-chatbot [role="assistant"] .message-expandable {
-            color: #FFFFFF !important;
+            color: #e6d9ff !important;
         }
-        
-        /* Remove inner box styling that creates double borders */
+
+        /* Remove inner box styling */
         #main-chatbot .message-bubble-border,
         #main-chatbot .message-content,
         #main-chatbot .message-row,
@@ -3766,39 +4012,165 @@ def create_ui():
         }
 
         /* ============================================
-           TAB AND ACCORDION BORDERS
+           INPUT AREA - Neon Border Active
            ============================================ */
-        
-        /* Tab container borders - Subtle teal-green */
-        .tabs, .tab-nav, .tabitem {
-            border-color: #00645A !important;
+        #msg-input,
+        #msg-input textarea {
+            background: #0f0520 !important;
+            border: 2px solid #bf00ff !important;
+            color: #e6d9ff !important;
         }
-        
-        /* Accordion borders - Match tabs */
+        #msg-input:focus-within,
+        #msg-input textarea:focus {
+            box-shadow: 0 0 15px rgba(191, 0, 255, 0.4) !important;
+        }
+
+        /* ============================================
+           TAB AND ACCORDION BORDERS - Neon
+           ============================================ */
+
+        .tabs, .tab-nav, .tabitem {
+            border-color: #bf00ff !important;
+        }
+
         .gradio-accordion {
-            border: 1px solid #00645A !important;
+            border: 1px solid #bf00ff !important;
         }
         .gradio-accordion > .label-wrap {
-            border-bottom: 1px solid #00645A !important;
+            border-bottom: 1px solid #bf00ff !important;
+            background: #05000a !important;
+            color: #bf00ff !important;
         }
-        
-        /* Group containers (collapsible sections) */
+
         .gradio-group {
-            border: 1px solid #00645A !important;
+            border: 1px solid #bf00ff !important;
         }
-        
-        /* Dropdown and input borders */
+
+        /* All inputs - Neon focus */
         .gradio-dropdown, .gradio-textbox, .gradio-slider {
-            border-color: #404040 !important;
+            border-color: #3d1a66 !important;
         }
         .gradio-dropdown:focus-within, .gradio-textbox:focus-within {
-            border-color: #007846 !important;
+            border-color: #bf00ff !important;
+            box-shadow: 0 0 10px rgba(191, 0, 255, 0.3) !important;
+        }
+
+        /* Labels - Purple */
+        label, .label-wrap, .svelte-1gfkn6j {
+            color: #bf00ff !important;
+        }
+
+        /* Button styling - Neon */
+        button.primary {
+            background: #bf00ff !important;
+            color: #000000 !important;
+            border: none !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            text-shadow: none !important;
+        }
+        button.primary:hover {
+            background: #d633ff !important;
+            box-shadow: 0 0 20px rgba(191, 0, 255, 0.5) !important;
+        }
+
+        /* Secondary buttons */
+        button.secondary {
+            background: #1a0a30 !important;
+            color: #bf00ff !important;
+            border: 1px solid #bf00ff !important;
+        }
+        button.secondary:hover {
+            background: #bf00ff !important;
+            color: #000000 !important;
+        }
+
+        /* VAD Indicator - Neon pulse style */
+        .vad-indicator {
+            background: repeating-linear-gradient(
+                45deg,
+                #0a0518,
+                #0a0518 10px,
+                #140828 10px,
+                #140828 20px
+            );
+            border: 1px solid #3d1a66;
+            color: #6b3d99;
+        }
+        .vad-indicator.active {
+            background: #bf00ff;
+            box-shadow: 0 0 30px #bf00ff;
+            color: #000;
+            font-weight: bold;
         }
     """
     
-    # JavaScript for keyboard shortcuts, copy buttons, and expandable messages
+    # JavaScript for keyboard shortcuts, copy buttons, HUD updates, and expandable messages
     keyboard_js = """
     function() {
+        // ==================== CYBERDECK HUD SYSTEM ====================
+        window.HUD = {
+            latency: 0,
+            ttsSpeed: 0,
+            tokensIn: 0,
+            tokensOut: 0,
+            memoryNodes: 0,
+            emotion: 'neutral',
+            emotionValue: 0.5,
+
+            // Update HUD display
+            update: function(data) {
+                if (data.latency !== undefined) {
+                    this.latency = data.latency;
+                    const el = document.getElementById('hud-latency');
+                    if (el) {
+                        el.textContent = data.latency + 'ms';
+                        el.className = 'hud-value' + (data.latency > 2000 ? ' danger' : data.latency > 1000 ? ' warning' : '');
+                    }
+                }
+                if (data.ttsSpeed !== undefined) {
+                    this.ttsSpeed = data.ttsSpeed;
+                    const el = document.getElementById('hud-tts-speed');
+                    if (el) el.textContent = data.ttsSpeed + 'x';
+                }
+                if (data.tokensIn !== undefined) {
+                    this.tokensIn = data.tokensIn;
+                    const el = document.getElementById('hud-tokens-in');
+                    if (el) el.textContent = data.tokensIn.toLocaleString();
+                }
+                if (data.tokensOut !== undefined) {
+                    this.tokensOut = data.tokensOut;
+                    const el = document.getElementById('hud-tokens-out');
+                    if (el) el.textContent = data.tokensOut.toLocaleString();
+                }
+                if (data.memoryNodes !== undefined) {
+                    this.memoryNodes = data.memoryNodes;
+                    const el = document.getElementById('hud-memory-nodes');
+                    if (el) el.textContent = data.memoryNodes;
+                }
+                if (data.emotion !== undefined) {
+                    this.emotion = data.emotion;
+                    this.emotionValue = data.emotionValue || 0.5;
+                    const fill = document.getElementById('emotion-fill');
+                    const value = document.getElementById('emotion-value');
+                    if (fill && value) {
+                        fill.className = 'meter-fill ' + data.emotion.toLowerCase();
+                        fill.style.width = (this.emotionValue * 100) + '%';
+                        value.textContent = data.emotion.toUpperCase();
+                    }
+                }
+            },
+
+            // Set state indicator on PTT box
+            setState: function(state) {
+                const pttBox = document.getElementById('ptt-status-box');
+                if (!pttBox) return;
+                pttBox.classList.remove('recording', 'processing', 'speaking');
+                if (state) pttBox.classList.add(state);
+            }
+        };
+
         // Wait for DOM to be ready
         setTimeout(() => {
             const msgInput = document.querySelector('#msg-input textarea');
@@ -3829,10 +4201,10 @@ def create_ui():
                         const text = msgContent.innerText || msgContent.textContent;
                         navigator.clipboard.writeText(text).then(() => {
                             e.target.classList.add('copied');
-                            e.target.textContent = '✓ Copied';
+                            e.target.textContent = '[ OK ]';
                             setTimeout(() => {
                                 e.target.classList.remove('copied');
-                                e.target.textContent = '📋';
+                                e.target.textContent = 'COPY';
                             }, 2000);
                         });
                     }
@@ -3844,7 +4216,7 @@ def create_ui():
                     if (expandable && expandable.classList.contains('message-expandable')) {
                         expandable.classList.toggle('expanded');
                         e.target.textContent = expandable.classList.contains('expanded')
-                            ? '▲ Show less' : '▼ Show more';
+                            ? '[ COLLAPSE ]' : '[ EXPAND ]';
                     }
                 }
             });
@@ -3857,7 +4229,7 @@ def create_ui():
                         bubble.style.position = 'relative';
                         const btn = document.createElement('button');
                         btn.className = 'message-copy-btn';
-                        btn.textContent = '📋';
+                        btn.textContent = 'COPY';
                         btn.title = 'Copy message';
                         bubble.appendChild(btn);
                     }
@@ -3885,19 +4257,56 @@ def create_ui():
         current_provider = gr.State(value=initial_provider)
         
         gr.HTML(f"""
-        <pre style="color: #007846; font-family: 'Consolas', monospace; font-size: 11px; line-height: 1.1; margin: 0; padding: 10px 0; text-align: center; letter-spacing: -1px;">
- ████████╗████████╗███████╗██████╗    ██╗   ██╗ ██████╗ ██╗ ██████╗███████╗
- ╚══██╔══╝╚══██╔══╝██╔════╝╚════██╗   ██║   ██║██╔═══██╗██║██╔════╝██╔════╝
-    ██║      ██║   ███████╗ █████╔╝   ██║   ██║██║   ██║██║██║     █████╗  
-    ██║      ██║   ╚════██║██╔═══╝    ╚██╗ ██╔╝██║   ██║██║██║     ██╔══╝  
-    ██║      ██║   ███████║███████╗    ╚████╔╝ ╚██████╔╝██║╚██████╗███████╗
-    ╚═╝      ╚═╝   ╚══════╝╚══════╝     ╚═══╝   ╚═════╝ ╚═╝ ╚═════╝╚══════╝
-        </pre>
-        <div style="text-align: center; color: #A03CFF; font-size: 0.85em; margin-top: 2px;">
-            Multi-Character • Memory • Tools • Vision • MCP &nbsp;|&nbsp; <span style="color: #A03CFF;">Running on {PLATFORM.title()}{" (WSL)" if IS_WSL else ""}</span>
+        <div style="border: 3px solid #bf00ff; background: #05000a; padding: 15px 20px; margin-bottom: 15px; box-shadow: 0 0 25px rgba(191, 0, 255, 0.4), inset 0 0 30px rgba(191, 0, 255, 0.08);">
+            <pre style="color: #bf00ff; font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; font-size: 16px; line-height: 1.15; margin: 0; text-align: center; letter-spacing: 0px; text-shadow: 0 0 10px rgba(191, 0, 255, 0.6);">
+╔════════════════════════════════════════════════════════════════════════════════════╗
+║  ████████╗████████╗ ███████╗ ██████╗    ██╗   ██╗ ██████╗ ██╗ ██████╗███████╗      ║
+║  ╚══██╔══╝╚══██╔══╝ ██╔════╝ ╚════██╗   ██║   ██║██╔═══██╗██║██╔════╝██╔════╝      ║
+║     ██║      ██║    ███████╗  █████╔╝   ██║   ██║██║   ██║██║██║     █████╗        ║
+║     ██║      ██║    ╚════██║ ██╔═══╝    ╚██╗ ██╔╝██║   ██║██║██║     ██╔══╝        ║
+║     ██║      ██║    ███████║ ███████╗    ╚████╔╝ ╚██████╔╝██║╚██████╗███████╗      ║
+║     ╚═╝      ╚═╝    ╚══════╝ ╚══════╝     ╚═══╝   ╚═════╝ ╚═╝ ╚═════╝╚══════╝      ║
+╚════════════════════════════════════════════════════════════════════════════════════╝
+            </pre>
+            <div style="text-align: center; color: #e6d9ff; font-size: 0.9em; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">
+                Multi-Character • Memory • Tools • Vision • MCP &nbsp;|&nbsp; <span style="color: #d0b3ff;">Running on {PLATFORM.title()}{" (WSL)" if IS_WSL else ""}</span>
+            </div>
         </div>
         """)
-        
+
+        # ==================== HUD BAR - System Status ====================
+        gr.HTML("""
+        <div id="hud-bar">
+            <div class="hud-item">
+                <span class="hud-label">LATENCY:</span>
+                <span class="hud-value" id="hud-latency">--ms</span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-label">TTS:</span>
+                <span class="hud-value" id="hud-tts-speed">--x</span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-label">TOKENS:</span>
+                <span class="hud-value" id="hud-tokens-in">--</span>
+                <span style="color: #666;">IN</span>
+                <span class="hud-value" id="hud-tokens-out">--</span>
+                <span style="color: #666;">OUT</span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-label">MEMORY:</span>
+                <span class="hud-value" id="hud-memory-nodes">0</span>
+                <span style="color: #666;">NODES</span>
+            </div>
+            <div id="emotion-meter">
+                <span class="meter-label">EMOTION:</span>
+                <div class="meter-bar">
+                    <div class="meter-fill neutral" id="emotion-fill" style="width: 50%;"></div>
+                </div>
+                <span class="meter-value" id="emotion-value">NEUTRAL</span>
+            </div>
+        </div>
+        """)
+
         # PTT Status
         _, initial_ptt_display, _, _ = get_ptt_status()
         
