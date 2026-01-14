@@ -4,17 +4,17 @@ import os
 TARGET_FILE = "VoiceChat.bat"
 DELETE_FILE = "VoiceChat_new.bat"
 
-# --- ANSI Colors (Engineered Amber Palette - TrueColor) ---
+# --- ANSI Colors (Lapis Lazuli Palette - TrueColor) ---
 ESC = "\x1b"
 C_RESET   = f"{ESC}[0m"
 C_GREY    = f"{ESC}[90m"
 
-# The Palette
-C_ORANGE  = f"{ESC}[38;2;255;69;0m"     # Neon Orange #ff4500 (Borders/Headers)
-C_AMBER   = f"{ESC}[38;2;255;204;153m" # Pale Amber #ffcc99 (Main Text - Low Eye Strain)
-C_GOLD    = f"{ESC}[38;2;255;215;0m"   # Gold #ffd700 (Highlights/Keys)
-C_RED     = f"{ESC}[38;2;255;42;0m"    # Bright Red-Orange #ff2a00 (Alerts)
-C_DARK    = f"{ESC}[38;2;184;134;11m"  # Dark Goldenrod (Subtitles)
+# The Palette - Lapis Lazuli Glowing Blue
+C_ORANGE  = f"{ESC}[38;2;255;69;0m"     # Neon Orange #ff4500 (Borders only)
+C_AMBER   = f"{ESC}[38;2;0;191;255m"   # Lapis Lazuli #00BFFF (Main Text)
+C_GOLD    = f"{ESC}[38;2;0;191;255m"   # Lapis Lazuli #00BFFF (Highlights)
+C_RED     = f"{ESC}[38;2;0;191;255m"   # Lapis Lazuli #00BFFF (Alerts - now blue)
+C_DARK    = f"{ESC}[38;2;0;136;170m"   # Dim Lapis #0088AA (Subtitles)
 
 # --- ASCII Art (TTS2 VOICE) ---
 HEADER_ART = [
