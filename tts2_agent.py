@@ -3467,6 +3467,12 @@ def create_ui():
         /* Import monospace fonts */
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fira+Code:wght@400;500;700&display=swap');
 
+        /* SOLID BASE - Prevent desktop/browser background from showing through */
+        html, body {
+            background-color: #050200 !important;
+            min-height: 100vh;
+        }
+
         /* Global Font - Full Monospace Terminal */
         * {
             font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', 'Lucida Console', monospace !important;
