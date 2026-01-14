@@ -29,21 +29,21 @@ warnings.filterwarnings("ignore", message=".*WebSocketServerProtocol.*")
 # Silence noisy loggers
 import logging
 
-# Force all output to match the Engineered Amber theme (RGB 255, 69, 0)
-ORANGE = "\033[38;2;255;69;0m"
+# Force all output to match the Lapis Lazuli theme (RGB 0, 191, 255)
+LAPIS = "\033[38;2;0;191;255m"
 RESET = "\033[0m"
 
-# Wrap stdout/stderr to always output orange
-class OrangeStream:
+# Wrap stdout/stderr to always output lapis lazuli
+class LapisStream:
     def __init__(self, stream):
         self._stream = stream
         self._at_line_start = True
 
     def write(self, text):
         if text:
-            # Add orange color code at the start of each line
+            # Add lapis lazuli color code at the start of each line
             if self._at_line_start and text.strip():
-                self._stream.write(ORANGE)
+                self._stream.write(LAPIS)
             self._stream.write(text)
             self._at_line_start = text.endswith('\n')
 
@@ -53,17 +53,17 @@ class OrangeStream:
     def __getattr__(self, name):
         return getattr(self._stream, name)
 
-# Apply orange wrapper to stdout/stderr
-sys.stdout = OrangeStream(sys.__stdout__)
-sys.stderr = OrangeStream(sys.__stderr__)
+# Apply lapis wrapper to stdout/stderr
+sys.stdout = LapisStream(sys.__stdout__)
+sys.stderr = LapisStream(sys.__stderr__)
 
-class OrangeFormatter(logging.Formatter):
+class LapisFormatter(logging.Formatter):
     def format(self, record):
-        return f"{ORANGE}{super().format(record)}"
+        return f"{LAPIS}{super().format(record)}"
 
-# Apply orange formatter to all existing and future handlers
-def apply_orange_formatter():
-    formatter = OrangeFormatter("%(message)s")
+# Apply lapis formatter to all existing and future handlers
+def apply_lapis_formatter():
+    formatter = LapisFormatter("%(message)s")
     root_logger = logging.getLogger()
 
     # Apply to root logger
@@ -82,9 +82,9 @@ def apply_orange_formatter():
             handler.setFormatter(formatter)
             handler.stream = sys.stdout
 
-apply_orange_formatter()
+apply_lapis_formatter()
 
-# Silence noisy loggers (but keep them orange when they do speak)
+# Silence noisy loggers (but keep them lapis when they do speak)
 logging.getLogger("transformers").setLevel(logging.ERROR)
 logging.getLogger("httpx").setLevel(logging.ERROR)
 logging.getLogger("uvicorn").setLevel(logging.WARNING)  # Allow startup messages
@@ -3246,7 +3246,7 @@ def get_ptt_status() -> Tuple[str, str, float, str]:
             extra = parts[2] if len(parts) > 2 else ""
             
             status_map = {
-                "ready": ("🎤 PTT Ready (Right Shift)", "#ff4500", "orange"),
+                "ready": ("🎤 PTT Ready (Right Shift)", "#00BFFF", "lapis"),
                 "recording": (f"🔴 RECORDING ({duration:.1f}s)", "#ef4444", "red"),
                 "processing": (f"⏳ Processing...", "#ffaa00", "orange"),
                 "sent": ("✅ Sent!", "#3b82f6", "blue"),
@@ -5767,9 +5767,9 @@ def process_group_chat_wrapper(user_message, chat_history, character_id, voice_f
 
 
 if __name__ == "__main__":
-    # Force orange color at very start of execution (Engineered Amber theme)
-    sys.stdout.write("\033[38;2;255;69;0m")
-    sys.stderr.write("\033[38;2;255;69;0m")
+    # Force lapis lazuli color at very start of execution
+    sys.stdout.write("\033[38;2;0;191;255m")
+    sys.stderr.write("\033[38;2;0;191;255m")
     sys.stdout.flush()
     sys.stderr.flush()
 
@@ -5779,8 +5779,8 @@ if __name__ == "__main__":
     print(f"   Platform: {PLATFORM.title()}" + (" (WSL)" if IS_WSL else ""))
     print("="*60)
 
-    # Ensure orange stays active
-    sys.stdout.write("\033[38;2;255;69;0m")
+    # Ensure lapis stays active
+    sys.stdout.write("\033[38;2;0;191;255m")
 
     # Move all status logs AFTER the banner
     print(f"\n[Platform] {PLATFORM.title()}" + (" (WSL)" if IS_WSL else ""))
@@ -5828,8 +5828,8 @@ if __name__ == "__main__":
     if SCREEN_AVAILABLE: features.append("Screen Capture")
     if PDF_AVAILABLE: features.append("Docs (PDF/TXT/MD/DOCX/CSV/JSON/Code)")
     
-    # Re-apply orange color before features
-    sys.stdout.write("\033[38;2;255;69;0m")
+    # Re-apply lapis color before features
+    sys.stdout.write("\033[38;2;0;191;255m")
     print(f"[Features] Enabled: {', '.join(features)}")
 
     print(f"\n✓ Starting on http://127.0.0.1:{SERVER_PORT}")
@@ -5848,7 +5848,7 @@ if __name__ == "__main__":
         update_vad_control(enabled=False, tts_playing=False)
 
     # Final color enforcement before uvicorn/gradio takes over
-    sys.stdout.write("\033[38;2;255;69;0m")
+    sys.stdout.write("\033[38;2;0;191;255m")
     sys.stdout.flush()
 
     app.launch(
