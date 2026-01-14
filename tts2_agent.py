@@ -5633,9 +5633,9 @@ def process_group_chat_wrapper(user_message, chat_history, character_id, voice_f
 
 
 if __name__ == "__main__":
-    # Force green color at very start of execution
-    sys.stdout.write("\033[38;2;0;120;70m")
-    sys.stderr.write("\033[38;2;0;120;70m")
+    # Force orange color at very start of execution
+    sys.stdout.write("\033[38;2;255;69;0m")
+    sys.stderr.write("\033[38;2;255;69;0m")
     sys.stdout.flush()
     sys.stderr.flush()
 
@@ -5645,8 +5645,8 @@ if __name__ == "__main__":
     print(f"   Platform: {PLATFORM.title()}" + (" (WSL)" if IS_WSL else ""))
     print("="*60)
     
-    # Ensure green stays active
-    sys.stdout.write("\033[38;2;0;120;70m")
+    # Ensure orange stays active
+    sys.stdout.write("\033[38;2;255;69;0m")
 
     # Move all status logs AFTER the banner
     print(f"\n[Platform] {PLATFORM.title()}" + (" (WSL)" if IS_WSL else ""))
@@ -5694,8 +5694,8 @@ if __name__ == "__main__":
     if SCREEN_AVAILABLE: features.append("Screen Capture")
     if PDF_AVAILABLE: features.append("Docs (PDF/TXT/MD/DOCX/CSV/JSON/Code)")
     
-    # Re-apply color before features
-    sys.stdout.write("\033[38;2;0;120;70m")
+    # Re-apply orange color before features
+    sys.stdout.write("\033[38;2;255;69;0m")
     print(f"[Features] Enabled: {', '.join(features)}")
 
     print(f"\n✓ Starting on http://127.0.0.1:{SERVER_PORT}")
@@ -5714,7 +5714,7 @@ if __name__ == "__main__":
         update_vad_control(enabled=False, tts_playing=False)
 
     # Final color enforcement before uvicorn/gradio takes over
-    sys.stdout.write("\033[38;2;0;120;70m")
+    sys.stdout.write("\033[38;2;255;69;0m")
     sys.stdout.flush()
 
     app.launch(
