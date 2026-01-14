@@ -3442,10 +3442,10 @@ def create_ui():
             --plasma-primary: #ff4500;
             --plasma-glow: rgba(255, 69, 0, 0.4);
 
-            /* 2. Reading Text - Comfortable Amber (fixes eye strain) */
-            --body-text-color: #ffcc99;
-            --block-label-text-color: #ffaa66;
-            --plasma-text: #ffcc99;
+            /* 2. Text - Lightsaber Purple */
+            --body-text-color: #cc00ff;
+            --block-label-text-color: #ff4500;
+            --plasma-text: #cc00ff;
             --plasma-dim: #883300;
             --plasma-border-dim: #551a00;
 
@@ -4132,8 +4132,180 @@ def create_ui():
             background-color: #ff4500 !important;
             border-color: #ff4500 !important;
         }
+
+        /* ============================================
+           RADIO BUTTON GROUP FIX - Selected State
+           Black text on orange background when selected
+           ============================================ */
+
+        /* Radio button labels - purple text by default */
+        .gr-radio label,
+        [data-testid="radio"] label,
+        .wrap label span,
+        label.svelte-1gfkn6j span {
+            color: #cc00ff !important;
+        }
+
+        /* Radio button group - selected item styling */
+        .gr-radio label.selected,
+        .gr-radio label[data-selected="true"],
+        [data-testid="radio"] label.selected,
+        [data-testid="radio"] label[data-selected="true"],
+        .wrap label.selected,
+        .wrap label[data-selected="true"],
+        input[type="radio"]:checked + label,
+        input[type="radio"]:checked ~ label,
+        input[type="radio"]:checked + span,
+        .gr-radio .selected,
+        label.selected span,
+        label[data-selected="true"] span {
+            background: #ff4500 !important;
+            color: #000000 !important;
+        }
+
+        /* Force selected radio button text to be black */
+        .gr-radio label.selected span,
+        .gr-radio label[data-selected="true"] span,
+        [data-testid="radio"] label.selected span,
+        [data-testid="radio"] label[data-selected="true"] span {
+            color: #000000 !important;
+        }
+
+        /* Gradio 4.x Radio specific - uses button-like styling */
+        .gradio-radio .wrap .selected,
+        .gradio-radio label.selected,
+        .gradio-radio [data-testid="radio"] label.selected,
+        button[role="radio"][aria-checked="true"],
+        [role="radiogroup"] button[aria-checked="true"],
+        [role="radiogroup"] label.selected {
+            background: #ff4500 !important;
+            color: #000000 !important;
+        }
+
+        /* Handle the inner span text for selected radio */
+        .gradio-radio .wrap .selected span,
+        .gradio-radio label.selected span,
+        button[role="radio"][aria-checked="true"] span,
+        [role="radiogroup"] button[aria-checked="true"] span {
+            color: #000000 !important;
+        }
+
+        /* Unselected radio buttons - black bg with orange border */
+        .gr-radio label:not(.selected),
+        [data-testid="radio"] label:not(.selected),
+        button[role="radio"][aria-checked="false"],
+        [role="radiogroup"] button[aria-checked="false"],
+        [role="radiogroup"] label:not(.selected) {
+            background: #000000 !important;
+            border: 1px solid #ff4500 !important;
+            color: #cc00ff !important;
+        }
+
+        /* ============================================
+           BUTTON FIXES - Black bg with orange outline
+           ============================================ */
+
+        /* Primary buttons - now black with orange border */
+        button.primary {
+            background: #000000 !important;
+            color: #cc00ff !important;
+            border: 2px solid #ff4500 !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            text-shadow: none !important;
+        }
+        button.primary:hover {
+            background: #ff4500 !important;
+            color: #000000 !important;
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.5) !important;
+        }
+
+        /* Secondary buttons - black with orange border */
+        button.secondary {
+            background: #000000 !important;
+            color: #cc00ff !important;
+            border: 1px solid #ff4500 !important;
+        }
+        button.secondary:hover {
+            background: #ff4500 !important;
+            color: #000000 !important;
+        }
+
+        /* All other buttons */
+        button:not(.primary):not(.secondary) {
+            background: #000000 !important;
+            color: #cc00ff !important;
+            border: 1px solid #ff4500 !important;
+        }
+        button:not(.primary):not(.secondary):hover {
+            background: #ff4500 !important;
+            color: #000000 !important;
+        }
+
+        /* ============================================
+           TEXT COLOR FIX - Lightsaber Purple
+           ============================================ */
+
+        /* Override body text to purple */
+        body, p, span, div {
+            color: #cc00ff !important;
+        }
+
+        /* Labels stay orange for structure */
+        label, .label-wrap, .svelte-1gfkn6j, h1, h2, h3, h4, h5, h6 {
+            color: #ff4500 !important;
+        }
+
+        /* Input text - purple */
+        input, textarea, select {
+            color: #cc00ff !important;
+        }
+
+        /* Placeholder text - dimmer purple */
+        input::placeholder, textarea::placeholder {
+            color: #9900cc !important;
+        }
+
+        /* Chatbot messages */
+        #main-chatbot [role="user"] > p,
+        #main-chatbot [role="user"] > span,
+        #main-chatbot [role="user"] > div:not(.tool-call-block):not(.tool-chain-container) {
+            color: #cc00ff !important;
+        }
+        #main-chatbot [role="assistant"] > p,
+        #main-chatbot [role="assistant"] > span,
+        #main-chatbot [role="assistant"] > div:not(.tool-call-block):not(.tool-chain-container):not(.message-expandable) {
+            color: #cc00ff !important;
+        }
+        #main-chatbot [role="assistant"] .message-expandable {
+            color: #cc00ff !important;
+        }
+
+        /* ============================================
+           GRADIO FOOTER FIX
+           ============================================ */
+        footer, footer a, footer span, .footer, .built-with {
+            color: #cc00ff !important;
+        }
+
+        /* ============================================
+           FORCE ALL BUTTONS BLACK WITH ORANGE OUTLINE
+           Override Gradio's default button styling completely
+           ============================================ */
+        button, .gr-button, [class*="button"] {
+            background: #000000 !important;
+            background-color: #000000 !important;
+            color: #cc00ff !important;
+            border: 1px solid #ff4500 !important;
+        }
+        button:hover, .gr-button:hover, [class*="button"]:hover {
+            background: #ff4500 !important;
+            background-color: #ff4500 !important;
+            color: #000000 !important;
+        }
     """
-    
+
     # JavaScript for keyboard shortcuts, copy buttons, HUD updates, and expandable messages
     keyboard_js = """
     function() {
