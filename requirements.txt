@@ -110,3 +110,4 @@ soprano-tts>=0.0.2
 # If pyaudio fails on Windows:
 #   pip install pipwin && pipwin install pyaudio
 # ============================================
+mcp>=1.0.0
