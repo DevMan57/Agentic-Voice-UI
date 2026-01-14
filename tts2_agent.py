@@ -3450,8 +3450,8 @@ def create_ui():
             --plasma-border-dim: #551a00;
 
             /* 3. Background Tints */
-            --plasma-bg: #050200;
-            --plasma-bg-light: #0f0500;
+            --plasma-bg: #000000;
+            --plasma-bg-light: #000000;
             --bg-overlay: rgba(0, 0, 0, 0.6);
             --panel-bg: rgba(20, 10, 5, 0.7);
 
@@ -3469,7 +3469,7 @@ def create_ui():
 
         /* SOLID BASE - Prevent desktop/browser background from showing through */
         html, body {
-            background-color: #050200 !important;
+            background-color: #000000 !important;
             min-height: 100vh;
         }
 
@@ -3484,32 +3484,11 @@ def create_ui():
             text-shadow: 0 0 2px rgba(255, 160, 50, 0.3);
         }
 
-        /* SCANLINES OVERLAY - CRT Effect (Orange tint) */
-        .gradio-container::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(255, 69, 0, 0.03) 0px,
-                rgba(255, 69, 0, 0.03) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        /* PLASMA GLOW - Main container border/shadow only (background set in carbon fiber section) */
+        /* Main container - Black with orange border */
         .gradio-container {
+            background-color: #000000 !important;
             border: 2px solid #ff4500 !important;
-            box-shadow:
-                inset 0 0 100px rgba(255, 69, 0, 0.08),
-                0 0 25px rgba(255, 69, 0, 0.4),
-                inset 0 0 10px rgba(255, 69, 0, 0.4) !important;
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.3) !important;
         }
 
         /* Scrollbars - Burnt Orange */
@@ -3518,7 +3497,7 @@ def create_ui():
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #050200;
+            background: #000000;
             border: 1px solid #551a00;
         }
         ::-webkit-scrollbar-thumb {
@@ -3544,7 +3523,7 @@ def create_ui():
             justify-content: space-between;
             align-items: center;
             padding: 8px 16px;
-            background: #050200;
+            background: #000000;
             border: 2px solid #ff4500;
             margin-bottom: 10px;
             font-size: 0.85em;
@@ -3577,7 +3556,7 @@ def create_ui():
             align-items: center;
             gap: 10px;
             padding: 6px 12px;
-            background: #050200;
+            background: #000000;
             border: 1px solid #ff4500;
         }
         #emotion-meter .meter-label {
@@ -3589,7 +3568,7 @@ def create_ui():
         #emotion-meter .meter-bar {
             flex: 1;
             height: 12px;
-            background: #0f0500;
+            background: #000000;
             border: 1px solid #551a00;
             position: relative;
             overflow: hidden;
@@ -3619,7 +3598,7 @@ def create_ui():
             font-size: 1.2em;
             font-weight: bold;
             transition: all 0.2s ease;
-            background: #050200;
+            background: #000000;
             border: 2px solid #ff4500;
             color: #ff4500;
             text-transform: uppercase;
@@ -3680,7 +3659,7 @@ def create_ui():
         #audio-response {
             min-height: 60px;
             border: 1px solid #ff4500;
-            background: #050200;
+            background: #000000;
         }
         #audio-response audio {
             width: 100%;
@@ -3708,7 +3687,7 @@ def create_ui():
         .tool-call-block,
         #main-chatbot .tool-call-block,
         #main-chatbot [role="assistant"] .tool-call-block {
-            background: #050200 !important;
+            background: #000000 !important;
             border: 2px solid #ff4500 !important;
             padding: 0 !important;
             margin: 8px 0 !important;
@@ -3727,7 +3706,7 @@ def create_ui():
             color: #ff4500;
             font-size: 10px;
             z-index: 1;
-            background: #050200;
+            background: #000000;
             padding: 2px 8px;
             border: 1px solid #ff4500;
         }
@@ -3770,7 +3749,7 @@ def create_ui():
             word-break: break-word !important;
             text-shadow: none !important;
             font-weight: normal !important;
-            background: #050200 !important;
+            background: #000000 !important;
             border-top: 1px solid #331100 !important;
         }
 
@@ -3778,7 +3757,7 @@ def create_ui():
         .tool-call-result,
         #main-chatbot .tool-call-result,
         #main-chatbot [role="assistant"] .tool-call-result {
-            background: #0f0500 !important;
+            background: #000000 !important;
             border-top: 2px solid #cc6600 !important;
             border-left: none !important;
             color: #cc6600 !important;
@@ -3797,7 +3776,7 @@ def create_ui():
             position: absolute;
             top: 8px;
             right: 8px;
-            background: #050200;
+            background: #000000;
             border: 1px solid #ff4500;
             color: #ff4500;
             cursor: pointer;
@@ -3834,7 +3813,7 @@ def create_ui():
             left: 0;
             right: 0;
             height: 60px;
-            background: linear-gradient(transparent, #050200);
+            background: linear-gradient(transparent, #000000);
             pointer-events: none;
         }
         .expand-btn {
@@ -3844,7 +3823,7 @@ def create_ui():
             color: #ff4500;
             cursor: pointer;
             font-size: 0.9em;
-            background: #050200;
+            background: #000000;
             margin-top: 4px;
             transition: background 0.2s;
             border: 1px solid #ff4500;
@@ -3879,7 +3858,7 @@ def create_ui():
         .thinking-bar-container {
             width: 150px;
             height: 6px;
-            background: #0f0500;
+            background: #000000;
             border: 1px solid #ff4500;
             overflow: hidden;
             position: relative;
@@ -3903,7 +3882,7 @@ def create_ui():
             font-size: 0.75em;
             color: #ffcc99;
             padding: 6px 12px;
-            background: #050200;
+            background: #000000;
             display: inline-flex;
             gap: 16px;
             border: 1px solid #ff4500;
@@ -3924,7 +3903,7 @@ def create_ui():
             align-items: center;
             gap: 8px;
             padding: 6px 12px;
-            background: #050200;
+            background: #000000;
             font-size: 0.8em;
             border: 1px solid #ff4500;
             text-transform: uppercase;
@@ -3932,38 +3911,22 @@ def create_ui():
         .mood-indicator .mood-text { color: #ff4500; }
 
         /* ============================================
-           CARBON FIBER BACKGROUND (Orange Tinted)
-           Weave pattern on main container only
+           PANELS - Black with Orange Borders
            ============================================ */
 
-        /* Main container - Carbon fiber weave (burnt orange tinted) */
-        .gradio-container {
-            background:
-                linear-gradient(27deg, #0a0400 5px, transparent 5px) 0 5px,
-                linear-gradient(207deg, #0a0400 5px, transparent 5px) 10px 0px,
-                linear-gradient(27deg, #0f0600 5px, transparent 5px) 0px 10px,
-                linear-gradient(207deg, #0f0600 5px, transparent 5px) 10px 5px,
-                linear-gradient(90deg, #080300 10px, transparent 10px),
-                linear-gradient(#090400 25%, #070300 25%, #070300 50%, transparent 50%, transparent 75%, #0b0500 75%, #0b0500) !important;
-            background-color: #050200 !important;
-            background-size: 20px 20px !important;
-        }
-
-        /* Panels - Glass Effect over Carbon Weave */
+        /* All panels - Solid black */
         .block, .panel,
         .gradio-accordion,
         .gradio-group {
-            background-color: var(--panel-bg) !important;
-            backdrop-filter: blur(3px);
-            -webkit-backdrop-filter: blur(3px);
-            border: 1px solid rgba(255, 69, 0, 0.3) !important;
+            background-color: #000000 !important;
+            border: 1px solid #ff4500 !important;
         }
 
-        /* Input areas - Solid dark for contrast */
+        /* Input areas - Black */
         .gradio-dropdown,
         .gradio-textbox,
         .gradio-chatbot {
-            background-color: #050200 !important;
+            background-color: #000000 !important;
         }
 
         /* ============================================
@@ -3974,7 +3937,7 @@ def create_ui():
         #main-chatbot [role="user"],
         #main-chatbot .role-user,
         #main-chatbot .user {
-            background: #0f0500 !important;
+            background: #000000 !important;
             border: 2px solid #cc6600 !important;
             box-shadow: 0 0 10px rgba(204, 102, 0, 0.3);
         }
@@ -3988,7 +3951,7 @@ def create_ui():
         #main-chatbot [role="assistant"],
         #main-chatbot .role-assistant,
         #main-chatbot .bot {
-            background: #050200 !important;
+            background: #000000 !important;
             border: 2px solid #ff4500 !important;
             box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
         }
@@ -4019,7 +3982,7 @@ def create_ui():
            ============================================ */
         #msg-input,
         #msg-input textarea {
-            background: #0f0500 !important;
+            background: #000000 !important;
             border: 2px solid #ff4500 !important;
             color: #ffb380 !important;
         }
@@ -4041,7 +4004,7 @@ def create_ui():
         }
         .gradio-accordion > .label-wrap {
             border-bottom: 1px solid #ff4500 !important;
-            background: #050200 !important;
+            background: #000000 !important;
             color: #ff4500 !important;
         }
 
@@ -4093,8 +4056,8 @@ def create_ui():
         .vad-indicator {
             background: repeating-linear-gradient(
                 45deg,
-                #1a0500,
-                #1a0500 10px,
+                #000000,
+                #000000 10px,
                 #330a00 10px,
                 #330a00 20px
             );
@@ -4322,7 +4285,7 @@ def create_ui():
         current_provider = gr.State(value=initial_provider)
         
         gr.HTML(f"""
-        <div style="border: 3px solid #ff4500; background: #050200; padding: 15px 20px; margin-bottom: 15px; box-shadow: 0 0 25px rgba(255, 69, 0, 0.4), inset 0 0 30px rgba(255, 69, 0, 0.08);">
+        <div style="border: 3px solid #ff4500; background: #000000; padding: 15px 20px; margin-bottom: 15px; box-shadow: 0 0 25px rgba(255, 69, 0, 0.4), inset 0 0 30px rgba(255, 69, 0, 0.08);">
             <pre style="color: #ff4500; font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; font-size: 16px; line-height: 1.15; margin: 0; text-align: center; letter-spacing: 0px; text-shadow: 0 0 10px rgba(255, 69, 0, 0.6);">
 ╔════════════════════════════════════════════════════════════════════════════════════╗
 ║  ████████╗████████╗ ███████╗ ██████╗    ██╗   ██╗ ██████╗ ██╗ ██████╗███████╗      ║

@@ -31,42 +31,42 @@ def create_dark_theme():
         neutral_hue="slate",
         font=gr.themes.GoogleFont("Fira Code"),
     ).set(
-        # Base colors - Deep burnt black
-        body_background_fill="#050200",
-        body_background_fill_dark="#050200",
-        background_fill_primary="#0a0400",
-        background_fill_primary_dark="#0a0400",
-        background_fill_secondary="#0f0500",
-        background_fill_secondary_dark="#0f0500",
+        # Base colors - Pure black
+        body_background_fill="#000000",
+        body_background_fill_dark="#000000",
+        background_fill_primary="#000000",
+        background_fill_primary_dark="#000000",
+        background_fill_secondary="#000000",
+        background_fill_secondary_dark="#000000",
 
-        # Block colors - Burnt black with neon orange borders
-        block_background_fill="#0a0400",
-        block_background_fill_dark="#0a0400",
-        block_border_color="#ff4500",  # Neon Orange
+        # Block colors - Black with orange borders
+        block_background_fill="#000000",
+        block_background_fill_dark="#000000",
+        block_border_color="#ff4500",
         block_border_color_dark="#ff4500",
-        block_label_background_fill="#0f0500",
-        block_label_background_fill_dark="#0f0500",
-        block_title_text_color="#ffcc99",  # Soft Amber for readability
-        block_title_text_color_dark="#ffcc99",
+        block_label_background_fill="#000000",
+        block_label_background_fill_dark="#000000",
+        block_title_text_color="#ff4500",
+        block_title_text_color_dark="#ff4500",
 
-        # Input colors - Deep burnt black
-        input_background_fill="#050200",
-        input_background_fill_dark="#050200",
-        input_border_color="#551a00",
-        input_border_color_dark="#551a00",
+        # Input colors - Black
+        input_background_fill="#000000",
+        input_background_fill_dark="#000000",
+        input_border_color="#ff4500",
+        input_border_color_dark="#ff4500",
         input_placeholder_color="#883300",
         input_placeholder_color_dark="#883300",
 
-        # Button colors - NEON ORANGE
+        # Button colors - Orange
         button_primary_background_fill="#ff4500",
         button_primary_background_fill_dark="#ff4500",
         button_primary_background_fill_hover="#ff6600",
         button_primary_background_fill_hover_dark="#ff6600",
-        button_primary_text_color="#000000",  # Black text on orange = high vis
+        button_primary_text_color="#000000",
         button_primary_text_color_dark="#000000",
         # Secondary buttons
-        button_secondary_background_fill="#0f0500",
-        button_secondary_background_fill_dark="#0f0500",
+        button_secondary_background_fill="#000000",
+        button_secondary_background_fill_dark="#000000",
         button_secondary_background_fill_hover="#ff4500",
         button_secondary_background_fill_hover_dark="#ff4500",
         button_secondary_text_color="#ff4500",
