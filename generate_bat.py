@@ -37,7 +37,7 @@ def make_bar(char="=", length=TERM_WIDTH, color=C_ORANGE, end_color=C_RESET):
 def make_item(key, label, status="", color_main=C_AMBER):
     label_part = f"[{key}] {label}"
     if status:
-        padding = 55 - len(label_part)
+        padding = 70 - len(label_part)
         return f"{C_ORANGE}:{C_RESET}  {color_main}{label_part}{' ' * padding}{C_GREY}{status}{C_RESET}"
     else:
         return f"{C_ORANGE}:{C_RESET}  {color_main}{label_part}{C_RESET}"
@@ -77,9 +77,9 @@ def get_batch_content():
     lines.append(f"echo {C_ORANGE}:{C_RESET}")
     for line in HEADER_ART:
         safe_line = line.replace("|", "^|").replace("%", "%%")
-        lines.append(f"echo {C_ORANGE}:{C_RESET} {C_ORANGE}{safe_line}{C_RESET}")
+        lines.append(f"echo {C_ORANGE}:{C_RESET}   {C_ORANGE}{safe_line}{C_RESET}")
     lines.append(f"echo {C_ORANGE}:{C_RESET}")
-    lines.append(f"echo {C_ORANGE}:{C_RESET}                       {C_AMBER}Multi-Character Memory System{C_RESET}")
+    lines.append(f"echo {C_ORANGE}:{C_RESET}                           {C_AMBER}Multi-Character Memory System{C_RESET}")
     lines.append(f"echo {C_ORANGE}:{C_RESET}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_ORANGE)}")
     lines.append(f"echo {C_ORANGE}:{C_RESET}")
