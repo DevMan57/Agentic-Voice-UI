@@ -9,12 +9,6 @@
 
 Designed for **Hybrid** environments: Run the heavy AI core (IndexTTS2) in **WSL** for Linux performance, while keeping your tools (LM Studio, Microphone) on **Windows**.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/TTS-IndexTTS2%20%7C%20Kokoro-green.svg" alt="TTS">
-  <img src="https://img.shields.io/badge/STT-Whisper-orange.svg" alt="STT">
-  <img src="https://img.shields.io/badge/Memory-SQLite_Graph-purple.svg" alt="Memory">
-  <img src="https://img.shields.io/badge/Architecture-Hybrid_WSL-blue.svg" alt="Arch">
-</p>
 
 ---
 
