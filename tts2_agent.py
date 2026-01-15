@@ -4008,21 +4008,26 @@ def create_ui():
 
         /* Input areas - Black */
         .gradio-dropdown,
-        .gradio-textbox,
-        .gradio-chatbot {
+        .gradio-textbox {
             background-color: #000000 !important;
+        }
+
+        /* Chatbot container - Grey gradient background */
+        .gradio-chatbot {
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+            border: 1px solid var(--theme-primary) !important;
         }
 
         /* ============================================
            CHATBOT MESSAGE STYLING - Visual Separation
-           User: Textured grey | Assistant: Pure black void
+           User: Black | Assistant: Pure black void
            ============================================ */
 
-        /* User messages - Grey gradient */
+        /* User messages - Black background */
         #main-chatbot [role="user"],
         #main-chatbot .role-user,
         #main-chatbot .user {
-            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+            background: #000000 !important;
             border: 1px solid var(--theme-medium) !important;
             border-left: 3px solid var(--theme-dim) !important;
         }
@@ -4651,6 +4656,104 @@ def create_ui():
         }
         button:active, .gr-button:active, [class*="button"]:active {
             background: var(--theme-bright) !important;
+            color: #000000 !important;
+        }
+
+        /* ============================================
+           UNIVERSAL HOVER TEXT COLOR FIX
+           Force ALL text/icons to black on hover
+           ============================================ */
+
+        /* Buttons - all text and icons black on hover */
+        button:hover *,
+        .gr-button:hover *,
+        [class*="button"]:hover * {
+            color: #000000 !important;
+            fill: #000000 !important;
+        }
+
+        /* Accordion headers - all content black on hover */
+        .gradio-accordion > .label-wrap:hover,
+        .gradio-accordion > .label-wrap:hover *,
+        .gradio-accordion > .label-wrap:hover span,
+        .gradio-accordion > .label-wrap:hover svg {
+            color: #000000 !important;
+            fill: #000000 !important;
+        }
+
+        /* Dropdowns - all content black on hover */
+        .gradio-dropdown:hover *,
+        .gradio-dropdown:hover span,
+        .gradio-dropdown:hover input,
+        .gradio-dropdown:hover svg {
+            color: #000000 !important;
+            fill: #000000 !important;
+        }
+
+        /* Checkbox labels - black on hover */
+        .gr-checkbox:hover label,
+        .gr-checkbox:hover span,
+        [data-testid="checkbox"]:hover label,
+        [data-testid="checkbox"]:hover span,
+        .checkbox-group label:hover,
+        .checkbox-group label:hover span {
+            color: #000000 !important;
+        }
+
+        /* Radio buttons - black text on hover */
+        .gradio-radio label:hover,
+        .gradio-radio label:hover span,
+        [role="radiogroup"] button:hover,
+        [role="radiogroup"] button:hover span,
+        [role="radiogroup"] label:hover,
+        [role="radiogroup"] label:hover span {
+            color: #000000 !important;
+        }
+
+        /* File upload areas - styling and hover */
+        .gradio-file,
+        .gradio-image,
+        [data-testid="file"],
+        [data-testid="image"],
+        .upload-container,
+        [class*="upload"] {
+            border: 1px solid var(--theme-primary) !important;
+            background: #000000 !important;
+            transition: all 0.2s ease !important;
+        }
+        .gradio-file:hover,
+        .gradio-image:hover,
+        [data-testid="file"]:hover,
+        [data-testid="image"]:hover,
+        .upload-container:hover,
+        [class*="upload"]:hover {
+            background: var(--theme-primary) !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+        }
+        .gradio-file:hover *,
+        .gradio-image:hover *,
+        [data-testid="file"]:hover *,
+        [data-testid="image"]:hover *,
+        .upload-container:hover *,
+        [class*="upload"]:hover * {
+            color: #000000 !important;
+            fill: #000000 !important;
+        }
+
+        /* Tab buttons - black on hover and selected */
+        .tab-nav button:hover *,
+        .tab-nav button.selected * {
+            color: #000000 !important;
+        }
+
+        /* Footer links - black on hover */
+        footer a:hover,
+        footer a:hover * {
+            color: #000000 !important;
+        }
+
+        /* Select elements - black on hover */
+        select:hover {
             color: #000000 !important;
         }
 
