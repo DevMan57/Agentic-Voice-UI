@@ -28,7 +28,7 @@ HEADER_ART = [
     r"╚════════════════════════════════════════════════════════════════════════════════╝"
 ]
 
-TERM_WIDTH = 110
+TERM_WIDTH = 100
 
 def make_bar(char="=", length=TERM_WIDTH, color=C_ORANGE, end_color=C_RESET):
     solid = char * length
@@ -55,7 +55,7 @@ def get_batch_content():
     lines.append("title IndexTTS2 Voice Agent")
 
     # --- RESIZE WINDOW ---
-    lines.append('mode con: cols=115 lines=38')
+    lines.append('mode con: cols=105 lines=42')
     lines.append('powershell -command "&{$W=(get-host).ui.rawui;$B=$W.buffersize;$B.height=1000;$W.buffersize=$B;}"')
 
     # --- PATH SETUP ---
