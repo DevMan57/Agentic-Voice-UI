@@ -1,11 +1,5 @@
 # Agentic Voice UI
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%2B%20WSL2-lightgrey.svg)](https://github.com)
-
-**Local AI voice assistant with multi-character conversations, persistent memory, emotion detection, and MCP tool calling.**
-
 Real-time voice chat with swappable TTS/STT backends, knowledge graphs, and one-click installation for Windows + WSL2 + NVIDIA GPU.
 
 <p align="center">
