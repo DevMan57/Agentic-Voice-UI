@@ -4690,24 +4690,38 @@ def create_ui():
             fill: #000000 !important;
         }
 
-        /* Checkbox labels - black on hover */
+        /* Checkbox labels - black on hover (Gradio 4.x) */
         .gr-checkbox:hover label,
         .gr-checkbox:hover span,
         [data-testid="checkbox"]:hover label,
         [data-testid="checkbox"]:hover span,
         .checkbox-group label:hover,
-        .checkbox-group label:hover span {
+        .checkbox-group label:hover span,
+        .gradio-checkboxgroup label:hover,
+        .gradio-checkboxgroup label:hover *,
+        [data-testid="checkbox-group"] label:hover,
+        [data-testid="checkbox-group"] label:hover *,
+        .wrap label:hover,
+        .wrap label:hover span {
             color: #000000 !important;
+            background: var(--theme-primary) !important;
         }
 
-        /* Radio buttons - black text on hover */
+        /* Radio buttons - black text on hover (Gradio 4.x) */
         .gradio-radio label:hover,
-        .gradio-radio label:hover span,
+        .gradio-radio label:hover *,
+        .gradio-radio button:hover,
+        .gradio-radio button:hover *,
         [role="radiogroup"] button:hover,
-        [role="radiogroup"] button:hover span,
+        [role="radiogroup"] button:hover *,
         [role="radiogroup"] label:hover,
-        [role="radiogroup"] label:hover span {
+        [role="radiogroup"] label:hover *,
+        [data-testid="radio"] label:hover,
+        [data-testid="radio"] label:hover *,
+        [data-testid="radio"] button:hover,
+        [data-testid="radio"] button:hover * {
             color: #000000 !important;
+            background: var(--theme-primary) !important;
         }
 
         /* File upload areas - styling and hover */
