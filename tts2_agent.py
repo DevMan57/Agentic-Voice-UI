@@ -3252,14 +3252,14 @@ def get_ptt_status() -> Tuple[str, str, float, str]:
             
             status_map = {
                 "ready": ("🎤 PTT Ready (Right Shift)", "#00BFFF", "lapis"),
-                "recording": (f"🔴 RECORDING ({duration:.1f}s)", "#ef4444", "red"),
-                "processing": (f"⏳ Processing...", "#ffaa00", "orange"),
-                "sent": ("✅ Sent!", "#3b82f6", "blue"),
-                "error": (f"❌ Error: {extra}", "#ef4444", "red"),
-                "offline": ("⚫ Offline", "#6b7280", "gray"),
+                "recording": (f"🔴 RECORDING ({duration:.1f}s)", "#00BFFF", "lapis"),
+                "processing": (f"⏳ Processing...", "#00BFFF", "lapis"),
+                "sent": ("✅ Sent!", "#00BFFF", "lapis"),
+                "error": (f"❌ Error: {extra}", "#00BFFF", "lapis"),
+                "offline": ("⚫ Offline", "#006699", "lapis-dim"),
             }
-            
-            display, color, _ = status_map.get(status, ("❓ Unknown", "#6b7280", "gray"))
+
+            display, color, _ = status_map.get(status, ("❓ Unknown", "#006699", "lapis-dim"))
             if extra and status == "ready":
                 display = f"🎤 {extra}"
             
@@ -3430,31 +3430,69 @@ def create_ui():
     
     custom_css = """
         /* ============================================
-           ENGINEERED AMBER THEME
-           Industrial Retro-Futurism with Woven Carbon
-           Split Toning: Neon Orange (structure) + Soft Amber (reading)
+           SWITCHABLE COLOR THEME SYSTEM
+           Lapis Lazuli | Lightsaber Purple | Orange | Green
            ============================================ */
 
-        /* CSS Variables - Clean Black + Lapis Lazuli */
+        /* CSS Variables - Theme Colors (defaults to Lapis Lazuli) */
         :root {
-            /* FORCE GRADIO INTERNAL VARIABLES TO LAPIS LAZULI */
-            --color-accent: #00BFFF !important;
-            --slider-color: #00BFFF !important;
-            --loader-color: #00BFFF !important;
+            /* THEME COLOR VARIABLES - Changed dynamically by JavaScript */
+            --theme-primary: #00BFFF;      /* Main accent color */
+            --theme-dim: #006699;          /* Darker variant */
+            --theme-bright: #33CCFF;       /* Lighter/hover variant */
+            --theme-medium: #0088AA;       /* Medium variant */
+            --theme-glow: rgba(0, 191, 255, 0.4);      /* Glow effect */
+            --theme-glow-soft: rgba(0, 191, 255, 0.1); /* Soft glow */
+            --theme-glow-text: rgba(0, 191, 255, 0.5); /* Text shadow */
+            --theme-glow-text-strong: rgba(0, 191, 255, 0.6); /* Strong text shadow */
 
-            /* Structure - Lapis Lazuli */
-            --primary-500: #00BFFF;
-            --plasma-primary: #00BFFF;
-            --plasma-glow: rgba(0, 191, 255, 0.4);
+            /* FORCE GRADIO INTERNAL VARIABLES */
+            --color-accent: var(--theme-primary) !important;
+            --slider-color: var(--theme-primary) !important;
+            --loader-color: var(--theme-primary) !important;
 
-            /* Text - Lapis Lazuli Glowing */
-            --body-text-color: #00BFFF;
-            --block-label-text-color: #00BFFF;
-            --plasma-text: #00BFFF;
+            /* Structure */
+            --primary-500: var(--theme-primary);
+            --plasma-primary: var(--theme-primary);
+            --plasma-glow: var(--theme-glow);
+
+            /* Text */
+            --body-text-color: var(--theme-primary);
+            --block-label-text-color: var(--theme-primary);
+            --plasma-text: var(--theme-primary);
 
             /* Backgrounds - Pure Black */
             --plasma-bg: #000000;
             --panel-bg: #000000;
+        }
+
+        /* ============================================
+           TEXTURES & SURFACES - Cyberdeck Materials
+           ============================================ */
+
+        /* 1. Woven Carbon Fiber - Structural areas (Sidebar, Headers) */
+        .carbon-fiber {
+            background:
+                radial-gradient(black 15%, transparent 16%) 0 0,
+                radial-gradient(black 15%, transparent 16%) 8px 8px,
+                radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+                radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+            background-color: #1a1a1a !important;
+            background-size: 16px 16px;
+        }
+
+        /* 2. Matte Dark Grey - Input/Control areas */
+        .matte-plate {
+            background-color: #111111 !important;
+            background-image: linear-gradient(to bottom, #1a1a1a, #0d0d0d);
+            border: 1px solid var(--theme-dim) !important;
+        }
+
+        /* 3. Settings Panel - Clean Black */
+        #settings-panel {
+            background-color: #000000 !important;
+            border-left: 2px solid var(--theme-primary) !important;
+            padding: 10px !important;
         }
 
         /* Import monospace fonts */
@@ -3472,74 +3510,76 @@ def create_ui():
             border-radius: 0px !important;
         }
 
-        /* Text glow effect - Lapis lazuli bloom */
+        /* Text glow effect */
         body, button, input, textarea {
-            text-shadow: 0 0 4px rgba(0, 191, 255, 0.5);
+            text-shadow: 0 0 4px var(--theme-glow-text);
         }
 
-        /* Main container - Black with lapis lazuli border */
+        /* Main container - Black with theme border */
         .gradio-container {
             background-color: #000000 !important;
-            border: 2px solid #00BFFF !important;
-            box-shadow: 0 0 20px rgba(0, 191, 255, 0.3) !important;
+            border: 2px solid var(--theme-primary) !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
         }
 
-        /* Scrollbars - Lapis Lazuli */
+        /* Scrollbars - Theme Color */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         ::-webkit-scrollbar-track {
             background: #000000;
-            border: 1px solid #006699;
+            border: 1px solid var(--theme-dim);
         }
         ::-webkit-scrollbar-thumb {
-            background: #00BFFF;
+            background: var(--theme-primary);
             border: none;
-            filter: drop-shadow(0 0 5px #00BFFF);
+            filter: drop-shadow(0 0 5px var(--theme-primary));
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #33CCFF;
+            background: var(--theme-bright);
         }
 
         /* Force slider accent color */
         input[type="range"] {
-            accent-color: #00BFFF !important;
-            filter: drop-shadow(0 0 5px #00BFFF);
+            accent-color: var(--theme-primary) !important;
+            filter: drop-shadow(0 0 5px var(--theme-primary));
         }
 
         /* ============================================
            HUD HEADER - Latency/Token/Memory Counters
+           Matte gradient surface like a dashboard module
            ============================================ */
         #hud-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 8px 16px;
-            background: #000000;
-            border: 2px solid #00BFFF;
+            background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+            border: 2px solid var(--theme-primary);
+            border-bottom: 3px solid var(--theme-primary);
             margin-bottom: 10px;
             font-size: 0.85em;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 0 15px rgba(0, 191, 255, 0.3);
+            box-shadow: 0 0 15px var(--theme-glow), inset 0 1px 0 rgba(255,255,255,0.05);
         }
         .hud-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #00BFFF;
+            color: var(--theme-primary);
         }
         .hud-label {
-            color: #006699;
+            color: var(--theme-dim);
         }
         .hud-value {
-            color: #00BFFF;
+            color: var(--theme-primary);
             font-weight: bold;
-            text-shadow: 0 0 5px #00BFFF;
+            text-shadow: 0 0 5px var(--theme-primary);
         }
-        .hud-value.warning { color: #00BFFF; }
-        .hud-value.danger { color: #00BFFF; }
+        .hud-value.warning { color: var(--theme-primary); }
+        .hud-value.danger { color: var(--theme-primary); }
 
         /* ============================================
            EMOTION METER - HUD Bar Gauge
@@ -3550,10 +3590,10 @@ def create_ui():
             gap: 10px;
             padding: 6px 12px;
             background: #000000;
-            border: 1px solid #00BFFF;
+            border: 1px solid var(--theme-primary);
         }
         #emotion-meter .meter-label {
-            color: #006699;
+            color: var(--theme-dim);
             font-size: 0.75em;
             text-transform: uppercase;
             min-width: 60px;
@@ -3562,7 +3602,7 @@ def create_ui():
             flex: 1;
             height: 12px;
             background: #000000;
-            border: 1px solid #006699;
+            border: 1px solid var(--theme-dim);
             position: relative;
             overflow: hidden;
         }
@@ -3570,13 +3610,13 @@ def create_ui():
             height: 100%;
             transition: width 0.3s, background 0.3s;
         }
-        #emotion-meter .meter-fill.happy { background: #00ff41; }
-        #emotion-meter .meter-fill.neutral { background: #00BFFF; }
-        #emotion-meter .meter-fill.sad { background: #0066ff; }
-        #emotion-meter .meter-fill.angry { background: #ff0040; }
-        #emotion-meter .meter-fill.fear { background: #9933ff; }
+        #emotion-meter .meter-fill.happy { background: var(--theme-primary); }
+        #emotion-meter .meter-fill.neutral { background: var(--theme-primary); }
+        #emotion-meter .meter-fill.sad { background: var(--theme-primary); }
+        #emotion-meter .meter-fill.angry { background: var(--theme-primary); }
+        #emotion-meter .meter-fill.fear { background: var(--theme-primary); }
         #emotion-meter .meter-value {
-            color: #00BFFF;
+            color: var(--theme-primary);
             font-size: 0.8em;
             min-width: 40px;
             text-align: right;
@@ -3592,11 +3632,11 @@ def create_ui():
             font-weight: bold;
             transition: all 0.2s ease;
             background: #000000;
-            border: 2px solid #00BFFF;
-            color: #00BFFF;
+            border: 2px solid var(--theme-primary);
+            color: var(--theme-primary);
             text-transform: uppercase;
             letter-spacing: 2px;
-            text-shadow: 0 0 10px #00BFFF;
+            text-shadow: 0 0 10px var(--theme-primary);
         }
 
         /* ============================================
@@ -3606,24 +3646,27 @@ def create_ui():
             padding: 20px 40px;
             font-size: 1.4em;
             font-weight: bold;
-            background: linear-gradient(135deg, #001a33 0%, #003366 100%);
-            border: 3px solid #00BFFF;
-            color: #00BFFF;
+            background: #000000 !important;
+            border: 3px solid var(--theme-primary);
+            color: var(--theme-primary);
             text-transform: uppercase;
             letter-spacing: 2px;
-            text-shadow: 0 0 10px #00BFFF;
-            box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+            text-shadow: 0 0 10px var(--theme-primary);
+            box-shadow: none;
             cursor: pointer;
             user-select: none;
             -webkit-user-select: none;
             touch-action: none;
-            transition: all 0.15s ease;
+            transition: all 0.2s ease;
         }
         #mobile-ptt-btn:hover {
-            box-shadow: 0 0 30px rgba(0, 191, 255, 0.5);
+            background: var(--theme-primary) !important;
+            color: #000000 !important;
+            text-shadow: none !important;
+            box-shadow: 0 0 30px var(--theme-glow);
         }
         #mobile-ptt-btn.recording {
-            background: linear-gradient(135deg, #330000 0%, #660000 100%);
+            background: #000000 !important;
             border-color: #FF4444;
             color: #FF4444;
             text-shadow: 0 0 15px #FF4444;
@@ -3647,59 +3690,59 @@ def create_ui():
             }
         }
 
-        /* RECORDING STATE - Bright red pulse */
+        /* RECORDING STATE - Theme pulse */
         @keyframes pulse-recording {
             0%, 100% {
-                box-shadow: 0 0 10px #ff0040, inset 0 0 20px rgba(255, 0, 64, 0.1);
-                border-color: #00BFFF;
-                color: #00BFFF;
+                box-shadow: 0 0 10px var(--theme-primary), inset 0 0 20px var(--theme-glow-soft);
+                border-color: var(--theme-primary);
+                color: var(--theme-primary);
             }
             50% {
-                box-shadow: 0 0 30px #ff0040, inset 0 0 40px rgba(255, 0, 64, 0.2);
-                border-color: #00BFFF;
-                color: #00BFFF;
+                box-shadow: 0 0 30px var(--theme-bright), inset 0 0 40px var(--theme-glow-soft);
+                border-color: var(--theme-bright);
+                color: var(--theme-primary);
             }
         }
         .recording {
             animation: pulse-recording 0.8s ease-in-out infinite;
         }
 
-        /* PROCESSING STATE - Lapis pulse */
+        /* PROCESSING STATE - Theme pulse */
         @keyframes pulse-processing {
             0%, 100% {
-                box-shadow: 0 0 10px #00BFFF;
-                border-color: #00BFFF;
+                box-shadow: 0 0 10px var(--theme-primary);
+                border-color: var(--theme-primary);
             }
             50% {
-                box-shadow: 0 0 25px #33CCFF;
-                border-color: #33CCFF;
+                box-shadow: 0 0 25px var(--theme-bright);
+                border-color: var(--theme-bright);
             }
         }
         .processing {
             animation: pulse-processing 1s ease-in-out infinite;
-            border-color: #00BFFF !important;
+            border-color: var(--theme-primary) !important;
         }
 
-        /* SPEAKING STATE - Full lapis glow */
+        /* SPEAKING STATE - Full theme glow */
         @keyframes pulse-burn {
-            from { box-shadow: 0 0 10px #00BFFF; }
-            to { box-shadow: 0 0 25px #33CCFF; }
+            from { box-shadow: 0 0 10px var(--theme-primary); }
+            to { box-shadow: 0 0 25px var(--theme-bright); }
         }
         .speaking {
             animation: pulse-burn 0.5s infinite alternate;
-            border-color: #00BFFF !important;
-            color: #00BFFF !important;
-            text-shadow: 0 0 15px #00BFFF !important;
+            border-color: var(--theme-primary) !important;
+            color: var(--theme-primary) !important;
+            text-shadow: 0 0 15px var(--theme-primary) !important;
         }
 
         #tts-warning {
-            color: #00BFFF;
+            color: var(--theme-primary);
             font-size: 0.9em;
             text-transform: uppercase;
         }
         #audio-response {
             min-height: 60px;
-            border: 1px solid #00BFFF;
+            border: 1px solid var(--theme-primary);
             background: #000000;
         }
         #audio-response audio {
@@ -3721,21 +3764,21 @@ def create_ui():
             top: 0;
             bottom: 0;
             width: 3px;
-            background: linear-gradient(to bottom, #00BFFF, #33CCFF);
+            background: linear-gradient(to bottom, var(--theme-primary), var(--theme-bright));
         }
 
-        /* Protocol Block - Black text on Lapis header */
+        /* Protocol Block - Black text on theme header */
         .tool-call-block,
         #main-chatbot .tool-call-block,
         #main-chatbot [role="assistant"] .tool-call-block {
             background: #000000 !important;
-            border: 2px solid #00BFFF !important;
+            border: 2px solid var(--theme-primary) !important;
             padding: 0 !important;
             margin: 8px 0 !important;
             font-size: 0.9em !important;
             position: relative !important;
             z-index: 10 !important;
-            box-shadow: 0 0 10px rgba(0, 191, 255, 0.3) !important;
+            box-shadow: 0 0 10px var(--theme-glow) !important;
             isolation: isolate;
         }
         .tool-call-block.tool-chain-continues::after {
@@ -3744,17 +3787,17 @@ def create_ui():
             bottom: -18px;
             left: 50%;
             transform: translateX(-50%);
-            color: #00BFFF;
+            color: var(--theme-primary);
             font-size: 10px;
             z-index: 1;
             background: #000000;
             padding: 2px 8px;
-            border: 1px solid #00BFFF;
+            border: 1px solid var(--theme-primary);
         }
 
-        /* Protocol Step Badge - Lapis style */
+        /* Protocol Step Badge - Theme style */
         .tool-step-badge {
-            background: #00BFFF !important;
+            background: var(--theme-primary) !important;
             color: #000000 !important;
             padding: 4px 10px !important;
             font-size: 0.75em !important;
@@ -3765,10 +3808,10 @@ def create_ui():
             letter-spacing: 1px;
         }
 
-        /* Protocol Header - Lapis bar */
+        /* Protocol Header - Theme bar */
         .tool-call-header,
         #main-chatbot .tool-call-header {
-            background: #00BFFF !important;
+            background: var(--theme-primary) !important;
             color: #000000 !important;
             font-weight: bold !important;
             margin: 0 !important;
@@ -3780,10 +3823,10 @@ def create_ui():
             letter-spacing: 1px;
         }
 
-        /* Protocol Args - Lapis text on black */
+        /* Protocol Args - Theme text on black */
         .tool-call-args,
         #main-chatbot .tool-call-args {
-            color: #00BFFF !important;
+            color: var(--theme-primary) !important;
             margin: 0 !important;
             padding: 8px 12px !important;
             font-size: 0.85em !important;
@@ -3791,17 +3834,17 @@ def create_ui():
             text-shadow: none !important;
             font-weight: normal !important;
             background: #000000 !important;
-            border-top: 1px solid #006699 !important;
+            border-top: 1px solid var(--theme-dim) !important;
         }
 
-        /* Protocol Result - Dim lapis output */
+        /* Protocol Result - Dim theme output */
         .tool-call-result,
         #main-chatbot .tool-call-result,
         #main-chatbot [role="assistant"] .tool-call-result {
             background: #000000 !important;
-            border-top: 2px solid #0088AA !important;
+            border-top: 2px solid var(--theme-medium) !important;
             border-left: none !important;
-            color: #0088AA !important;
+            color: var(--theme-medium) !important;
             margin: 0 !important;
             padding: 8px 12px !important;
             font-size: 0.85em !important;
@@ -3812,14 +3855,14 @@ def create_ui():
             font-weight: normal !important;
         }
 
-        /* Copy button - Lapis style */
+        /* Copy button - Theme style */
         .message-copy-btn {
             position: absolute;
             top: 8px;
             right: 8px;
             background: #000000;
-            border: 1px solid #00BFFF;
-            color: #00BFFF;
+            border: 1px solid var(--theme-primary);
+            color: var(--theme-primary);
             cursor: pointer;
             padding: 4px 8px;
             font-size: 12px;
@@ -3830,11 +3873,11 @@ def create_ui():
             opacity: 1;
         }
         .message-copy-btn:hover {
-            background: #00BFFF;
+            background: var(--theme-primary);
             color: #000000;
         }
         .message-copy-btn.copied {
-            background: #00BFFF;
+            background: var(--theme-primary);
             color: #000000;
         }
 
@@ -3861,25 +3904,25 @@ def create_ui():
             display: block;
             text-align: center;
             padding: 8px;
-            color: #00BFFF;
+            color: var(--theme-primary);
             cursor: pointer;
             font-size: 0.9em;
             background: #000000;
             margin-top: 4px;
             transition: background 0.2s;
-            border: 1px solid #00BFFF;
+            border: 1px solid var(--theme-primary);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
         .expand-btn:hover {
-            background: #00BFFF;
+            background: var(--theme-primary);
             color: #000000;
         }
 
         /* Message timestamps */
         .message-timestamp {
             font-size: 0.7em;
-            color: #006699;
+            color: var(--theme-dim);
             margin-top: 4px;
             text-align: right;
             opacity: 0.7;
@@ -3887,7 +3930,7 @@ def create_ui():
 
         /* Thinking indicator - Heating coil bar */
         .thinking-indicator {
-            color: #00BFFF;
+            color: var(--theme-primary);
             font-style: normal;
             font-size: 0.9em;
             margin: 4px 0;
@@ -3900,7 +3943,7 @@ def create_ui():
             width: 150px;
             height: 6px;
             background: #000000;
-            border: 1px solid #00BFFF;
+            border: 1px solid var(--theme-primary);
             overflow: hidden;
             position: relative;
         }
@@ -3910,7 +3953,7 @@ def create_ui():
             left: 0;
             height: 100%;
             width: 40%;
-            background: linear-gradient(90deg, transparent, #00BFFF, #33CCFF, transparent);
+            background: linear-gradient(90deg, transparent, var(--theme-primary), var(--theme-bright), transparent);
             animation: thinking-slide 1.2s infinite linear;
         }
         @keyframes thinking-slide {
@@ -3921,12 +3964,12 @@ def create_ui():
         /* Token usage - HUD style */
         .token-usage {
             font-size: 0.75em;
-            color: #00BFFF;
+            color: var(--theme-primary);
             padding: 6px 12px;
             background: #000000;
             display: inline-flex;
             gap: 16px;
-            border: 1px solid #00BFFF;
+            border: 1px solid var(--theme-primary);
             text-transform: uppercase;
         }
         .token-usage span {
@@ -3934,9 +3977,9 @@ def create_ui():
             align-items: center;
             gap: 6px;
         }
-        .token-usage .token-in { color: #00BFFF; }
-        .token-usage .token-out { color: #00BFFF; }
-        .token-usage .token-total { color: #0088AA; }
+        .token-usage .token-in { color: var(--theme-primary); }
+        .token-usage .token-out { color: var(--theme-primary); }
+        .token-usage .token-total { color: var(--theme-medium); }
 
         /* Mood indicator - HUD style */
         .mood-indicator {
@@ -3946,13 +3989,13 @@ def create_ui():
             padding: 6px 12px;
             background: #000000;
             font-size: 0.8em;
-            border: 1px solid #00BFFF;
+            border: 1px solid var(--theme-primary);
             text-transform: uppercase;
         }
-        .mood-indicator .mood-text { color: #00BFFF; }
+        .mood-indicator .mood-text { color: var(--theme-primary); }
 
         /* ============================================
-           PANELS - Black with Lapis Lazuli Borders
+           PANELS - Black with Theme Borders
            ============================================ */
 
         /* All panels - Solid black */
@@ -3960,7 +4003,7 @@ def create_ui():
         .gradio-accordion,
         .gradio-group {
             background-color: #000000 !important;
-            border: 1px solid #00BFFF !important;
+            border: 1px solid var(--theme-primary) !important;
         }
 
         /* Input areas - Black */
@@ -3971,36 +4014,40 @@ def create_ui():
         }
 
         /* ============================================
-           CHATBOT MESSAGE STYLING - Plasma Borders
+           CHATBOT MESSAGE STYLING - Visual Separation
+           User: Textured grey | Assistant: Pure black void
            ============================================ */
 
-        /* User messages - Black with lapis border */
+        /* User messages - Grey gradient */
         #main-chatbot [role="user"],
         #main-chatbot .role-user,
         #main-chatbot .user {
-            background: #000000 !important;
-            border: 1px solid #0088AA !important;
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+            border: 1px solid var(--theme-medium) !important;
+            border-left: 3px solid var(--theme-dim) !important;
         }
         #main-chatbot [role="user"] > p,
         #main-chatbot [role="user"] > span,
         #main-chatbot [role="user"] > div:not(.tool-call-block):not(.tool-chain-container) {
-            color: #00BFFF !important;
+            color: var(--theme-primary) !important;
         }
 
-        /* Assistant messages - Black with lapis border */
+        /* Assistant messages - Pure black void (AI emanates from darkness) */
         #main-chatbot [role="assistant"],
         #main-chatbot .role-assistant,
         #main-chatbot .bot {
             background: #000000 !important;
-            border: 1px solid #00BFFF !important;
+            border: 1px solid var(--theme-primary) !important;
+            border-left: 3px solid var(--theme-primary) !important;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
         #main-chatbot [role="assistant"] > p,
         #main-chatbot [role="assistant"] > span,
         #main-chatbot [role="assistant"] > div:not(.tool-call-block):not(.tool-chain-container):not(.message-expandable) {
-            color: #00BFFF !important;
+            color: var(--theme-primary) !important;
         }
         #main-chatbot [role="assistant"] .message-expandable {
-            color: #00BFFF !important;
+            color: var(--theme-primary) !important;
         }
 
         /* Remove inner box styling */
@@ -4014,108 +4061,259 @@ def create_ui():
         }
 
         /* ============================================
-           INPUT AREA - Lapis Border Active
+           INPUT AREA - Recessed Terminal Entry Slot
            ============================================ */
         #msg-input,
         #msg-input textarea {
-            background: #000000 !important;
-            border: 2px solid #00BFFF !important;
-            color: #00BFFF !important;
+            background-color: #000000 !important;
+            border: 2px solid var(--theme-primary) !important;
+            color: var(--theme-primary) !important;
         }
         #msg-input:focus-within,
         #msg-input textarea:focus {
-            box-shadow: 0 0 15px rgba(0, 191, 255, 0.4) !important;
+            box-shadow: 0 0 15px var(--theme-glow) !important;
+            background-color: #000000 !important;
         }
 
         /* ============================================
-           TAB AND ACCORDION BORDERS - Lapis Lazuli
+           TAB AND ACCORDION BORDERS - Double border style
            ============================================ */
 
-        .tabs, .tab-nav, .tabitem {
-            border-color: #00BFFF !important;
+        .tabs {
+            border: 1px solid var(--theme-primary) !important;
+            background: #000000 !important;
+            padding: 4px !important;
+        }
+        .tab-nav {
+            border: 1px solid var(--theme-primary) !important;
+            background: #000000 !important;
+        }
+        .tab-nav button {
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+            border: 1px solid var(--theme-primary) !important;
+            color: var(--theme-primary) !important;
+            transition: all 0.2s ease !important;
+        }
+        .tab-nav button:hover {
+            background: var(--theme-primary) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+        }
+        .tab-nav button.selected {
+            background: var(--theme-primary) !important;
+            color: #000000 !important;
+        }
+        .tabitem {
+            border-color: var(--theme-primary) !important;
         }
 
         .gradio-accordion {
-            border: 1px solid #00BFFF !important;
+            border: 1px solid var(--theme-primary) !important;
         }
+        /* Accordion headers - Grey gradient for dimensionality */
         .gradio-accordion > .label-wrap {
-            border-bottom: 1px solid #00BFFF !important;
-            background: #000000 !important;
-            color: #00BFFF !important;
+            border-bottom: 1px solid var(--theme-primary) !important;
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+            color: var(--theme-primary) !important;
+            transition: all 0.2s ease !important;
+        }
+        .gradio-accordion > .label-wrap:hover {
+            background: var(--theme-primary) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+        }
+        .gradio-accordion > .label-wrap:hover * {
+            color: #000000 !important;
         }
 
         .gradio-group {
-            border: 1px solid #00BFFF !important;
+            border: 1px solid var(--theme-primary) !important;
+            background: #000000 !important;
+            padding: 4px !important;
         }
 
-        /* All inputs - Lapis focus */
-        .gradio-dropdown, .gradio-textbox, .gradio-slider {
-            border-color: #006699 !important;
+        /* Audio component - Double border style */
+        .gradio-audio,
+        [data-testid="audio"] {
+            border: 1px solid var(--theme-primary) !important;
+            background: #000000 !important;
+            padding: 4px !important;
         }
-        .gradio-dropdown:focus-within, .gradio-textbox:focus-within {
-            border-color: #00BFFF !important;
-            box-shadow: 0 0 10px rgba(0, 191, 255, 0.3) !important;
+        .gradio-audio audio,
+        [data-testid="audio"] audio {
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+            border: 1px solid var(--theme-primary) !important;
         }
 
-        /* Labels - Amber */
+        /* Image component - Double border style */
+        .gradio-image,
+        [data-testid="image"] {
+            border: 1px solid var(--theme-primary) !important;
+            background: #000000 !important;
+            padding: 4px !important;
+        }
+
+        /* File component - Double border style */
+        .gradio-file,
+        [data-testid="file"] {
+            border: 1px solid var(--theme-primary) !important;
+            background: #000000 !important;
+            padding: 4px !important;
+        }
+
+        /* All inputs - Double border style */
+        .gradio-textbox {
+            border: 1px solid var(--theme-primary) !important;
+            background: #000000 !important;
+            padding: 4px !important;
+            transition: all 0.2s ease !important;
+        }
+        .gradio-textbox textarea,
+        .gradio-textbox input {
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+            border: 1px solid var(--theme-primary) !important;
+        }
+        .gradio-textbox:focus-within {
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+        }
+        .gradio-textbox:hover:not(:focus-within) {
+            box-shadow: 0 0 10px var(--theme-glow) !important;
+        }
+
+        /* ============================================
+           DROPDOWNS - Matching Accordion Style Exactly
+           Outer cyan border > black padding > grey gradient inner
+           ============================================ */
+        .gradio-dropdown {
+            border: 1px solid var(--theme-primary) !important;
+            background: #000000 !important;
+            padding: 4px !important;
+            transition: all 0.2s ease !important;
+        }
+        .gradio-dropdown:focus-within {
+            box-shadow: 0 0 15px var(--theme-glow) !important;
+        }
+        /* Dropdown clickable area - Grey gradient with inner cyan border */
+        .gradio-dropdown > .wrap,
+        .gradio-dropdown > div:first-child,
+        .gradio-dropdown [data-testid="dropdown"] {
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+            border: 1px solid var(--theme-primary) !important;
+            transition: all 0.2s ease !important;
+        }
+        /* Dropdown hover - Solid lapis blue with black text */
+        .gradio-dropdown:hover > .wrap,
+        .gradio-dropdown:hover > div:first-child,
+        .gradio-dropdown:hover [data-testid="dropdown"] {
+            background: var(--theme-primary) !important;
+            color: #000000 !important;
+        }
+        .gradio-dropdown:hover {
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+        }
+        .gradio-dropdown:hover input,
+        .gradio-dropdown:hover span {
+            color: #000000 !important;
+        }
+        /* Dropdown input field */
+        .gradio-dropdown input,
+        .gradio-dropdown [data-testid="textbox"] {
+            border: none !important;
+            background: transparent !important;
+        }
+        /* Dropdown arrow - theme color */
+        .gradio-dropdown svg,
+        .gradio-dropdown .wrap svg,
+        .gradio-dropdown button svg {
+            color: var(--theme-primary) !important;
+            fill: var(--theme-primary) !important;
+            transition: all 0.2s ease !important;
+        }
+        .gradio-dropdown:hover svg,
+        .gradio-dropdown:hover .wrap svg,
+        .gradio-dropdown:hover button svg {
+            color: #000000 !important;
+            fill: #000000 !important;
+        }
+        /* Dropdown menu when open - cyan border with grey gradient */
+        .gradio-dropdown ul,
+        .gradio-dropdown [role="listbox"],
+        .gradio-dropdown .options,
+        ul[role="listbox"],
+        div[role="listbox"] {
+            border: 2px solid var(--theme-primary) !important;
+            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8), 0 0 15px var(--theme-glow) !important;
+        }
+        /* Dropdown items - transparent by default */
+        .gradio-dropdown li,
+        .gradio-dropdown [role="option"],
+        ul[role="listbox"] li,
+        div[role="listbox"] [role="option"] {
+            background: transparent !important;
+            transition: all 0.15s ease !important;
+        }
+        /* Dropdown items - solid lapis on hover with black text */
+        .gradio-dropdown li:hover,
+        .gradio-dropdown [role="option"]:hover,
+        ul[role="listbox"] li:hover,
+        div[role="listbox"] [role="option"]:hover {
+            background: var(--theme-primary) !important;
+            color: #000000 !important;
+        }
+        .gradio-dropdown li:hover *,
+        .gradio-dropdown [role="option"]:hover *,
+        ul[role="listbox"] li:hover *,
+        div[role="listbox"] [role="option"]:hover * {
+            color: #000000 !important;
+        }
+        /* Selected dropdown item */
+        .gradio-dropdown li.selected,
+        .gradio-dropdown [role="option"][aria-selected="true"],
+        ul[role="listbox"] li.selected,
+        div[role="listbox"] [role="option"][aria-selected="true"] {
+            background: linear-gradient(180deg, #333333 0%, #222222 100%) !important;
+            border-left: 3px solid var(--theme-primary) !important;
+        }
+
+        /* Labels - Theme */
         label, .label-wrap, .svelte-1gfkn6j {
-            color: #00BFFF !important;
+            color: var(--theme-primary) !important;
         }
 
-        /* Button styling - Lapis */
-        button.primary {
-            background: #000000 !important;
-            color: #00BFFF !important;
-            border: 2px solid #00BFFF !important;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: bold;
-            text-shadow: none !important;
-        }
-        button.primary:hover {
-            background: #00BFFF !important;
-            color: #000000 !important;
-            box-shadow: 0 0 20px rgba(0, 191, 255, 0.5) !important;
-        }
-
-        /* Secondary buttons */
-        button.secondary {
-            background: #000000 !important;
-            color: #00BFFF !important;
-            border: 1px solid #00BFFF !important;
-        }
-        button.secondary:hover {
-            background: #00BFFF !important;
-            color: #000000 !important;
-        }
-
-        /* VAD Indicator - Lapis style */
+        /* VAD Indicator - Theme style */
         .vad-indicator {
             background: repeating-linear-gradient(
                 45deg,
                 #000000,
                 #000000 10px,
-                #003344 10px,
-                #003344 20px
+                var(--theme-bg-stripe, #003344) 10px,
+                var(--theme-bg-stripe, #003344) 20px
             );
-            border: 1px solid #006699;
-            color: #006699;
+            border: 1px solid var(--theme-dim);
+            color: var(--theme-dim);
         }
         .vad-indicator.active {
-            background: #00BFFF;
-            box-shadow: 0 0 30px #00BFFF;
+            background: var(--theme-primary);
+            box-shadow: 0 0 30px var(--theme-primary);
             color: #000;
             font-weight: bold;
         }
 
         /* ============================================
            PHYSICAL SWITCH CHECKBOXES
-           Black unchecked, grey hover, lapis filled
+           Black unchecked, grey hover, theme filled
+           FORCE override any Gradio error/validation states
            ============================================ */
-        input[type="checkbox"] {
+        input[type="checkbox"],
+        input[type="checkbox"]:invalid,
+        input[type="checkbox"]:required,
+        input[type="checkbox"].error,
+        .checkbox-container input[type="checkbox"],
+        [data-testid="checkbox"] input {
             width: 20px;
             height: 20px;
-            border: 2px solid #00BFFF;
+            border: 2px solid var(--theme-primary) !important;
             border-radius: 0 !important;
             appearance: none;
             -webkit-appearance: none;
@@ -4123,73 +4321,105 @@ def create_ui():
             background: #000000 !important;
             background-color: #000000 !important;
             transition: all 0.15s ease;
+            outline: none !important;
+            box-shadow: none !important;
         }
-        input[type="checkbox"]:checked {
-            background: #00BFFF !important;
-            background-color: #00BFFF !important;
-            border-color: #00BFFF !important;
-            box-shadow: 0 0 10px #00BFFF;
+        input[type="checkbox"]:checked,
+        input[type="checkbox"]:checked:invalid,
+        [data-testid="checkbox"] input:checked {
+            background: var(--theme-primary) !important;
+            background-color: var(--theme-primary) !important;
+            border-color: var(--theme-primary) !important;
+            box-shadow: 0 0 10px var(--theme-primary) !important;
         }
         input[type="checkbox"]:hover:not(:checked) {
-            background: #333333 !important;
-            background-color: #333333 !important;
-            border-color: #00BFFF;
-            box-shadow: 0 0 5px rgba(0, 191, 255, 0.5);
+            background: var(--theme-primary) !important;
+            background-color: var(--theme-primary) !important;
+            border-color: var(--theme-primary) !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+        }
+        /* Kill any red/error borders Gradio might add */
+        input[type="checkbox"]:focus,
+        input[type="checkbox"]:focus-visible {
+            border-color: var(--theme-primary) !important;
+            outline: none !important;
+            box-shadow: 0 0 8px var(--theme-glow) !important;
         }
 
-        /* Force Radio Buttons to Lapis */
+        /* Force Radio Buttons to Theme */
         input[type="radio"] {
             background: #000000 !important;
             background-color: #000000 !important;
         }
         input[type="radio"]:checked {
-            background: #00BFFF !important;
-            background-color: #00BFFF !important;
-            border-color: #00BFFF !important;
-            box-shadow: 0 0 10px #00BFFF;
+            background: var(--theme-primary) !important;
+            background-color: var(--theme-primary) !important;
+            border-color: var(--theme-primary) !important;
+            box-shadow: 0 0 10px var(--theme-primary);
         }
         input[type="radio"]:hover:not(:checked) {
             background: #333333 !important;
             background-color: #333333 !important;
-            border-color: #00BFFF;
-            box-shadow: 0 0 5px rgba(0, 191, 255, 0.5);
+            border-color: var(--theme-primary);
+            box-shadow: 0 0 5px var(--theme-glow-text);
         }
 
-        /* Force Gradio Slider Track and Thumb to Lapis Lazuli */
+        /* Force Gradio Slider Track and Thumb to Theme Color */
+        input[type="range"] {
+            transition: all 0.2s ease !important;
+        }
         input[type="range"]::-webkit-slider-runnable-track {
-            background: linear-gradient(to right, #00BFFF, #00BFFF) !important;
+            background: linear-gradient(to right, var(--theme-primary), var(--theme-primary)) !important;
+            border: 1px solid var(--theme-primary) !important;
         }
         input[type="range"]::-webkit-slider-thumb {
-            background: #00BFFF !important;
-            box-shadow: 0 0 8px #00BFFF;
+            background: var(--theme-primary) !important;
+            box-shadow: 0 0 8px var(--theme-primary);
+            transition: all 0.2s ease !important;
+        }
+        input[type="range"]:hover::-webkit-slider-thumb {
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+            transform: scale(1.2);
         }
         input[type="range"]::-moz-range-track {
-            background: #00BFFF !important;
+            background: var(--theme-primary) !important;
+            border: 1px solid var(--theme-primary) !important;
         }
         input[type="range"]::-moz-range-thumb {
-            background: #00BFFF !important;
-            box-shadow: 0 0 8px #00BFFF;
+            background: var(--theme-primary) !important;
+            box-shadow: 0 0 8px var(--theme-primary);
+            transition: all 0.2s ease !important;
+        }
+        input[type="range"]:hover::-moz-range-thumb {
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+            transform: scale(1.2);
+        }
+        /* Slider container - double border style */
+        .gradio-slider {
+            border: 1px solid var(--theme-primary) !important;
+            background: #000000 !important;
+            padding: 4px !important;
         }
 
         /* Override Gradio's internal toggle/switch styling */
         .gr-check-radio input:checked,
         .gr-input-label input:checked,
         [data-testid="checkbox"] input:checked {
-            background-color: #00BFFF !important;
-            border-color: #00BFFF !important;
+            background-color: var(--theme-primary) !important;
+            border-color: var(--theme-primary) !important;
         }
 
         /* ============================================
            RADIO BUTTON GROUP FIX - Selected State
-           Black text on orange background when selected
+           Black text on theme background when selected
            ============================================ */
 
-        /* Radio button labels - bright yellow text by default */
+        /* Radio button labels - theme text by default */
         .gr-radio label,
         [data-testid="radio"] label,
         .wrap label span,
         label.svelte-1gfkn6j span {
-            color: #00BFFF !important;
+            color: var(--theme-primary) !important;
         }
 
         /* Radio button group - selected item styling */
@@ -4205,7 +4435,7 @@ def create_ui():
         .gr-radio .selected,
         label.selected span,
         label[data-selected="true"] span {
-            background: #00BFFF !important;
+            background: var(--theme-primary) !important;
             color: #000000 !important;
         }
 
@@ -4224,7 +4454,7 @@ def create_ui():
         button[role="radio"][aria-checked="true"],
         [role="radiogroup"] button[aria-checked="true"],
         [role="radiogroup"] label.selected {
-            background: #00BFFF !important;
+            background: var(--theme-primary) !important;
             color: #000000 !important;
         }
 
@@ -4236,125 +4466,423 @@ def create_ui():
             color: #000000 !important;
         }
 
-        /* Unselected radio buttons - black bg with lapis border */
+        /* Unselected radio buttons - black bg with theme border */
         .gr-radio label:not(.selected),
         [data-testid="radio"] label:not(.selected),
         button[role="radio"][aria-checked="false"],
         [role="radiogroup"] button[aria-checked="false"],
         [role="radiogroup"] label:not(.selected) {
             background: #000000 !important;
-            border: 1px solid #00BFFF !important;
-            color: #00BFFF !important;
+            border: 1px solid var(--theme-primary) !important;
+            color: var(--theme-primary) !important;
+            transition: all 0.2s ease !important;
+        }
+        /* Unselected radio buttons - solid lapis on hover */
+        .gr-radio label:not(.selected):hover,
+        [data-testid="radio"] label:not(.selected):hover,
+        button[role="radio"][aria-checked="false"]:hover,
+        [role="radiogroup"] button[aria-checked="false"]:hover,
+        [role="radiogroup"] label:not(.selected):hover {
+            background: var(--theme-primary) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+        }
+        .gr-radio label:not(.selected):hover span,
+        [data-testid="radio"] label:not(.selected):hover span,
+        button[role="radio"][aria-checked="false"]:hover span,
+        [role="radiogroup"] button[aria-checked="false"]:hover span {
+            color: #000000 !important;
+        }
+
+        /* Radio button container - double border style */
+        .gradio-radio,
+        [data-testid="radio"],
+        [role="radiogroup"] {
+            border: 1px solid var(--theme-primary) !important;
+            background: #000000 !important;
+            padding: 4px !important;
         }
 
         /* ============================================
-           BUTTON FIXES - Black bg with lapis outline
+           BUTTON FIXES - Grey bg, Lapis hover with black text
            ============================================ */
 
-        /* Primary buttons - black with lapis border */
+        /* Primary buttons - Grey Gradient, Solid Lapis on Hover */
         button.primary {
-            background: #000000 !important;
-            color: #00BFFF !important;
-            border: 2px solid #00BFFF !important;
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+            color: var(--theme-primary) !important;
+            border: 2px solid var(--theme-primary) !important;
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: bold;
             text-shadow: none !important;
+            transition: all 0.2s ease !important;
         }
         button.primary:hover {
-            background: #00BFFF !important;
+            background: var(--theme-primary) !important;
             color: #000000 !important;
-            box-shadow: 0 0 20px rgba(0, 191, 255, 0.5) !important;
+            box-shadow: 0 0 25px var(--theme-glow) !important;
+            text-shadow: none !important;
         }
 
-        /* Secondary buttons - black with lapis border */
+        /* Secondary buttons - Grey Gradient, Solid Lapis on Hover */
         button.secondary {
-            background: #000000 !important;
-            color: #00BFFF !important;
-            border: 1px solid #00BFFF !important;
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+            color: var(--theme-primary) !important;
+            border: 1px solid var(--theme-primary) !important;
+            transition: all 0.2s ease !important;
         }
         button.secondary:hover {
-            background: #00BFFF !important;
+            background: var(--theme-primary) !important;
             color: #000000 !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
         }
 
-        /* All other buttons */
-        button:not(.primary):not(.secondary) {
-            background: #000000 !important;
-            color: #00BFFF !important;
-            border: 1px solid #00BFFF !important;
+        /* All other buttons - Grey Gradient, Solid Lapis on Hover */
+        button:not(.primary):not(.secondary):not(#mobile-ptt-btn) {
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+            color: var(--theme-primary) !important;
+            border: 1px solid var(--theme-primary) !important;
+            transition: all 0.2s ease !important;
         }
-        button:not(.primary):not(.secondary):hover {
-            background: #00BFFF !important;
+        button:not(.primary):not(.secondary):not(#mobile-ptt-btn):hover {
+            background: var(--theme-primary) !important;
             color: #000000 !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
         }
 
         /* ============================================
-           TEXT COLOR FIX - Soft gold (like Tips box)
+           TEXT COLOR FIX - Theme Color
            ============================================ */
 
-        /* Override body text to soft gold */
+        /* Override body text to theme color */
         body, p, span, div {
-            color: #00BFFF !important;
+            color: var(--theme-primary) !important;
         }
 
-        /* Labels stay orange for structure */
+        /* Labels - theme color */
         label, .label-wrap, .svelte-1gfkn6j, h1, h2, h3, h4, h5, h6 {
-            color: #00BFFF !important;
+            color: var(--theme-primary) !important;
         }
 
-        /* Input text - soft gold */
-        input, textarea, select {
-            color: #00BFFF !important;
+        /* Input text - theme color */
+        input, textarea {
+            color: var(--theme-primary) !important;
         }
 
-        /* Placeholder text - dimmer lapis lazuli */
+        /* Native select elements - Theme styling */
+        select {
+            color: var(--theme-primary) !important;
+            background: #000000 !important;
+            border: 2px solid var(--theme-primary) !important;
+            transition: all 0.2s ease !important;
+        }
+        select:hover {
+            background: var(--theme-primary) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+        }
+        select:focus {
+            border-color: var(--theme-bright) !important;
+            box-shadow: 0 0 15px var(--theme-glow) !important;
+        }
+
+        /* Placeholder text - dimmer theme */
         input::placeholder, textarea::placeholder {
-            color: #0088AA !important;
+            color: var(--theme-medium) !important;
         }
 
         /* Chatbot messages */
         #main-chatbot [role="user"] > p,
         #main-chatbot [role="user"] > span,
         #main-chatbot [role="user"] > div:not(.tool-call-block):not(.tool-chain-container) {
-            color: #00BFFF !important;
+            color: var(--theme-primary) !important;
         }
         #main-chatbot [role="assistant"] > p,
         #main-chatbot [role="assistant"] > span,
         #main-chatbot [role="assistant"] > div:not(.tool-call-block):not(.tool-chain-container):not(.message-expandable) {
-            color: #00BFFF !important;
+            color: var(--theme-primary) !important;
         }
         #main-chatbot [role="assistant"] .message-expandable {
-            color: #00BFFF !important;
+            color: var(--theme-primary) !important;
         }
 
         /* ============================================
-           GRADIO FOOTER FIX
+           GRADIO FOOTER - Double border style with hover
            ============================================ */
-        footer, footer a, footer span, .footer, .built-with {
-            color: #00BFFF !important;
+        footer {
+            border: 1px solid var(--theme-primary) !important;
+            background: #000000 !important;
+            padding: 4px !important;
+        }
+        footer a, footer span, .footer, .built-with {
+            color: var(--theme-primary) !important;
+        }
+        /* Footer links - grey gradient with inner border */
+        footer a {
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+            border: 1px solid var(--theme-primary) !important;
+            padding: 4px 8px !important;
+            text-decoration: none !important;
+            transition: all 0.2s ease !important;
+        }
+        footer a:hover {
+            background: var(--theme-primary) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
         }
 
         /* ============================================
-           FORCE ALL BUTTONS BLACK WITH LAPIS OUTLINE
+           ALL BUTTONS - Grey Gradient, Solid Lapis Hover
            Override Gradio's default button styling completely
            ============================================ */
         button, .gr-button, [class*="button"] {
-            background: #000000 !important;
-            background-color: #000000 !important;
-            color: #00BFFF !important;
-            border: 1px solid #00BFFF !important;
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+            background-color: #1a1a1a !important;
+            color: var(--theme-primary) !important;
+            border: 1px solid var(--theme-primary) !important;
+            transition: all 0.2s ease !important;
         }
         button:hover, .gr-button:hover, [class*="button"]:hover {
-            background: #00BFFF !important;
-            background-color: #00BFFF !important;
+            background: var(--theme-primary) !important;
+            background-color: var(--theme-primary) !important;
             color: #000000 !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+        }
+        button:active, .gr-button:active, [class*="button"]:active {
+            background: var(--theme-bright) !important;
+            color: #000000 !important;
+        }
+
+        /* ============================================
+           KILL ALL RED/ERROR STATES
+           Force theme colors everywhere, no validation red
+           ============================================ */
+        *:invalid,
+        *:required,
+        *.error,
+        *[aria-invalid="true"],
+        .has-error *,
+        .error-border,
+        [class*="error"],
+        [class*="invalid"] {
+            border-color: var(--theme-primary) !important;
+            outline-color: var(--theme-primary) !important;
+        }
+
+        /* Override Gradio's specific error classes */
+        .gr-box.error,
+        .gr-input.error,
+        .gr-check-radio.error,
+        .gradio-container [class*="error"]:not(.tool-call-block),
+        .gradio-container [class*="invalid"] {
+            border-color: var(--theme-primary) !important;
+            box-shadow: none !important;
+        }
+
+        /* SVG icons inside checkboxes - force theme color */
+        input[type="checkbox"] + svg,
+        input[type="checkbox"] ~ svg,
+        [data-testid="checkbox"] svg {
+            color: var(--theme-primary) !important;
+            fill: var(--theme-primary) !important;
+            stroke: var(--theme-primary) !important;
         }
     """
     
     # JavaScript for keyboard shortcuts, copy buttons, HUD updates, and expandable messages
     keyboard_js = """
     function() {
+        // ==================== THEME SWITCHER SYSTEM ====================
+        window.ThemeSwitcher = {
+            themes: {
+                'lapis': {
+                    name: 'Lapis Lazuli',
+                    primary: '#00BFFF',
+                    dim: '#006699',
+                    bright: '#33CCFF',
+                    medium: '#0088AA',
+                    glow: 'rgba(0, 191, 255, 0.4)',
+                    glowSoft: 'rgba(0, 191, 255, 0.1)',
+                    glowText: 'rgba(0, 191, 255, 0.5)',
+                    glowTextStrong: 'rgba(0, 191, 255, 0.6)',
+                    bgDark: '#001a33',
+                    bgMid: '#003366',
+                    bgStripe: '#003344'
+                },
+                'purple': {
+                    name: 'Lightsaber Purple',
+                    primary: '#9B30FF',
+                    dim: '#6B1FA3',
+                    bright: '#B041FF',
+                    medium: '#8A2BE2',
+                    glow: 'rgba(155, 48, 255, 0.4)',
+                    glowSoft: 'rgba(155, 48, 255, 0.1)',
+                    glowText: 'rgba(155, 48, 255, 0.5)',
+                    glowTextStrong: 'rgba(155, 48, 255, 0.6)',
+                    bgDark: '#1a0033',
+                    bgMid: '#330066',
+                    bgStripe: '#2a0044'
+                },
+                'orange': {
+                    name: 'Lightsaber Orange',
+                    primary: '#FF6600',
+                    dim: '#CC5200',
+                    bright: '#FF8533',
+                    medium: '#E65C00',
+                    glow: 'rgba(255, 102, 0, 0.4)',
+                    glowSoft: 'rgba(255, 102, 0, 0.1)',
+                    glowText: 'rgba(255, 102, 0, 0.5)',
+                    glowTextStrong: 'rgba(255, 102, 0, 0.6)',
+                    bgDark: '#331a00',
+                    bgMid: '#663300',
+                    bgStripe: '#442200'
+                },
+                'green': {
+                    name: 'Lightsaber Green',
+                    primary: '#39FF14',
+                    dim: '#2ACC10',
+                    bright: '#66FF44',
+                    medium: '#30DD12',
+                    glow: 'rgba(57, 255, 20, 0.4)',
+                    glowSoft: 'rgba(57, 255, 20, 0.1)',
+                    glowText: 'rgba(57, 255, 20, 0.5)',
+                    glowTextStrong: 'rgba(57, 255, 20, 0.6)',
+                    bgDark: '#0a3300',
+                    bgMid: '#146600',
+                    bgStripe: '#0d4400'
+                }
+            },
+
+            currentTheme: 'lapis',
+
+            apply: function(themeName) {
+                const theme = this.themes[themeName];
+                if (!theme) return;
+
+                this.currentTheme = themeName;
+                const root = document.documentElement;
+
+                root.style.setProperty('--theme-primary', theme.primary);
+                root.style.setProperty('--theme-dim', theme.dim);
+                root.style.setProperty('--theme-bright', theme.bright);
+                root.style.setProperty('--theme-medium', theme.medium);
+                root.style.setProperty('--theme-glow', theme.glow);
+                root.style.setProperty('--theme-glow-soft', theme.glowSoft);
+                root.style.setProperty('--theme-glow-text', theme.glowText);
+                root.style.setProperty('--theme-glow-text-strong', theme.glowTextStrong);
+                root.style.setProperty('--theme-bg-dark', theme.bgDark);
+                root.style.setProperty('--theme-bg-mid', theme.bgMid);
+                root.style.setProperty('--theme-bg-stripe', theme.bgStripe);
+
+                // Update banner dynamically
+                const banner = document.querySelector('#app-banner');
+                if (banner) {
+                    banner.style.borderColor = theme.primary;
+                    banner.style.boxShadow = '0 0 25px ' + theme.glow + ', inset 0 0 30px ' + theme.glowSoft;
+                }
+                const bannerPre = document.querySelector('#app-banner pre');
+                if (bannerPre) {
+                    bannerPre.style.color = theme.primary;
+                    bannerPre.style.textShadow = '0 0 10px ' + theme.glowTextStrong;
+                }
+                const bannerDiv = document.querySelector('#app-banner > div:last-child');
+                if (bannerDiv) {
+                    bannerDiv.style.color = theme.primary;
+                    const span = bannerDiv.querySelector('span');
+                    if (span) span.style.color = theme.primary;
+                }
+
+                // Save preference
+                try {
+                    localStorage.setItem('tts2_theme', themeName);
+                } catch(e) {}
+
+                console.log('[Theme] Applied: ' + theme.name);
+            },
+
+            init: function() {
+                // Load saved theme on page load
+                try {
+                    const saved = localStorage.getItem('tts2_theme');
+                    if (saved && this.themes[saved]) {
+                        this.apply(saved);
+                    }
+                } catch(e) {}
+
+                // Watch for theme dropdown changes
+                this.watchDropdown();
+            },
+
+            watchDropdown: function() {
+                const self = this;
+                // Poll for the dropdown since Gradio loads dynamically
+                const setupWatcher = () => {
+                    // Look for dropdown with "Color Theme" label or containing theme values
+                    const dropdowns = document.querySelectorAll('select, input[type="text"][data-testid]');
+                    const containers = document.querySelectorAll('.gradio-dropdown');
+
+                    containers.forEach(container => {
+                        const label = container.querySelector('label');
+                        if (label && label.textContent.includes('Color Theme')) {
+                            // Found theme dropdown container - watch for input changes
+                            const input = container.querySelector('input');
+                            if (input && !input._themeWatcherAttached) {
+                                input._themeWatcherAttached = true;
+
+                                // Watch for value changes
+                                const observer = new MutationObserver(() => {
+                                    const value = input.value;
+                                    if (value && self.themes[value] && value !== self.currentTheme) {
+                                        self.apply(value);
+                                    }
+                                });
+                                observer.observe(input, { attributes: true, attributeFilter: ['value'] });
+
+                                // Also listen for input events
+                                input.addEventListener('input', () => {
+                                    setTimeout(() => {
+                                        const value = input.value;
+                                        if (value && self.themes[value]) {
+                                            self.apply(value);
+                                        }
+                                    }, 100);
+                                });
+
+                                console.log('[Theme] Dropdown watcher attached');
+                            }
+                        }
+                    });
+
+                    // Also watch listbox options being clicked
+                    document.addEventListener('click', (e) => {
+                        const listItem = e.target.closest('[role="option"], .dropdown-item, li');
+                        if (listItem) {
+                            const text = listItem.textContent.trim().toLowerCase();
+                            // Map display text to theme key
+                            const themeMap = {
+                                'lapis lazuli (blue)': 'lapis',
+                                'lightsaber purple': 'purple',
+                                'lightsaber orange': 'orange',
+                                'lightsaber green': 'green'
+                            };
+                            const themeKey = themeMap[text];
+                            if (themeKey && self.themes[themeKey]) {
+                                setTimeout(() => self.apply(themeKey), 50);
+                            }
+                        }
+                    }, true);
+                };
+
+                // Run setup after a short delay for Gradio to load
+                setTimeout(setupWatcher, 1000);
+                setTimeout(setupWatcher, 3000);  // Retry in case of slow load
+            }
+        };
+
+        // Initialize theme on load
+        window.ThemeSwitcher.init();
+
         // ==================== CYBERDECK HUD SYSTEM ====================
         window.HUD = {
             latency: 0,
@@ -4587,7 +5115,7 @@ def create_ui():
         return [];
     }
     """
-
+    
     # PWA manifest for webapp installation
     pwa_js = """
     () => {
@@ -4652,10 +5180,10 @@ def create_ui():
         current_voice = gr.State(value=SETTINGS.get("last_voice", "reference.wav"))
         current_conversation_id = gr.State(value="new")
         current_provider = gr.State(value=initial_provider)
-        
+
         gr.HTML(f"""
-        <div style="border: 3px solid #00BFFF; background: #000000; padding: 15px 20px; margin-bottom: 15px; box-shadow: 0 0 25px rgba(0, 191, 255, 0.4), inset 0 0 30px rgba(0, 191, 255, 0.08);">
-            <pre style="color: #00BFFF; font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; font-size: 16px; line-height: 1.15; margin: 0; text-align: center; letter-spacing: 0px; text-shadow: 0 0 10px rgba(0, 191, 255, 0.6);">
+        <div id="app-banner" style="border: 3px solid var(--theme-primary, #00BFFF); background: linear-gradient(180deg, #141414 0%, #000000 100%); padding: 15px 20px; margin-bottom: 15px; box-shadow: 0 0 25px var(--theme-glow, rgba(0, 191, 255, 0.4)), inset 0 0 30px var(--theme-glow-soft, rgba(0, 191, 255, 0.08)), inset 0 1px 0 rgba(255,255,255,0.05);">
+            <pre style="color: var(--theme-primary, #00BFFF); font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; font-size: 16px; line-height: 1.15; margin: 0; text-align: center; letter-spacing: 0px; text-shadow: 0 0 10px var(--theme-glow-text-strong, rgba(0, 191, 255, 0.6));">
 ╔════════════════════════════════════════════════════════════════════════════════════╗
 ║  ████████╗████████╗ ███████╗ ██████╗    ██╗   ██╗ ██████╗ ██╗ ██████╗███████╗      ║
 ║  ╚══██╔══╝╚══██╔══╝ ██╔════╝ ╚════██╗   ██║   ██║██╔═══██╗██║██╔════╝██╔════╝      ║
@@ -4665,8 +5193,8 @@ def create_ui():
 ║     ╚═╝      ╚═╝    ╚══════╝ ╚══════╝     ╚═══╝   ╚═════╝ ╚═╝ ╚═════╝╚══════╝      ║
 ╚════════════════════════════════════════════════════════════════════════════════════╝
             </pre>
-            <div style="text-align: center; color: #00BFFF; font-size: 0.9em; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">
-                Multi-Character • Memory • Tools • Vision • MCP &nbsp;|&nbsp; <span style="color: #00BFFF;">Running on {PLATFORM.title()}{" (WSL)" if IS_WSL else ""}</span>
+            <div style="text-align: center; color: var(--theme-primary, #00BFFF); font-size: 0.9em; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">
+                Multi-Character • Memory • Tools • Vision • MCP &nbsp;|&nbsp; <span style="color: var(--theme-primary, #00BFFF);">Running on {PLATFORM.title()}{" (WSL)" if IS_WSL else ""}</span>
             </div>
         </div>
         """)
@@ -4867,7 +5395,7 @@ def create_ui():
                 )
             
             # ==================== RIGHT COLUMN - Settings ====================
-            with gr.Column(scale=1):
+            with gr.Column(scale=1, elem_id="settings-panel"):
                 
                 with gr.Accordion("👥 Group Chat (Multi-Character)", open=False):
                     group_enabled = gr.Checkbox(
@@ -4953,7 +5481,20 @@ def create_ui():
                         info="Not used with SenseVoice (built-in)" if sensevoice_active else "Detect user emotion (~300ms CPU)",
                         interactive=not sensevoice_active
                     )
-                
+
+                with gr.Accordion("🎨 Appearance", open=False):
+                    theme_dropdown = gr.Dropdown(
+                        choices=[
+                            ("Lapis Lazuli (Blue)", "lapis"),
+                            ("Lightsaber Purple", "purple"),
+                            ("Lightsaber Orange", "orange"),
+                            ("Lightsaber Green", "green")
+                        ],
+                        value=SETTINGS.get("theme", "lapis"),
+                        label="Color Theme",
+                        info="Switch UI colors instantly"
+                    )
+
                 with gr.Accordion("🔧 Tools", open=False):
                     # Show available tools dynamically
                     tool_list = REGISTRY.list_tools()
@@ -5403,7 +5944,21 @@ def create_ui():
             return enabled
         
         emotion_toggle.change(fn=on_emotion_toggle, inputs=[emotion_toggle])
-        
+
+        # Theme switcher - uses JavaScript to update CSS variables instantly
+        def on_theme_change(value):
+            SETTINGS["theme"] = value
+            save_settings(SETTINGS)
+            print(f"[Settings] Theme switched to: {value}")
+            return value
+
+        theme_dropdown.change(
+            fn=on_theme_change,
+            inputs=[theme_dropdown],
+            outputs=[theme_dropdown],
+            js="(value) => { if (window.ThemeSwitcher) { window.ThemeSwitcher.apply(value); } return value; }"
+        )
+
         # Full file access toggle
         def toggle_full_file_access(enabled):
             global REGISTRY
