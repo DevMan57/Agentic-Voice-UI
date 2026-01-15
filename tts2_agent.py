@@ -1482,6 +1482,11 @@ def find_free_port(start_port: int, max_attempts: int = 100) -> int:
 CONFIG = load_config()
 SERVER_PORT = find_free_port(CONFIG['SERVER_PORT'])
 
+# Mobile/Remote access mode - enables Gradio share for HTTPS access
+SHARE_MODE = os.environ.get("SHARE_MODE", "").lower() in ("1", "true", "yes")
+if SHARE_MODE:
+    print("[Config] Share Mode: ENABLED (remote/mobile access)")
+
 print(f"[Config] API Key: {'✓' if CONFIG['OPENROUTER_API_KEY'] else '✗'}")
 print(f"[Config] Server Port: {SERVER_PORT}")
 
@@ -3594,6 +3599,54 @@ def create_ui():
             text-shadow: 0 0 10px #00BFFF;
         }
 
+        /* ============================================
+           MOBILE PTT BUTTON - Touch-friendly
+           ============================================ */
+        #mobile-ptt-btn {
+            padding: 20px 40px;
+            font-size: 1.4em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #001a33 0%, #003366 100%);
+            border: 3px solid #00BFFF;
+            color: #00BFFF;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #00BFFF;
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+            transition: all 0.15s ease;
+        }
+        #mobile-ptt-btn:hover {
+            box-shadow: 0 0 30px rgba(0, 191, 255, 0.5);
+        }
+        #mobile-ptt-btn.recording {
+            background: linear-gradient(135deg, #330000 0%, #660000 100%);
+            border-color: #FF4444;
+            color: #FF4444;
+            text-shadow: 0 0 15px #FF4444;
+            box-shadow: 0 0 40px rgba(255, 68, 68, 0.6);
+            animation: mobile-ptt-pulse 0.5s ease-in-out infinite;
+        }
+        @keyframes mobile-ptt-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            #mobile-ptt-btn {
+                padding: 30px 50px;
+                font-size: 1.6em;
+                width: 100%;
+            }
+            .hide-on-mobile {
+                display: none !important;
+            }
+        }
+
         /* RECORDING STATE - Bright red pulse */
         @keyframes pulse-recording {
             0%, 100% {
@@ -4436,13 +4489,164 @@ def create_ui():
                 observer.observe(chatbot, { childList: true, subtree: true });
                 addCopyButtons(); // Initial run
             }
+
+            // ============================================
+            // MOBILE PTT - Touch-based recording
+            // ============================================
+            const mobilePttBtn = document.getElementById('mobile-ptt-btn');
+            if (mobilePttBtn) {
+                let mediaRecorder = null;
+                let audioChunks = [];
+                let isRecording = false;
+                let recordingStartTime = null;
+
+                const startRecording = async () => {
+                    if (isRecording) return;
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({
+                            audio: {
+                                echoCancellation: true,
+                                noiseSuppression: true,
+                                sampleRate: 16000
+                            }
+                        });
+                        mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+                        audioChunks = [];
+
+                        mediaRecorder.ondataavailable = (e) => {
+                            if (e.data.size > 0) audioChunks.push(e.data);
+                        };
+
+                        mediaRecorder.onstop = async () => {
+                            stream.getTracks().forEach(t => t.stop());
+                            if (audioChunks.length > 0) {
+                                const blob = new Blob(audioChunks, { type: 'audio/webm' });
+                                // Send to hidden audio input for processing
+                                const audioInput = document.querySelector('#component-23 input[type="file"], .audio-input input[type="file"]');
+                                if (audioInput) {
+                                    const file = new File([blob], 'mobile_recording.webm', { type: 'audio/webm' });
+                                    const dt = new DataTransfer();
+                                    dt.items.add(file);
+                                    audioInput.files = dt.files;
+                                    audioInput.dispatchEvent(new Event('change', { bubbles: true }));
+                                    // Auto-click send after recording
+                                    setTimeout(() => {
+                                        const sendBtn = document.querySelector('button[id*="voice_btn"], .voice-send-btn');
+                                        if (sendBtn) sendBtn.click();
+                                    }, 500);
+                                }
+                            }
+                        };
+
+                        mediaRecorder.start(100);
+                        isRecording = true;
+                        recordingStartTime = Date.now();
+                        mobilePttBtn.classList.add('recording');
+                        mobilePttBtn.textContent = '🔴 RECORDING...';
+                    } catch (err) {
+                        console.error('Mic access denied:', err);
+                        mobilePttBtn.textContent = '⚠️ MIC ACCESS DENIED';
+                        setTimeout(() => { mobilePttBtn.textContent = '🎤 HOLD TO TALK'; }, 2000);
+                    }
+                };
+
+                const stopRecording = () => {
+                    if (!isRecording || !mediaRecorder) return;
+                    const duration = Date.now() - recordingStartTime;
+                    if (duration < 500) {
+                        // Too short, cancel
+                        mediaRecorder.stop();
+                        audioChunks = [];
+                        mobilePttBtn.textContent = '⚠️ TOO SHORT';
+                    } else {
+                        mediaRecorder.stop();
+                        mobilePttBtn.textContent = '✓ PROCESSING...';
+                    }
+                    isRecording = false;
+                    mobilePttBtn.classList.remove('recording');
+                    setTimeout(() => { mobilePttBtn.textContent = '🎤 HOLD TO TALK'; }, 1500);
+                };
+
+                // Touch events for mobile
+                mobilePttBtn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    startRecording();
+                }, { passive: false });
+                mobilePttBtn.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    stopRecording();
+                }, { passive: false });
+                mobilePttBtn.addEventListener('touchcancel', stopRecording);
+
+                // Mouse events for desktop testing
+                mobilePttBtn.addEventListener('mousedown', startRecording);
+                mobilePttBtn.addEventListener('mouseup', stopRecording);
+                mobilePttBtn.addEventListener('mouseleave', () => { if (isRecording) stopRecording(); });
+            }
         }, 1000);
         return [];
     }
     """
-    
-    with gr.Blocks(title="IndexTTS2 Voice Agent", theme=create_dark_theme(), css=custom_css, js=keyboard_js) as app:
-        
+
+    # PWA manifest for webapp installation
+    pwa_js = """
+    () => {
+        // Inject PWA meta tags for mobile webapp support
+        const addMeta = (name, content) => {
+            if (!document.querySelector(`meta[name="${name}"]`)) {
+                const meta = document.createElement('meta');
+                meta.name = name;
+                meta.content = content;
+                document.head.appendChild(meta);
+            }
+        };
+
+        // Mobile webapp meta tags
+        addMeta('mobile-web-app-capable', 'yes');
+        addMeta('apple-mobile-web-app-capable', 'yes');
+        addMeta('apple-mobile-web-app-status-bar-style', 'black-translucent');
+        addMeta('apple-mobile-web-app-title', 'TTS2 Voice');
+        addMeta('theme-color', '#000000');
+        addMeta('viewport', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
+
+        // Create and inject manifest dynamically
+        const manifest = {
+            name: 'TTS2 Voice Agent',
+            short_name: 'TTS2 Voice',
+            description: 'Multi-character voice AI assistant',
+            start_url: window.location.origin,
+            display: 'standalone',
+            background_color: '#000000',
+            theme_color: '#00BFFF',
+            icons: [
+                { src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23000" width="100" height="100"/><text y="70" x="50" text-anchor="middle" font-size="60" fill="%2300BFFF">🎤</text></svg>', sizes: '192x192', type: 'image/svg+xml' },
+                { src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23000" width="100" height="100"/><text y="70" x="50" text-anchor="middle" font-size="60" fill="%2300BFFF">🎤</text></svg>', sizes: '512x512', type: 'image/svg+xml' }
+            ]
+        };
+        const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+        const manifestUrl = URL.createObjectURL(manifestBlob);
+        if (!document.querySelector('link[rel="manifest"]')) {
+            const link = document.createElement('link');
+            link.rel = 'manifest';
+            link.href = manifestUrl;
+            document.head.appendChild(link);
+        }
+
+        // iOS splash screen color
+        const appleLink = document.createElement('link');
+        appleLink.rel = 'apple-touch-icon';
+        appleLink.href = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23000" width="100" height="100"/><text y="70" x="50" text-anchor="middle" font-size="60" fill="%2300BFFF">🎤</text></svg>';
+        document.head.appendChild(appleLink);
+
+        return [];
+    }
+    """
+
+    # Combine JS
+    combined_js = keyboard_js.replace("return [];", "") + pwa_js.replace("() => {", "").replace("return [];\n    }", "return [];")
+
+    with gr.Blocks(title="IndexTTS2 Voice Agent", theme=create_dark_theme(), css=custom_css, js=combined_js) as app:
+
         # State variables
         current_character = gr.State(value=initial_char)
         current_voice = gr.State(value=SETTINGS.get("last_voice", "reference.wav"))
@@ -4516,6 +4720,14 @@ def create_ui():
                     max_lines=1,
                     elem_id="ptt-status-box"
                 )
+
+                # Mobile PTT Button - Touch-friendly for phones/tablets
+                mobile_ptt_btn = gr.Button(
+                    "🎤 HOLD TO TALK",
+                    variant="secondary",
+                    elem_id="mobile-ptt-btn"
+                )
+                mobile_ptt_status = gr.Textbox(visible=False, elem_id="mobile-ptt-status")
 
                 with gr.Row():
                     character_dropdown = gr.Dropdown(
@@ -5851,10 +6063,21 @@ if __name__ == "__main__":
     sys.stdout.write("\033[38;2;0;191;255m")
     sys.stdout.flush()
 
+    # Use 0.0.0.0 for share mode to allow external connections
+    server_host = "0.0.0.0" if SHARE_MODE else "127.0.0.1"
+
+    if SHARE_MODE:
+        print(f"\n{'='*60}")
+        print("📱 MOBILE/REMOTE ACCESS MODE")
+        print("="*60)
+        print("A public HTTPS URL will be generated below.")
+        print("Use this URL on your phone or any device.")
+        print("="*60 + "\n")
+
     app.launch(
         server_port=SERVER_PORT,
-        server_name="127.0.0.1",
-        inbrowser=False, # Changed to False since you want manual links
-        share=False,
+        server_name=server_host,
+        inbrowser=False,
+        share=SHARE_MODE,  # Enables Gradio's public HTTPS URL
         show_error=True
     )

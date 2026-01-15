@@ -52,7 +52,7 @@ VoiceChat.bat
 
 ### 3. Install Dependencies
 
-Select **Option [4] Install Dependencies** from the menu.
+Select **Option [5] Install Dependencies** from the menu.
 
 This automatically:
 - Installs WSL packages (python3-venv, git-lfs)
@@ -86,11 +86,34 @@ Open your browser to: **http://localhost:7861**
 
 ---
 
+## Mobile Access
+
+Access the voice agent from your phone or any device on your network.
+
+### Quick Start
+1. Run `VoiceChat.bat`
+2. Select **Option [2] Mobile/Remote Access**
+3. A public HTTPS URL will be generated (e.g., `https://xxxxx.gradio.live`)
+4. Open the URL on your phone
+
+### Features
+- **Mobile PTT Button** - Large touch-friendly "HOLD TO TALK" button
+- **PWA Support** - Install as a webapp on your phone (Add to Home Screen)
+- **HTTPS Required** - Microphone access requires secure connection (handled automatically)
+
+### Tips
+- The Gradio share URL is temporary (72 hours max)
+- For permanent access, consider [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/)
+- PWA install: On mobile browser, tap Share > "Add to Home Screen"
+
+---
+
 ## Controls
 
 | Action | Control |
 |--------|---------|
 | **Push-to-Talk** | Hold **Right Shift**, release to send |
+| **Mobile PTT** | Hold the "HOLD TO TALK" button |
 | **Hands-Free** | Enable VAD toggle in Settings |
 | **Stop Audio** | Click Stop button or press Escape |
 
@@ -171,7 +194,7 @@ The app includes Speech Emotion Recognition (SER) that detects your emotional st
 The SER model works out-of-the-box, but you can calibrate it to YOUR voice for improved accuracy:
 
 1. Run `VoiceChat.bat`
-2. Select **Option [5] Calibrate Emotion Detection**
+2. Select **Option [6] Calibrate Emotion Detection**
 3. Follow the prompts to record samples:
    - **Neutral**: Speak normally (like reading news)
    - **Happy**: Say something with genuine excitement

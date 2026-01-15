@@ -34,31 +34,36 @@ echo [38;2;0;191;255m:[0m  [38;2;0;191;255m[1] Voice Agent                   
 echo [38;2;0;191;255m:[0m       [90m+-- PTT/VAD + Tools + Memory + Vision[0m
 echo [38;2;0;191;255m:[0m       [90m+-- Docs: PDF,TXT,MD,DOCX,CSV,JSON,Code[0m
 echo [38;2;0;191;255m:[0m
-echo [38;2;0;191;255m:[0m  [38;2;0;191;255m[2] Character and Memory Manager                       [90mPort: 7863[0m
+echo [38;2;0;191;255m:[0m  [38;2;0;191;255m[2] Mobile/Remote Access                               [90mHTTPS Share[0m
+echo [38;2;0;191;255m:[0m       [90m+-- Access from phone or any device[0m
+echo [38;2;0;191;255m:[0m       [90m+-- Generates public HTTPS URL[0m
+echo [38;2;0;191;255m:[0m
+echo [38;2;0;191;255m:[0m  [38;2;0;191;255m[3] Character and Memory Manager                       [90mPort: 7863[0m
 echo [38;2;0;191;255m:[0m       [90m+-- Create/Edit Personalities[0m
 echo [38;2;0;191;255m:[0m       [90m+-- Manage Knowledge Graph[0m
 echo [38;2;0;191;255m:[0m
-echo [38;2;0;191;255m:[0m  [38;2;0;191;255m[3] MCP Server Manager                                 [90mPort: 7864[0m
+echo [38;2;0;191;255m:[0m  [38;2;0;136;170m[4] MCP Server Manager                                 [90mPort: 7864[0m
 echo [38;2;0;191;255m:[0m       [90m+-- Configure Agent Tools[0m
 echo [38;2;0;191;255m:[0m       [90m+-- Install MCP Servers[0m
 echo [38;2;0;191;255m:[0m
-echo [38;2;0;191;255m:[0m  [38;2;0;136;170m[4] Install Dependencies[0m
+echo [38;2;0;191;255m:[0m  [90m[5] Install Dependencies[0m
 echo [38;2;0;191;255m:[0m       [90m+-- Python + Node.js (v20)[0m
 echo [38;2;0;191;255m:[0m
-echo [38;2;0;191;255m:[0m  [90m[5] Calibrate Emotion Detection[0m
+echo [38;2;0;191;255m:[0m  [90m[6] Calibrate Emotion Detection[0m
 echo [38;2;0;191;255m:[0m       [90m+-- Personalize SER to your voice[0m
 echo [38;2;0;191;255m:[0m
-echo [38;2;0;191;255m:[0m  [38;2;0;191;255m[6] Exit[0m
+echo [38;2;0;191;255m:[0m  [38;2;0;191;255m[7] Exit[0m
 echo [38;2;0;191;255m:[0m
 echo [38;2;0;191;255m=============================================================================================[0m
 echo.
-set /p "choice=[38;2;0;191;255mSelect option [1-6]: [0m"
+set /p "choice=[38;2;0;191;255mSelect option [1-7]: [0m"
 if "%choice%"=="1" goto VOICECHAT
-if "%choice%"=="2" goto MANAGER
-if "%choice%"=="3" goto MCPMANAGER
-if "%choice%"=="4" goto INSTALL
-if "%choice%"=="5" goto CALIBRATE
-if "%choice%"=="6" exit /b 0
+if "%choice%"=="2" goto MOBILE
+if "%choice%"=="3" goto MANAGER
+if "%choice%"=="4" goto MCPMANAGER
+if "%choice%"=="5" goto INSTALL
+if "%choice%"=="6" goto CALIBRATE
+if "%choice%"=="7" exit /b 0
 goto MENU
 :VOICECHAT
 cls
@@ -95,6 +100,48 @@ start "" /min wscript.exe scripts\ptt_hidden.vbs
 start "" /min pythonw audio\vad_windows.py
 echo [38;2;0;191;255m
 wsl -d %WSL_DISTRO% -e bash -c "export NVM_DIR=$HOME/.nvm; [ -s $NVM_DIR/nvm.sh ] && . $NVM_DIR/nvm.sh; cd %WSL_WIN_PATH% && source .venv/bin/activate && python -W ignore tts2_agent.py"
+taskkill /f /im pythonw.exe 2>nul
+echo.
+echo [38;2;0;191;255mProcess exited. Press any key to return to menu...[0m
+pause >nul
+goto MENU
+:MOBILE
+cls
+echo [38;2;0;191;255m
+echo [38;2;0;191;255m=============================================================================================[0m
+echo [38;2;0;191;255m:[0m
+echo [38;2;0;191;255m:[0m   [38;2;0;191;255m███╗   ███╗ ██████╗ ██████╗ ██╗██╗     ███████╗     █████╗  ██████╗ ██████╗███████╗███████╗███████╗[0m
+echo [38;2;0;191;255m:[0m   [38;2;0;191;255m████╗ ████║██╔═══██╗██╔══██╗██║██║     ██╔════╝    ██╔══██╗██╔════╝██╔════╝██╔════╝██╔════╝██╔════╝[0m
+echo [38;2;0;191;255m:[0m   [38;2;0;191;255m██╔████╔██║██║   ██║██████╔╝██║██║     █████╗      ███████║██║     ██║     █████╗  ███████╗███████╗[0m
+echo [38;2;0;191;255m:[0m   [38;2;0;191;255m██║╚██╔╝██║██║   ██║██╔══██╗██║██║     ██╔══╝      ██╔══██║██║     ██║     ██╔══╝  ╚════██║╚════██║[0m
+echo [38;2;0;191;255m:[0m   [38;2;0;191;255m██║ ╚═╝ ██║╚██████╔╝██████╔╝██║███████╗███████╗    ██║  ██║╚██████╗╚██████╗███████╗███████║███████║[0m
+echo [38;2;0;191;255m:[0m   [38;2;0;191;255m╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚═╝╚══════╝╚══════╝    ╚═╝  ╚═╝ ╚═════╝ ╚═════╝╚══════╝╚══════╝╚══════╝[0m
+echo [38;2;0;191;255m:[0m
+echo [38;2;0;191;255m:[0m                         [90mAccess from Phone or Any Device via HTTPS[0m
+echo [38;2;0;191;255m:[0m
+echo [38;2;0;191;255m=============================================================================================[0m
+echo.
+echo   [38;2;0;191;255mStarting with Share Mode enabled...[0m
+echo   [90mA public HTTPS URL will be generated for remote access.[0m
+echo   [90mYou can access this URL from your phone or any device.[0m
+echo.
+echo [90m---------------------------------------------------------------------------------------------[0m
+echo.
+if not exist "recordings" mkdir recordings
+echo ready^|0^|Starting... > recordings\ptt_status.txt
+wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && [ -d .venv ] && echo VENV_OK || echo VENV_MISSING" > "%TEMP%\venv_check.txt"
+set /p VENV_STATUS=<"%TEMP%\venv_check.txt"
+if "%VENV_STATUS%"=="VENV_MISSING" (
+    echo [38;2;0;191;255mERROR: Virtual environment not found![0m
+    echo [38;2;0;191;255mPlease run option [5] Install Dependencies first.[0m
+    echo.
+    pause
+    goto MENU
+)
+start "" /min wscript.exe scripts\ptt_hidden.vbs
+start "" /min pythonw audio\vad_windows.py
+echo [38;2;0;191;255m
+wsl -d %WSL_DISTRO% -e bash -c "export NVM_DIR=$HOME/.nvm; [ -s $NVM_DIR/nvm.sh ] && . $NVM_DIR/nvm.sh; cd %WSL_WIN_PATH% && source .venv/bin/activate && SHARE_MODE=1 python -W ignore tts2_agent.py"
 taskkill /f /im pythonw.exe 2>nul
 echo.
 echo [38;2;0;191;255mProcess exited. Press any key to return to menu...[0m
@@ -173,8 +220,8 @@ echo.
 echo   [38;2;0;191;255m[1/8][0m Checking/Installing Node.js 20 (via NVM)...
 wsl -d %WSL_DISTRO% -e bash -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash && export NVM_DIR=\"$HOME/.nvm\" && [ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\" && nvm install 20 && nvm alias default 20 && nvm use default && node -v"
 echo.
-echo   [38;2;0;191;255m[2/8][0m Checking Python Environment...
-wsl -d %WSL_DISTRO% -e bash -c "dpkg -s python3-venv >/dev/null 2>&1 || (echo Installing python3-venv... && sudo apt-get update && sudo apt-get install -y python3-venv python3-dev build-essential)"
+echo   [38;2;0;191;255m[2/8][0m Checking Python Environment + System Dependencies...
+wsl -d %WSL_DISTRO% -e bash -c "sudo apt-get update && sudo apt-get install -y python3-venv python3-dev build-essential ffmpeg"
 echo   [38;2;0;191;255m[3/8][0m Creating virtual environment...
 wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && [ ! -d .venv ] && python3 -m venv .venv && echo Created .venv || echo .venv already exists"
 echo.
