@@ -1,11 +1,19 @@
 # Agentic Voice UI
 
-Real-time voice chat with swappable TTS/STT backends, knowledge graphs, and one-click installation for Windows + WSL2 + NVIDIA GPU.
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Platform](https://img.shields.io/badge/platform-Hybrid%20%7C%20Windows%20%7C%20Linux-lightgrey.svg)](https://github.com)
+[![Version](https://img.shields.io/badge/version-2.3.1-blue.svg)](https://github.com)
+
+**Multi-character AI voice agent with Knowledge Graph memory.**
+
+Designed for **Hybrid** environments: Run the heavy AI core (IndexTTS2) in **WSL** for Linux performance, while keeping your tools (LM Studio, Microphone) on **Windows**.
 
 <p align="center">
-  <img src="https://img.shields.io/badge/TTS-IndexTTS2%20%7C%20Kokoro%20%7C%20Soprano-green.svg" alt="TTS">
-  <img src="https://img.shields.io/badge/STT-Whisper%20%7C%20SenseVoice%20%7C%20FunASR-orange.svg" alt="STT">
-  <img src="https://img.shields.io/badge/Memory-SQLite%20%2B%20Vector%20Search-purple.svg" alt="Memory">
+  <img src="https://img.shields.io/badge/TTS-IndexTTS2%20%7C%20Kokoro-green.svg" alt="TTS">
+  <img src="https://img.shields.io/badge/STT-Whisper-orange.svg" alt="STT">
+  <img src="https://img.shields.io/badge/Memory-SQLite_Graph-purple.svg" alt="Memory">
+  <img src="https://img.shields.io/badge/Architecture-Hybrid_WSL-blue.svg" alt="Arch">
 </p>
 
 ---
