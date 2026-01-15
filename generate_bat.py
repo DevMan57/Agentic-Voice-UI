@@ -255,17 +255,17 @@ def get_batch_content():
 
     # PyTorch with CUDA (must be first before other ML packages)
     lines.append(f"echo   {C_AMBER}[4/8]{C_RESET} Installing PyTorch with CUDA 12.1 support...")
-    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install --upgrade pip && pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121"')
+    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install --upgrade pip --progress-bar off && pip install --progress-bar off torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121"')
     lines.append("echo.")
 
     # Main requirements
     lines.append(f"echo   {C_AMBER}[5/8]{C_RESET} Installing Python packages from requirements.txt...")
-    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install -r requirements.txt"')
+    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install --progress-bar off -r requirements.txt"')
     lines.append("echo.")
 
     # FunASR + SenseVoice (STT backends)
     lines.append(f"echo   {C_AMBER}[6/8]{C_RESET} Installing FunASR + SenseVoice (STT backends)...")
-    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install funasr modelscope"')
+    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install --progress-bar off funasr modelscope"')
     lines.append("echo.")
 
     # Pre-download STT models

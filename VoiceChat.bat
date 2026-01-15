@@ -179,13 +179,13 @@ echo   [38;2;0;191;255m[3/8][0m Creating virtual environment...
 wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && [ ! -d .venv ] && python3 -m venv .venv && echo Created .venv || echo .venv already exists"
 echo.
 echo   [38;2;0;191;255m[4/8][0m Installing PyTorch with CUDA 12.1 support...
-wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install --upgrade pip && pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121"
+wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install --upgrade pip --progress-bar off && pip install --progress-bar off torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121"
 echo.
 echo   [38;2;0;191;255m[5/8][0m Installing Python packages from requirements.txt...
-wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install -r requirements.txt"
+wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install --progress-bar off -r requirements.txt"
 echo.
 echo   [38;2;0;191;255m[6/8][0m Installing FunASR + SenseVoice (STT backends)...
-wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install funasr modelscope"
+wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install --progress-bar off funasr modelscope"
 echo.
 echo   [38;2;0;191;255m[7/8][0m Pre-downloading STT models (SenseVoice + FunASR)...
 echo         [90mThis may take a few minutes on first run...[0m
