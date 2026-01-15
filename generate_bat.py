@@ -234,29 +234,66 @@ def get_batch_content():
     lines.append(f"echo {C_DARK}:{C_RESET}   {C_DARK}██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗    ██████╔╝███████╗██║     ███████║{C_RESET}")
     lines.append(f"echo {C_DARK}:{C_RESET}   {C_DARK}╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝    ╚═════╝ ╚══════╝╚═╝     ╚══════╝{C_RESET}")
     lines.append(f"echo {C_DARK}:{C_RESET}")
-    lines.append(f"echo {C_DARK}:{C_RESET}                              {C_GREY}Python + Node.js Dependencies{C_RESET}")
+    lines.append(f"echo {C_DARK}:{C_RESET}                     {C_GREY}Complete TTS2 Voice Agent Installation{C_RESET}")
     lines.append(f"echo {C_DARK}:{C_RESET}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
     lines.append(f"echo.")
     lines.append(f"echo {make_bar('-', TERM_WIDTH, C_GREY)}")
     lines.append("echo.")
 
-    lines.append(f"echo   [*] Checking/Installing Node.js 20 (via NVM)...{C_AMBER}")
+    # Node.js installation
+    lines.append(f"echo   {C_AMBER}[1/8]{C_RESET} Checking/Installing Node.js 20 (via NVM)...")
     lines.append('wsl -d %WSL_DISTRO% -e bash -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash && export NVM_DIR=\\"$HOME/.nvm\\" && [ -s \\"$NVM_DIR/nvm.sh\\" ] && . \\"$NVM_DIR/nvm.sh\\" && nvm install 20 && nvm alias default 20 && nvm use default && node -v"')
     lines.append("echo.")
 
-    lines.append(f"echo   [*] Checking Python Environment...{C_AMBER}")
-    lines.append('wsl -d %WSL_DISTRO% -e bash -c "dpkg -s python3-venv >/dev/null 2>&1 || (echo Installing python3-venv... && sudo apt-get update && sudo apt-get install -y python3-venv)"')
-    lines.append(f"echo   [*] Creating virtual environment...{C_AMBER}")
+    # Python venv setup
+    lines.append(f"echo   {C_AMBER}[2/8]{C_RESET} Checking Python Environment...")
+    lines.append('wsl -d %WSL_DISTRO% -e bash -c "dpkg -s python3-venv >/dev/null 2>&1 || (echo Installing python3-venv... && sudo apt-get update && sudo apt-get install -y python3-venv python3-dev build-essential)"')
+    lines.append(f"echo   {C_AMBER}[3/8]{C_RESET} Creating virtual environment...")
     lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && [ ! -d .venv ] && python3 -m venv .venv && echo Created .venv || echo .venv already exists"')
-    lines.append(f"echo   [*] Installing Python packages...{C_AMBER}")
-    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt"')
     lines.append("echo.")
-    lines.append(f"echo   [*] Checking Windows audio deps...{C_AMBER}")
+
+    # PyTorch with CUDA (must be first before other ML packages)
+    lines.append(f"echo   {C_AMBER}[4/8]{C_RESET} Installing PyTorch with CUDA 12.1 support...")
+    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install --upgrade pip && pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121"')
+    lines.append("echo.")
+
+    # Main requirements
+    lines.append(f"echo   {C_AMBER}[5/8]{C_RESET} Installing Python packages from requirements.txt...")
+    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install -r requirements.txt"')
+    lines.append("echo.")
+
+    # FunASR + SenseVoice (STT backends)
+    lines.append(f"echo   {C_AMBER}[6/8]{C_RESET} Installing FunASR + SenseVoice (STT backends)...")
+    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install funasr modelscope"')
+    lines.append("echo.")
+
+    # Pre-download STT models
+    lines.append(f"echo   {C_AMBER}[7/8]{C_RESET} Pre-downloading STT models (SenseVoice + FunASR)...")
+    lines.append(f"echo         {C_GREY}This may take a few minutes on first run...{C_RESET}")
+    # Download SenseVoiceSmall and paraformer models
+    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && python -c \\"from funasr import AutoModel; print(\'Downloading SenseVoiceSmall...\'); m = AutoModel(model=\'FunAudioLLM/SenseVoiceSmall\', device=\'cpu\', hub=\'hf\'); print(\'SenseVoice ready!\')\\""')
+    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && python -c \\"from funasr import AutoModel; print(\'Downloading Paraformer-zh...\'); m = AutoModel(model=\'paraformer-zh\', device=\'cpu\'); print(\'FunASR ready!\')\\""')
+    lines.append("echo.")
+
+    # Windows audio dependencies
+    lines.append(f"echo   {C_AMBER}[8/8]{C_RESET} Installing Windows audio dependencies...")
     lines.append("pip install keyboard pyaudio numpy --quiet 2>nul")
 
     lines.append("echo.")
-    lines.append(f"echo {C_AMBER}Done!{C_RESET}")
+    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_AMBER)}")
+    lines.append(f"echo.")
+    lines.append(f"echo   {C_AMBER}Installation Complete!{C_RESET}")
+    lines.append(f"echo.")
+    lines.append(f"echo   {C_GREY}Installed Components:{C_RESET}")
+    lines.append(f"echo   {C_GREY}  - PyTorch with CUDA 12.1{C_RESET}")
+    lines.append(f"echo   {C_GREY}  - TTS: IndexTTS2, Kokoro, Supertonic, Soprano{C_RESET}")
+    lines.append(f"echo   {C_GREY}  - STT: Faster-Whisper, SenseVoice, FunASR{C_RESET}")
+    lines.append(f"echo   {C_GREY}  - Memory: sqlite-vec, Qwen3 embeddings{C_RESET}")
+    lines.append(f"echo   {C_GREY}  - Node.js 20 (for MCP servers){C_RESET}")
+    lines.append(f"echo.")
+    lines.append(f"echo {make_bar('=', TERM_WIDTH, C_AMBER)}")
+    lines.append("echo.")
     lines.append("pause")
     lines.append("goto MENU")
 

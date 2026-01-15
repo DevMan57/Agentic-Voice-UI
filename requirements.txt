@@ -64,8 +64,10 @@ pytest>=7.0.0
 # ============================================
 # New Audio Backends (Path C)
 # ============================================
-# FunASR - Unified STT (SenseVoice, Fun-ASR-Nano)
+# FunASR - Unified STT (SenseVoice, Fun-ASR)
+# Provides: SenseVoice (STT+VAD+Emotion), Paraformer (high-accuracy)
 funasr>=1.0.0
+modelscope>=1.9.0                      # Model hub for FunASR
 
 # Supertonic - Ultra-fast ONNX TTS
 # Note: Requires model download: git clone https://huggingface.co/Supertone/supertonic assets/supertonic

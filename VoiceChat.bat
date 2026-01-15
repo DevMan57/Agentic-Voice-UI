@@ -164,26 +164,50 @@ echo [38;2;0;136;170m:[0m   [38;2;0;136;170m██║██║╚██╗█
 echo [38;2;0;136;170m:[0m   [38;2;0;136;170m██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗    ██████╔╝███████╗██║     ███████║[0m
 echo [38;2;0;136;170m:[0m   [38;2;0;136;170m╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝    ╚═════╝ ╚══════╝╚═╝     ╚══════╝[0m
 echo [38;2;0;136;170m:[0m
-echo [38;2;0;136;170m:[0m                              [90mPython + Node.js Dependencies[0m
+echo [38;2;0;136;170m:[0m                     [90mComplete TTS2 Voice Agent Installation[0m
 echo [38;2;0;136;170m:[0m
 echo [38;2;0;136;170m=============================================================================================[0m
 echo.
 echo [90m---------------------------------------------------------------------------------------------[0m
 echo.
-echo   [*] Checking/Installing Node.js 20 (via NVM)...[38;2;0;191;255m
+echo   [38;2;0;191;255m[1/8][0m Checking/Installing Node.js 20 (via NVM)...
 wsl -d %WSL_DISTRO% -e bash -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash && export NVM_DIR=\"$HOME/.nvm\" && [ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\" && nvm install 20 && nvm alias default 20 && nvm use default && node -v"
 echo.
-echo   [*] Checking Python Environment...[38;2;0;191;255m
-wsl -d %WSL_DISTRO% -e bash -c "dpkg -s python3-venv >/dev/null 2>&1 || (echo Installing python3-venv... && sudo apt-get update && sudo apt-get install -y python3-venv)"
-echo   [*] Creating virtual environment...[38;2;0;191;255m
+echo   [38;2;0;191;255m[2/8][0m Checking Python Environment...
+wsl -d %WSL_DISTRO% -e bash -c "dpkg -s python3-venv >/dev/null 2>&1 || (echo Installing python3-venv... && sudo apt-get update && sudo apt-get install -y python3-venv python3-dev build-essential)"
+echo   [38;2;0;191;255m[3/8][0m Creating virtual environment...
 wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && [ ! -d .venv ] && python3 -m venv .venv && echo Created .venv || echo .venv already exists"
-echo   [*] Installing Python packages...[38;2;0;191;255m
-wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt"
 echo.
-echo   [*] Checking Windows audio deps...[38;2;0;191;255m
+echo   [38;2;0;191;255m[4/8][0m Installing PyTorch with CUDA 12.1 support...
+wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install --upgrade pip && pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121"
+echo.
+echo   [38;2;0;191;255m[5/8][0m Installing Python packages from requirements.txt...
+wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install -r requirements.txt"
+echo.
+echo   [38;2;0;191;255m[6/8][0m Installing FunASR + SenseVoice (STT backends)...
+wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install funasr modelscope"
+echo.
+echo   [38;2;0;191;255m[7/8][0m Pre-downloading STT models (SenseVoice + FunASR)...
+echo         [90mThis may take a few minutes on first run...[0m
+wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && python -c \"from funasr import AutoModel; print('Downloading SenseVoiceSmall...'); m = AutoModel(model='FunAudioLLM/SenseVoiceSmall', device='cpu', hub='hf'); print('SenseVoice ready!')\""
+wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && python -c \"from funasr import AutoModel; print('Downloading Paraformer-zh...'); m = AutoModel(model='paraformer-zh', device='cpu'); print('FunASR ready!')\""
+echo.
+echo   [38;2;0;191;255m[8/8][0m Installing Windows audio dependencies...
 pip install keyboard pyaudio numpy --quiet 2>nul
 echo.
-echo [38;2;0;191;255mDone![0m
+echo [38;2;0;191;255m=============================================================================================[0m
+echo.
+echo   [38;2;0;191;255mInstallation Complete![0m
+echo.
+echo   [90mInstalled Components:[0m
+echo   [90m  - PyTorch with CUDA 12.1[0m
+echo   [90m  - TTS: IndexTTS2, Kokoro, Supertonic, Soprano[0m
+echo   [90m  - STT: Faster-Whisper, SenseVoice, FunASR[0m
+echo   [90m  - Memory: sqlite-vec, Qwen3 embeddings[0m
+echo   [90m  - Node.js 20 (for MCP servers)[0m
+echo.
+echo [38;2;0;191;255m=============================================================================================[0m
+echo.
 pause
 goto MENU
 :CALIBRATE
