@@ -24,7 +24,7 @@ class ToolCallInfo:
 class ChatResult:
     """
     Result of processing a chat message.
-    
+
     This is pure data - no UI formatting. The UI layer converts this to Gradio format.
     """
     response_text: str
@@ -35,6 +35,13 @@ class ChatResult:
     user_display_message: str  # What to show in UI for user message
     was_long_response: bool = False
     tts_warning: str = ""
+    # HUD metrics
+    latency_ms: int = 0
+    tokens_in: int = 0
+    tokens_out: int = 0
+    memory_nodes: int = 0
+    emotion: str = "neutral"
+    tts_speed: float = 0.0
 
 
 class ChatService:
@@ -183,8 +190,10 @@ class ChatService:
         else:
             print(f"[Progressive Disclosure] Skipped tool schemas (casual message or no tools)")
         
-        # Execute chat loop with tool handling
-        final_response, tool_calls_info = self._execute_chat_loop(
+        # Execute chat loop with tool handling (track timing for HUD)
+        import time
+        llm_start = time.time()
+        final_response, tool_calls_info, usage_stats = self._execute_chat_loop(
             messages=messages,
             model=model,
             temperature=temperature,
@@ -198,6 +207,15 @@ class ChatService:
             character=character,
             chat_with_llm_func=chat_with_llm_func,
             execute_tool_func=execute_tool_func
+        )
+        latency_ms = int((time.time() - llm_start) * 1000)
+
+        # Get memory stats for HUD
+        memory_stats = self.memory.get_stats(character_id)
+        memory_nodes = (
+            memory_stats.get("episodic_count", 0) +
+            memory_stats.get("semantic_count", 0) +
+            memory_stats.get("procedural_count", 0)
         )
         
         # Save to memory (unless incognito)
@@ -248,7 +266,13 @@ class ChatService:
             conversation_id=actual_conversation_id,
             user_display_message=user_display,
             was_long_response=was_long,
-            tts_warning=tts_warning
+            tts_warning=tts_warning,
+            # HUD metrics
+            latency_ms=latency_ms,
+            tokens_in=usage_stats.get("prompt_tokens", 0),
+            tokens_out=usage_stats.get("completion_tokens", 0),
+            memory_nodes=memory_nodes,
+            emotion=emotion_label or "neutral"
         )
     
     def _build_system_prompt(
@@ -354,17 +378,19 @@ When using tools, provide brief spoken updates and summaries:
         chat_with_llm_func,
         execute_tool_func,
         max_turns: int = 5
-    ) -> Tuple[str, List[ToolCallInfo]]:
+    ) -> Tuple[str, List[ToolCallInfo], dict]:
         """
         Execute chat loop with recursive tool handling.
-        
+
         Returns:
-            (final_response, tool_calls_info)
+            (final_response, tool_calls_info, usage_stats)
         """
         current_turn = 0
         final_response = ""
         tool_calls_info = []
         tool_call_count = 0
+        # Accumulate usage across turns
+        usage_stats = {"prompt_tokens": 0, "completion_tokens": 0}
         
         while current_turn < max_turns:
             print(f"[Chat] Turn {current_turn+1} - Sending {len(messages)} messages (Tools: {len(tools_schema)})")
@@ -375,7 +401,13 @@ When using tools, provide brief spoken updates and summaries:
                 freq_penalty, pres_penalty, provider=llm_provider,
                 image_data=image_data, tools=tools_schema
             )
-            
+
+            # Accumulate usage stats if present
+            if isinstance(response_msg, dict) and "_usage" in response_msg:
+                msg_usage = response_msg["_usage"]
+                usage_stats["prompt_tokens"] += msg_usage.get("prompt_tokens", 0)
+                usage_stats["completion_tokens"] += msg_usage.get("completion_tokens", 0)
+
             # Check for tool calls
             if isinstance(response_msg, dict) and response_msg.get("tool_calls"):
                 tool_calls = response_msg["tool_calls"]
@@ -442,7 +474,7 @@ When using tools, provide brief spoken updates and summaries:
         # Fallback if loop exhausted
         if not final_response:
             final_response = "I processed the information but couldn't generate a final response."
-        
+
         print(f"[Chat] [{character.id}] Response: {final_response[:100]}...")
-        
-        return final_response, tool_calls_info
+
+        return final_response, tool_calls_info, usage_stats

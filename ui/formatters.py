@@ -37,26 +37,26 @@ def format_memory_for_ui(context: Dict[str, Any]) -> str:
 
 def format_tool_call_html(tool_name: str, arguments: Dict[str, Any], result: str = None,
                           step: int = None, total: int = None, status: str = "complete") -> str:
-    """Format a tool call as HTML for Claude Desktop-style display with chain visualization"""
+    """Format a tool call as HTML for CYBERDECK System Protocol display"""
     args_str = ", ".join([f"{k}: {v}" for k, v in arguments.items()])
 
-    # Status indicator
-    status_icons = {"pending": "⏳", "complete": "✅", "failed": "❌"}
-    status_icon = status_icons.get(status, "✅")
+    # Status indicator - Military style
+    status_icons = {"pending": "[ EXEC ]", "complete": "[ OK ]", "failed": "[ FAIL ]"}
+    status_icon = status_icons.get(status, "[ OK ]")
 
-    # Step indicator for all tool calls
+    # Protocol indicator for all tool calls
     step_html = ""
     chain_class = ""
     if step is not None and total is not None:
         if total > 1:
-            step_html = f'<span class="tool-step-badge">🔗 Step {step}/{total}</span>'
+            step_html = f'<span class="tool-step-badge">PROTOCOL {step:02d}</span>'
             if step < total:
                 chain_class = " tool-chain-continues"
             if step > 1:
                 chain_class += " tool-chain-continued"
         else:
-            # Single tool call - still show badge for consistency
-            step_html = f'<span class="tool-step-badge">🔗</span>'
+            # Single tool call - SYS_CALL
+            step_html = f'<span class="tool-step-badge">SYS_CALL</span>'
 
     html = f'<div class="tool-call-block{chain_class}">'
     html += f'<div class="tool-call-header">{step_html}{status_icon} {tool_name}</div>'

@@ -282,12 +282,12 @@ def _get_system_info_html() -> str:
         cuda_memory = "N/A"
     
     return f"""
-    <div style="background: #252525; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.85em;">
-        <div style="color: #888;">Platform: <span style="color: #e5e5e5;">{platform.system()} {platform.release()}</span></div>
-        <div style="color: #888;">Python: <span style="color: #e5e5e5;">{platform.python_version()}</span></div>
-        <div style="color: #888;">CUDA: <span style="color: {'#22c55e' if cuda_available else '#ef4444'};">{'✓ Available' if cuda_available else '✗ Not available'}</span></div>
-        <div style="color: #888;">GPU: <span style="color: #e5e5e5;">{cuda_device}</span></div>
-        <div style="color: #888;">VRAM: <span style="color: #e5e5e5;">{cuda_memory}</span></div>
+    <div style="background: #000000; padding: 12px; border: 1px solid var(--theme-primary, #00BFFF); border-radius: 0px; font-family: monospace; font-size: 0.85em;">
+        <div style="color: var(--theme-dim, #006699);">Platform: <span style="color: var(--theme-primary, #00BFFF);">{platform.system()} {platform.release()}</span></div>
+        <div style="color: var(--theme-dim, #006699);">Python: <span style="color: var(--theme-primary, #00BFFF);">{platform.python_version()}</span></div>
+        <div style="color: var(--theme-dim, #006699);">CUDA: <span style="color: var(--theme-primary, #00BFFF);">{'✓ Available' if cuda_available else '✗ Not available'}</span></div>
+        <div style="color: var(--theme-dim, #006699);">GPU: <span style="color: var(--theme-primary, #00BFFF);">{cuda_device}</span></div>
+        <div style="color: var(--theme-dim, #006699);">VRAM: <span style="color: var(--theme-primary, #00BFFF);">{cuda_memory}</span></div>
     </div>
     """
 
@@ -300,55 +300,55 @@ def create_shortcuts_modal() -> str:
     """Create keyboard shortcuts modal HTML"""
     return """
     <div id="shortcuts-help" style="
-        position: fixed; 
-        top: 50%; left: 50%; 
+        position: fixed;
+        top: 50%; left: 50%;
         transform: translate(-50%, -50%);
-        background: #1a1a1a; 
-        border: 1px solid #333;
-        border-radius: 12px;
+        background: #000000;
+        border: 2px solid var(--theme-primary, #00BFFF);
+        border-radius: 0px;
         padding: 24px;
         z-index: 1000;
         display: none;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        box-shadow: 0 0 30px var(--theme-glow, rgba(0,191,255,0.3));
         max-width: 400px;
     ">
-        <h3 style="margin-top: 0; color: #fff; display: flex; align-items: center; gap: 8px;">
+        <h3 style="margin-top: 0; color: var(--theme-primary, #00BFFF); display: flex; align-items: center; gap: 8px;">
             <span>⌨️</span> Keyboard Shortcuts
         </h3>
-        <table style="width: 100%; color: #e5e5e5; border-collapse: collapse;">
+        <table style="width: 100%; color: var(--theme-primary, #00BFFF); border-collapse: collapse;">
             <tr>
                 <td style="padding: 8px 0;">
-                    <kbd style="background: #333; padding: 4px 8px; border-radius: 4px; font-family: monospace;">Shift</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; font-family: monospace; color: var(--theme-primary, #00BFFF);">Shift</kbd>
                 </td>
                 <td style="padding: 8px 12px;">Hold to record (Push-to-Talk)</td>
             </tr>
             <tr>
                 <td style="padding: 8px 0;">
-                    <kbd style="background: #333; padding: 4px 8px; border-radius: 4px;">Ctrl</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #00BFFF);">Ctrl</kbd>
                     +
-                    <kbd style="background: #333; padding: 4px 8px; border-radius: 4px;">Enter</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #00BFFF);">Enter</kbd>
                 </td>
                 <td style="padding: 8px 12px;">Send message</td>
             </tr>
             <tr>
                 <td style="padding: 8px 0;">
-                    <kbd style="background: #333; padding: 4px 8px; border-radius: 4px;">Ctrl</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #00BFFF);">Ctrl</kbd>
                     +
-                    <kbd style="background: #333; padding: 4px 8px; border-radius: 4px;">N</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #00BFFF);">N</kbd>
                 </td>
                 <td style="padding: 8px 12px;">New conversation</td>
             </tr>
             <tr>
                 <td style="padding: 8px 0;">
-                    <kbd style="background: #333; padding: 4px 8px; border-radius: 4px;">Esc</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #00BFFF);">Esc</kbd>
                 </td>
                 <td style="padding: 8px 12px;">Clear input</td>
             </tr>
             <tr>
                 <td style="padding: 8px 0;">
-                    <kbd style="background: #333; padding: 4px 8px; border-radius: 4px;">Ctrl</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #00BFFF);">Ctrl</kbd>
                     +
-                    <kbd style="background: #333; padding: 4px 8px; border-radius: 4px;">/</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #00BFFF);">/</kbd>
                 </td>
                 <td style="padding: 8px 12px;">Toggle this help</td>
             </tr>
@@ -357,10 +357,10 @@ def create_shortcuts_modal() -> str:
             margin-top: 16px;
             width: 100%;
             padding: 10px;
-            background: #4f46e5;
-            color: white;
+            background: var(--theme-primary, #00BFFF);
+            color: #000000;
             border: none;
-            border-radius: 8px;
+            border-radius: 0px;
             cursor: pointer;
             font-size: 0.9em;
         ">Close</button>
@@ -391,22 +391,23 @@ def create_status_bar(
     memory_count: int = 0
 ) -> str:
     """Create status bar HTML"""
-    
+
+    # Use CSS variables for theme support
     status_colors = {
-        "ready": "#22c55e",
-        "recording": "#ef4444",
-        "processing": "#f59e0b",
-        "offline": "#6b7280"
+        "ready": "var(--theme-primary, #00BFFF)",
+        "recording": "var(--theme-primary, #00BFFF)",
+        "processing": "var(--theme-primary, #00BFFF)",
+        "offline": "var(--theme-dim, #006699)"
     }
-    
+
     status_icons = {
         "ready": "🟢",
         "recording": "🔴",
         "processing": "⏳",
         "offline": "⭕"
     }
-    
-    ptt_color = status_colors.get(ptt_status, "#6b7280")
+
+    ptt_color = status_colors.get(ptt_status, "var(--theme-dim, #006699)")
     ptt_icon = status_icons.get(ptt_status, "⭕")
     ptt_text = {
         "ready": "Ready (Hold Shift)",
@@ -414,25 +415,26 @@ def create_status_bar(
         "processing": "Processing...",
         "offline": "PTT Offline"
     }.get(ptt_status, "Unknown")
-    
+
     return f"""
     <div style="
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 8px 16px;
-        background: #1a1a1a;
-        border-radius: 8px;
+        background: #000000;
+        border: 1px solid var(--theme-dim, #006699);
+        border-radius: 0px;
         font-size: 0.85em;
-        color: #888;
+        color: var(--theme-primary, #00BFFF);
     ">
         <div style="display: flex; gap: 16px; align-items: center;">
             <span style="color: {ptt_color};">{ptt_icon} {ptt_text}</span>
-            {f'<span style="color: #818cf8;">👤 {character_name}</span>' if character_name else ''}
+            {f'<span style="color: var(--theme-primary, #00BFFF);">👤 {character_name}</span>' if character_name else ''}
         </div>
         <div style="display: flex; gap: 16px; align-items: center;">
             {f'<span>🧠 {memory_count} memories</span>' if memory_count else ''}
-            {f'<span style="color: #64748b;">🤖 {model_name[:25]}...</span>' if len(model_name) > 25 else f'<span style="color: #64748b;">🤖 {model_name}</span>' if model_name else ''}
+            {f'<span style="color: var(--theme-dim, #006699);">🤖 {model_name[:25]}...</span>' if len(model_name) > 25 else f'<span style="color: var(--theme-dim, #006699);">🤖 {model_name}</span>' if model_name else ''}
         </div>
     </div>
     """

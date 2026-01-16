@@ -30,9 +30,20 @@ from transformers.cache_utils import (
     DynamicCache,
     EncoderDecoderCache,
     OffloadedCache,
-    QuantizedCacheConfig,
     StaticCache,
 )
+# QuantizedCacheConfig was removed in transformers 4.57+
+# Create a simple fallback for compatibility
+try:
+    from transformers.cache_utils import QuantizedCacheConfig
+except ImportError:
+    # Dummy class for newer transformers versions that don't have this
+    class QuantizedCacheConfig:
+        """Compatibility shim for older transformers API."""
+        def __init__(self, backend="quanto", **kwargs):
+            self.backend = backend
+            for k, v in kwargs.items():
+                setattr(self, k, v)
 from transformers.configuration_utils import PretrainedConfig
 from transformers.integrations.deepspeed import is_deepspeed_zero3_enabled
 from transformers.integrations.fsdp import is_fsdp_managed_module
@@ -60,11 +71,34 @@ from transformers.generation.candidate_generator import (
     _prepare_token_type_ids,
 )
 from transformers.generation.configuration_utils import (
-    NEED_SETUP_CACHE_CLASSES_MAPPING,
-    QUANT_BACKEND_CLASSES_MAPPING,
     GenerationConfig,
     GenerationMode,
 )
+# These mappings were removed in transformers 4.57+
+try:
+    from transformers.generation.configuration_utils import NEED_SETUP_CACHE_CLASSES_MAPPING
+except ImportError:
+    # Fallback mapping for newer transformers
+    NEED_SETUP_CACHE_CLASSES_MAPPING = {
+        "static": StaticCache,
+        "offloaded_static": OffloadedCache,
+    }
+try:
+    from transformers.generation.configuration_utils import QUANT_BACKEND_CLASSES_MAPPING
+except ImportError:
+    # Fallback - import the actual cache classes
+    try:
+        from transformers.cache_utils import QuantoQuantizedCache, HQQQuantizedCache
+        QUANT_BACKEND_CLASSES_MAPPING = {
+            "quanto": QuantoQuantizedCache,
+            "HQQ": HQQQuantizedCache,
+        }
+    except ImportError:
+        from transformers.cache_utils import QuantizedCache
+        QUANT_BACKEND_CLASSES_MAPPING = {
+            "quanto": QuantizedCache,
+            "HQQ": QuantizedCache,
+        }
 from transformers.generation.logits_process import (
     EncoderNoRepeatNGramLogitsProcessor,
     EncoderRepetitionPenaltyLogitsProcessor,

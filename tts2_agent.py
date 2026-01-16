@@ -44,7 +44,15 @@ class LapisStream:
             # Add lapis lazuli color code at the start of each line
             if self._at_line_start and text.strip():
                 self._stream.write(LAPIS)
-            self._stream.write(text)
+            try:
+                self._stream.write(text)
+            except UnicodeEncodeError:
+                # Windows cp1252 can't handle some Unicode - replace with ASCII equivalents
+                safe_text = text.replace('✓', '[OK]').replace('✗', '[X]').replace('⏳', '[...]')
+                try:
+                    self._stream.write(safe_text)
+                except UnicodeEncodeError:
+                    self._stream.write(safe_text.encode('ascii', 'replace').decode('ascii'))
             self._at_line_start = text.endswith('\n')
 
     def flush(self):
@@ -113,6 +121,7 @@ import tempfile
 
 from tools import init_tools, REGISTRY, set_graph_tool_memory_manager
 from mcp_client import MCPManager, MCP_AVAILABLE
+from config.manager import config
 
 # Service Layer (Phase 1: Architecture Cleanup)
 from services import ServiceContainer, ChatService, ChatResult, ToolCallInfo
@@ -154,7 +163,11 @@ try:
     from indextts.infer_v2 import IndexTTS2 as _IndexTTS2
     IndexTTS2 = _IndexTTS2
     TTS_AVAILABLE = True
-except ImportError:
+except ImportError as e:
+    print(f"[TTS] IndexTTS2 import failed: {e}")
+    TTS_AVAILABLE = False
+except Exception as e:
+    print(f"[TTS] IndexTTS2 import error: {e}")
     TTS_AVAILABLE = False
 
 # Kokoro TTS
@@ -2574,10 +2587,15 @@ def chat_with_openrouter(messages: list, model: str, temperature: float, max_tok
             headers=headers, json=payload, timeout=120
         )
         response.raise_for_status()
-        
-        # Return full message object to handle tool_calls
-        return response.json()["choices"][0]["message"]
-        
+
+        # Return full message object with usage stats attached
+        data = response.json()
+        message = data["choices"][0]["message"]
+        # Attach usage stats to message for HUD display
+        if "usage" in data:
+            message["_usage"] = data["usage"]
+        return message
+
     except Exception as e:
         print(f"[LLM] OpenRouter error: {e}")
         # Return a fake error message object
@@ -2646,13 +2664,18 @@ def chat_with_lm_studio(messages: list, temperature: float, max_tokens: int,
         print(f"[LLM] LM Studio model: {LM_STUDIO_MODEL}")
         response = requests.post(
             f"{LM_STUDIO_BASE_URL}/chat/completions",
-            headers={"Content-Type": "application/json"}, 
+            headers={"Content-Type": "application/json"},
             json=payload, timeout=120
         )
         response.raise_for_status()
-        # Return full message object (content + tool_calls)
-        return response.json()["choices"][0]["message"]
-        
+        # Return full message object with usage stats attached
+        data = response.json()
+        message = data["choices"][0]["message"]
+        # Attach usage stats to message for HUD display
+        if "usage" in data:
+            message["_usage"] = data["usage"]
+        return message
+
     except requests.exceptions.ConnectionError:
         LM_STUDIO_AVAILABLE = False
         LM_STUDIO_MODEL = None
@@ -3028,10 +3051,42 @@ def process_message_with_memory_v2(user_message: str, chat_history: list, charac
     cleanup_counter[0] += 1
     if cleanup_counter[0] % 10 == 0:
         clear_cuda_memory(aggressive=True)
-    
-    # Return order: [chatbot, audio, msg_input, memory_display, conv_id, image_input, tts_warning]
-    return (formatted_history, result.audio_data, "", memory_ui_text, 
-            result.conversation_id, gr.update(), result.tts_warning)
+
+    # Estimate TTS speed based on backend (hardcoded estimates)
+    tts_backend = SETTINGS.get("tts_backend", "indextts")
+    tts_speed_estimates = {
+        "indextts": 2.0,   # ~2x realtime
+        "kokoro": 10.0,     # ~10x realtime
+        "supertonic": 167.0, # ~167x realtime
+        "soprano": 2000.0   # ~2000x realtime
+    }
+    estimated_tts_speed = tts_speed_estimates.get(tts_backend, 2.0)
+
+    # Map emotion to value (0-1 scale for meter width)
+    emotion_values = {
+        "happy": 0.9, "neutral": 0.5, "calm": 0.6,
+        "sad": 0.3, "angry": 0.8, "fear": 0.7, "frustrated": 0.75
+    }
+    emotion_val = emotion_values.get(result.emotion.lower() if result.emotion else "neutral", 0.5)
+
+    # Generate HUD update script (executed by browser when rendered)
+    hud_script = f"""<script>
+if (window.HUD) {{
+    window.HUD.update({{
+        latency: {result.latency_ms},
+        ttsSpeed: {estimated_tts_speed:.0f},
+        tokensIn: {result.tokens_in},
+        tokensOut: {result.tokens_out},
+        memoryNodes: {result.memory_nodes},
+        emotion: '{result.emotion or "neutral"}',
+        emotionValue: {emotion_val}
+    }});
+}}
+</script>"""
+
+    # Return order: [chatbot, audio, msg_input, memory_display, conv_id, image_input, tts_warning, hud_update]
+    return (formatted_history, result.audio_data, "", memory_ui_text,
+            result.conversation_id, gr.update(), result.tts_warning, hud_script)
 
 
 # Direct assignment to the service-based implementation (Phase 1: Architecture Cleanup)
@@ -3043,19 +3098,19 @@ def process_voice_input(audio_data, chat_history, character_id, voice_file, *arg
     """Process voice input with thread safety - handles variable settings args"""
     # args contains: model, temp, tokens, top_p, freq, pres, conv_id, tts, provider, [group_args...], image
     if not processing_lock.acquire(blocking=False):
-        return chat_history, None, "⏳ Processing...", gr.update(), args[6] if len(args) > 6 else "new", gr.update(), ""
+        return chat_history, None, "⏳ Processing...", gr.update(), args[6] if len(args) > 6 else "new", gr.update(), "", ""
 
     try:
         if audio_data is None:
              # args[6] is conversation_id usually, but let's be safe
             conv_id = args[6] if len(args) > 6 else "new"
-            return chat_history, None, "", gr.update(), conv_id, gr.update(), ""
+            return chat_history, None, "", gr.update(), conv_id, gr.update(), "", ""
 
         # Transcribe with potential emotion (SenseVoice provides both)
         user_message, stt_emotion = transcribe_audio(audio_data)
         if not user_message or user_message.startswith("["):
             conv_id = args[6] if len(args) > 6 else "new"
-            return chat_history, None, user_message or "", gr.update(), conv_id, gr.update(), ""
+            return chat_history, None, user_message or "", gr.update(), conv_id, gr.update(), "", ""
 
         # Handle emotion routing based on STT backend
         global _current_emotion
@@ -3101,7 +3156,9 @@ def process_voice_input(audio_data, chat_history, character_id, voice_file, *arg
         global _last_audio_hash
         _last_audio_hash = None
 
-        return final_result[0], final_result[1], user_message, final_result[3], final_result[4], final_result[5], final_result[6]
+        # Include HUD update (element 7)
+        hud_update = final_result[7] if len(final_result) > 7 else ""
+        return final_result[0], final_result[1], user_message, final_result[3], final_result[4], final_result[5], final_result[6], hud_update
     finally:
         processing_lock.release()
 
@@ -4149,6 +4206,23 @@ def create_ui():
             background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
             border: 1px solid var(--theme-primary) !important;
         }
+        /* Audio component buttons and dropdowns - grey gradient */
+        .gradio-audio button,
+        .gradio-audio select,
+        .gradio-audio .dropdown,
+        [data-testid="audio"] button,
+        [data-testid="audio"] select {
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+            border: 1px solid var(--theme-primary) !important;
+            color: var(--theme-primary) !important;
+        }
+        .gradio-audio button:hover,
+        .gradio-audio select:hover,
+        [data-testid="audio"] button:hover,
+        [data-testid="audio"] select:hover {
+            background: var(--theme-primary) !important;
+            color: #000000 !important;
+        }
 
         /* Image component - Double border style */
         .gradio-image,
@@ -4250,13 +4324,21 @@ def create_ui():
             background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%) !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8), 0 0 15px var(--theme-glow) !important;
         }
-        /* Dropdown items - transparent by default */
+        /* Dropdown items - transparent by default with theme text */
         .gradio-dropdown li,
         .gradio-dropdown [role="option"],
         ul[role="listbox"] li,
         div[role="listbox"] [role="option"] {
             background: transparent !important;
+            color: var(--theme-primary) !important;
             transition: all 0.15s ease !important;
+        }
+        /* Dropdown items inner text - theme color */
+        .gradio-dropdown li *,
+        .gradio-dropdown [role="option"] *,
+        ul[role="listbox"] li *,
+        div[role="listbox"] [role="option"] * {
+            color: var(--theme-primary) !important;
         }
         /* Dropdown items - solid lapis on hover with black text */
         .gradio-dropdown li:hover,
@@ -4280,9 +4362,43 @@ def create_ui():
             background: linear-gradient(180deg, #333333 0%, #222222 100%) !important;
             border-left: 3px solid var(--theme-primary) !important;
         }
+        /* Selected dropdown item HOVER - must also change background */
+        .gradio-dropdown li.selected:hover,
+        .gradio-dropdown [role="option"][aria-selected="true"]:hover,
+        ul[role="listbox"] li.selected:hover,
+        div[role="listbox"] [role="option"][aria-selected="true"]:hover {
+            background: var(--theme-primary) !important;
+            color: #000000 !important;
+        }
+        .gradio-dropdown li.selected:hover *,
+        .gradio-dropdown [role="option"][aria-selected="true"]:hover *,
+        ul[role="listbox"] li.selected:hover *,
+        div[role="listbox"] [role="option"][aria-selected="true"]:hover * {
+            color: #000000 !important;
+        }
 
         /* Labels - Theme */
         label, .label-wrap, .svelte-1gfkn6j {
+            color: var(--theme-primary) !important;
+        }
+
+        /* Info/helper text below components - Theme color */
+        .wrap > span:not(.token),
+        .wrap > p,
+        .info-text,
+        .block-info,
+        .gradio-container span[data-testid],
+        .gradio-textbox .wrap > div:last-child,
+        .gradio-dropdown .wrap > div:last-child,
+        .gradio-slider .wrap > div:last-child,
+        .gradio-checkbox .wrap > span,
+        .gradio-radio .wrap > span:not(.selected),
+        form span,
+        .form span,
+        .block span:not(.token):not([role]),
+        [class*="info"],
+        [class*="hint"],
+        [class*="desc"] {
             color: var(--theme-primary) !important;
         }
 
@@ -4399,11 +4515,31 @@ def create_ui():
             box-shadow: 0 0 20px var(--theme-glow) !important;
             transform: scale(1.2);
         }
-        /* Slider container - double border style */
+        /* Slider container - double border style, NO hover background */
         .gradio-slider {
             border: 1px solid var(--theme-primary) !important;
             background: #000000 !important;
             padding: 4px !important;
+        }
+        .gradio-slider:hover,
+        .gradio-slider:hover > *,
+        .gradio-slider .label-wrap,
+        .gradio-slider .label-wrap:hover {
+            background: #000000 !important;
+        }
+
+        /* Checkbox containers - NO hover background on label area */
+        .gradio-checkbox,
+        .gradio-checkboxgroup,
+        [data-testid="checkbox"] {
+            background: #000000 !important;
+        }
+        .gradio-checkbox:hover,
+        .gradio-checkboxgroup:hover,
+        [data-testid="checkbox"]:hover,
+        .gradio-checkbox .label-wrap:hover,
+        .gradio-checkboxgroup .label-wrap:hover {
+            background: #000000 !important;
         }
 
         /* Override Gradio's internal toggle/switch styling */
@@ -4487,7 +4623,9 @@ def create_ui():
         [data-testid="radio"] label:not(.selected):hover,
         button[role="radio"][aria-checked="false"]:hover,
         [role="radiogroup"] button[aria-checked="false"]:hover,
-        [role="radiogroup"] label:not(.selected):hover {
+        [role="radiogroup"] label:not(.selected):hover,
+        .gradio-radio label:hover,
+        .gradio-radio button:hover {
             background: var(--theme-primary) !important;
             color: #000000 !important;
             box-shadow: 0 0 20px var(--theme-glow) !important;
@@ -4495,7 +4633,30 @@ def create_ui():
         .gr-radio label:not(.selected):hover span,
         [data-testid="radio"] label:not(.selected):hover span,
         button[role="radio"][aria-checked="false"]:hover span,
-        [role="radiogroup"] button[aria-checked="false"]:hover span {
+        [role="radiogroup"] button[aria-checked="false"]:hover span,
+        .gradio-radio label:hover span,
+        .gradio-radio button:hover span {
+            color: #000000 !important;
+        }
+
+        /* ============================================
+           HOVER TEXT FIX - Radio and CheckboxGroup only
+           Regular checkboxes keep cyan text (black background)
+           ============================================ */
+        .gradio-radio label:hover,
+        .gradio-radio label:hover *,
+        .gradio-radio button:hover,
+        .gradio-radio button:hover *,
+        [role="radiogroup"] label:hover,
+        [role="radiogroup"] label:hover *,
+        [role="radiogroup"] button:hover,
+        [role="radiogroup"] button:hover * {
+            color: #000000 !important;
+            fill: #000000 !important;
+        }
+        /* CheckboxGroup (multi-select) labels only */
+        .gradio-checkboxgroup > div > label:hover,
+        .gradio-checkboxgroup > div > label:hover * {
             color: #000000 !important;
         }
 
@@ -4664,12 +4825,13 @@ def create_ui():
            Force ALL text/icons to black on hover
            ============================================ */
 
-        /* Buttons - all text and icons black on hover */
+        /* Buttons - all text and icons black on hover (fill AND stroke for SVGs) */
         button:hover *,
         .gr-button:hover *,
         [class*="button"]:hover * {
             color: #000000 !important;
             fill: #000000 !important;
+            stroke: #000000 !important;
         }
 
         /* Accordion headers - all content black on hover */
@@ -4679,6 +4841,7 @@ def create_ui():
         .gradio-accordion > .label-wrap:hover svg {
             color: #000000 !important;
             fill: #000000 !important;
+            stroke: #000000 !important;
         }
 
         /* Dropdowns - all content black on hover */
@@ -4688,49 +4851,41 @@ def create_ui():
         .gradio-dropdown:hover svg {
             color: #000000 !important;
             fill: #000000 !important;
+            stroke: #000000 !important;
         }
 
-        /* Checkbox labels - black on hover (Gradio 4.x) */
+        /* Checkbox labels - BLACK text on hover when background is cyan */
         .gr-checkbox:hover label,
         .gr-checkbox:hover span,
         [data-testid="checkbox"]:hover label,
-        [data-testid="checkbox"]:hover span,
-        .checkbox-group label:hover,
-        .checkbox-group label:hover span,
+        [data-testid="checkbox"]:hover span {
+            color: #000000 !important;
+        }
+
+        /* CheckboxGroup item labels - BLACK text on hover */
         .gradio-checkboxgroup label:hover,
-        .gradio-checkboxgroup label:hover *,
+        .gradio-checkboxgroup label:hover span,
         [data-testid="checkbox-group"] label:hover,
-        [data-testid="checkbox-group"] label:hover *,
-        .wrap label:hover,
-        .wrap label:hover span {
-            color: #000000 !important;
+        [data-testid="checkbox-group"] label:hover span {
             background: var(--theme-primary) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
         }
 
-        /* Radio buttons - black text on hover (Gradio 4.x) */
-        .gradio-radio label:hover,
-        .gradio-radio label:hover *,
+        /* Radio buttons - black text when selected/hovered on the button itself */
+        .gradio-radio button.selected,
         .gradio-radio button:hover,
-        .gradio-radio button:hover *,
-        [role="radiogroup"] button:hover,
-        [role="radiogroup"] button:hover *,
-        [role="radiogroup"] label:hover,
-        [role="radiogroup"] label:hover *,
-        [data-testid="radio"] label:hover,
-        [data-testid="radio"] label:hover *,
-        [data-testid="radio"] button:hover,
-        [data-testid="radio"] button:hover * {
+        [role="radiogroup"] button.selected,
+        [role="radiogroup"] button:hover {
             color: #000000 !important;
             background: var(--theme-primary) !important;
         }
 
-        /* File upload areas - styling and hover */
+        /* File upload areas - styling and hover (glow effect, not solid background) */
         .gradio-file,
         .gradio-image,
         [data-testid="file"],
-        [data-testid="image"],
-        .upload-container,
-        [class*="upload"] {
+        [data-testid="image"] {
             border: 1px solid var(--theme-primary) !important;
             background: #000000 !important;
             transition: all 0.2s ease !important;
@@ -4738,20 +4893,9 @@ def create_ui():
         .gradio-file:hover,
         .gradio-image:hover,
         [data-testid="file"]:hover,
-        [data-testid="image"]:hover,
-        .upload-container:hover,
-        [class*="upload"]:hover {
-            background: var(--theme-primary) !important;
+        [data-testid="image"]:hover {
+            border-color: var(--theme-bright) !important;
             box-shadow: 0 0 20px var(--theme-glow) !important;
-        }
-        .gradio-file:hover *,
-        .gradio-image:hover *,
-        [data-testid="file"]:hover *,
-        [data-testid="image"]:hover *,
-        .upload-container:hover *,
-        [class*="upload"]:hover * {
-            color: #000000 !important;
-            fill: #000000 !important;
         }
 
         /* Tab buttons - black on hover and selected */
@@ -4801,6 +4945,85 @@ def create_ui():
         input[type="checkbox"] + svg,
         input[type="checkbox"] ~ svg,
         [data-testid="checkbox"] svg {
+            color: var(--theme-primary) !important;
+            fill: var(--theme-primary) !important;
+            stroke: var(--theme-primary) !important;
+        }
+
+        /* ============================================
+           STOP/DELETE BUTTONS (variant="stop")
+           Blue glow background, black icon on hover
+           ============================================ */
+        button.stop,
+        button[variant="stop"],
+        .gradio-button.stop,
+        .gr-button-stop {
+            background: #000000 !important;
+            border: 1px solid var(--theme-primary) !important;
+            color: var(--theme-primary) !important;
+            transition: all 0.2s ease !important;
+        }
+        button.stop:hover,
+        button[variant="stop"]:hover,
+        .gradio-button.stop:hover,
+        .gr-button-stop:hover {
+            background: var(--theme-primary) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+        }
+        button.stop:hover *,
+        button[variant="stop"]:hover *,
+        .gradio-button.stop:hover *,
+        .gr-button-stop:hover * {
+            color: #000000 !important;
+            fill: #000000 !important;
+        }
+
+        /* ============================================
+           ACCORDION COLLAPSE BUTTON - Black on hover
+           ============================================ */
+        .gradio-accordion .icon,
+        .gradio-accordion svg.icon,
+        .gradio-accordion > .label-wrap svg {
+            color: var(--theme-primary) !important;
+            fill: var(--theme-primary) !important;
+            transition: all 0.2s ease !important;
+        }
+        .gradio-accordion > .label-wrap:hover svg,
+        .gradio-accordion > .label-wrap:hover .icon {
+            color: #000000 !important;
+            fill: #000000 !important;
+        }
+
+        /* ============================================
+           CHATBOT ACTION BUTTONS (download, delete, etc)
+           Blue glow background, black icon on hover
+           ============================================ */
+        #main-chatbot button,
+        .chatbot button,
+        [data-testid="chatbot"] button {
+            background: transparent !important;
+            border: 1px solid var(--theme-primary) !important;
+            color: var(--theme-primary) !important;
+            transition: all 0.2s ease !important;
+        }
+        #main-chatbot button:hover,
+        .chatbot button:hover,
+        [data-testid="chatbot"] button:hover {
+            background: var(--theme-primary) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 15px var(--theme-glow) !important;
+        }
+        #main-chatbot button:hover svg,
+        .chatbot button:hover svg,
+        [data-testid="chatbot"] button:hover svg {
+            color: #000000 !important;
+            fill: #000000 !important;
+            stroke: #000000 !important;
+        }
+        #main-chatbot button svg,
+        .chatbot button svg,
+        [data-testid="chatbot"] button svg {
             color: var(--theme-primary) !important;
             fill: var(--theme-primary) !important;
             stroke: var(--theme-primary) !important;
@@ -4927,6 +5150,20 @@ def create_ui():
                     }
                 } catch(e) {}
 
+                // Also check the dropdown value after Gradio loads (handles server-side saved theme)
+                setTimeout(() => {
+                    const containers = document.querySelectorAll('.gradio-dropdown');
+                    containers.forEach(container => {
+                        const label = container.querySelector('label');
+                        if (label && label.textContent.includes('Color Theme')) {
+                            const input = container.querySelector('input');
+                            if (input && input.value && this.themes[input.value]) {
+                                this.apply(input.value);
+                            }
+                        }
+                    });
+                }, 500);
+
                 // Watch for theme dropdown changes
                 this.watchDropdown();
             },
@@ -4999,6 +5236,10 @@ def create_ui():
 
         // Initialize theme on load
         window.ThemeSwitcher.init();
+
+        // ==================== HOVER TEXT FIX ====================
+        // CSS-only solution - no JavaScript to avoid side effects
+        // Targets ONLY radio buttons and checkbox groups with cyan hover backgrounds
 
         // ==================== CYBERDECK HUD SYSTEM ====================
         window.HUD = {
@@ -5287,8 +5528,9 @@ def create_ui():
     }
     """
 
-    # Combine JS
-    combined_js = keyboard_js.replace("return [];", "") + pwa_js.replace("() => {", "").replace("return [];\n    }", "return [];")
+    # Combine JS - merge keyboard_js and pwa_js into single function
+    # Remove keyboard_js closing (return + brace), remove pwa_js opening (arrow function)
+    combined_js = keyboard_js.replace("return [];\n    }", "") + pwa_js.replace("() => {\n", "")
 
     with gr.Blocks(title="IndexTTS2 Voice Agent", theme=create_dark_theme(), css=custom_css, js=combined_js) as app:
 
@@ -5348,6 +5590,13 @@ def create_ui():
             </div>
         </div>
         """)
+
+        # Hidden component to trigger HUD updates via JavaScript
+        hud_update_trigger = gr.HTML(
+            value="",
+            visible=False,
+            elem_id="hud-update-trigger"
+        )
 
         # PTT Status
         _, initial_ptt_display, _, _ = get_ptt_status()
@@ -5427,8 +5676,8 @@ def create_ui():
                     label="Conversation",
                     height=600,
                     value=load_session(initial_char),
-                    type="messages",
-                    elem_id="main-chatbot"
+                    elem_id="main-chatbot",
+                    type="messages"
                 )
                 
                 # TTS warning display
@@ -5507,7 +5756,6 @@ def create_ui():
                     autoplay=True,
                     interactive=False,
                     streaming=False,  # Disable streaming to prevent player reset
-                    show_download_button=True,  # Allow user to download if autoplay fails
                     elem_id="audio-response"
                 )
             
@@ -6118,7 +6366,7 @@ def create_ui():
         def send_with_warning(*args):
             """
             Process message with TTS warning handling.
-            
+
             Important: For audio stability, we track the latest valid audio
             and only update the component when we have new audio data.
             This prevents the audio player from disappearing during streaming updates.
@@ -6126,33 +6374,36 @@ def create_ui():
             # args match inputs: msg, history, char, voice, model...
             # process_group_chat_wrapper is a generator
             latest_audio = None
-            
+
             for result in process_group_chat_wrapper(*args):
                 # Show TTS warning if present
                 warning = result[6] if len(result) > 6 else ""
                 warning_visible = bool(warning)
-                
+
+                # Get HUD update script (8th element)
+                hud_update = result[7] if len(result) > 7 else ""
+
                 # Track the latest valid audio data
                 current_audio = result[1]
                 if current_audio is not None:
                     latest_audio = current_audio
-                
+
                 # Only update audio if we have valid audio data
                 # Use gr.update() to preserve existing audio when no new audio
                 audio_update = latest_audio if latest_audio is not None else gr.update()
-                
-                yield result[0], audio_update, result[2], result[3], result[4], result[5], gr.update(value=warning, visible=warning_visible)
+
+                yield result[0], audio_update, result[2], result[3], result[4], result[5], gr.update(value=warning, visible=warning_visible), hud_update
         
         msg_input.submit(
             fn=send_with_warning,
             inputs=[msg_input, chatbot, current_character, voice_dropdown] + all_settings[:-1] + [image_input],
-            outputs=[chatbot, audio_output, msg_input, memory_display, current_conversation_id, image_input, tts_warning_display]
+            outputs=[chatbot, audio_output, msg_input, memory_display, current_conversation_id, image_input, tts_warning_display, hud_update_trigger]
         )
-        
+
         send_btn.click(
             fn=send_with_warning,
             inputs=[msg_input, chatbot, current_character, voice_dropdown] + all_settings[:-1] + [image_input],
-            outputs=[chatbot, audio_output, msg_input, memory_display, current_conversation_id, image_input, tts_warning_display]
+            outputs=[chatbot, audio_output, msg_input, memory_display, current_conversation_id, image_input, tts_warning_display, hud_update_trigger]
         )
         
         # Voice input
@@ -6160,18 +6411,19 @@ def create_ui():
             result = process_voice_input(*args)
             warning = result[6] if len(result) > 6 else ""
             warning_visible = bool(warning)
-            return result[0], result[1], result[2], result[3], result[4], result[5], gr.update(value=warning, visible=warning_visible)
-        
+            hud_update = result[7] if len(result) > 7 else ""
+            return result[0], result[1], result[2], result[3], result[4], result[5], gr.update(value=warning, visible=warning_visible), hud_update
+
         audio_input.stop_recording(
             fn=voice_with_warning,
             inputs=[audio_input, chatbot, current_character, voice_dropdown] + all_settings + [image_input],
-            outputs=[chatbot, audio_output, transcription_display, memory_display, current_conversation_id, image_input, tts_warning_display]
+            outputs=[chatbot, audio_output, transcription_display, memory_display, current_conversation_id, image_input, tts_warning_display, hud_update_trigger]
         ).then(fn=lambda: None, outputs=[audio_input])
-        
+
         voice_btn.click(
             fn=voice_with_warning,
             inputs=[audio_input, chatbot, current_character, voice_dropdown] + all_settings + [image_input],
-            outputs=[chatbot, audio_output, transcription_display, memory_display, current_conversation_id, image_input, tts_warning_display]
+            outputs=[chatbot, audio_output, transcription_display, memory_display, current_conversation_id, image_input, tts_warning_display, hud_update_trigger]
         ).then(fn=lambda: None, outputs=[audio_input])
         
         # Clear buttons
@@ -6555,7 +6807,7 @@ def process_group_chat_wrapper(user_message, chat_history, character_id, voice_f
             {"role": "user", "content": user_formatted},
             {"role": "assistant", "content": thinking_html}
         ]
-        yield (thinking_history, None, "", gr.update(), conversation_id, None, "")
+        yield (thinking_history, None, "", gr.update(), conversation_id, None, "", "")
 
         result = process_message_with_memory(
             user_message, chat_history, character_id, voice_file,

@@ -59,13 +59,6 @@ checkpoints/*
 !checkpoints/.gitkeep
 !checkpoints/README.md
 
-# All model directories (downloaded on install)
-models/
-!models/.gitkeep
-
-# HuggingFace cache
-.cache/
-
 # ===========================================
 # PYTHON
 # ===========================================

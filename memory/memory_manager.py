@@ -1512,32 +1512,32 @@ JSON response:"""
         if not all_memories:
             return ""
             
-        # Initialize network
-        net = Network(height="600px", width="100%", bgcolor="#1a1a1a", font_color="white", directed=False)
+        # Initialize network - Lapis Lazuli theme
+        net = Network(height="600px", width="100%", bgcolor="#000000", font_color="#00BFFF", directed=False)
         net.barnes_hut()
-        
+
         # Add Central Node
         char_node_id = f"CHAR_{character_id}"
-        net.add_node(char_node_id, label=character_id.title(), color="#ff5722", size=30, shape="star")
-        
-        # Add Memory Nodes
+        net.add_node(char_node_id, label=character_id.title(), color="#00BFFF", size=30, shape="star")
+
+        # Add Memory Nodes - All lapis lazuli with varying brightness
         for mem in all_memories:
             if mem.memory_type == 'episodic':
-                color = "#2196f3"
+                color = "#00BFFF"
                 shape = "dot"
             elif mem.memory_type == 'semantic':
-                color = "#4caf50"
+                color = "#33CCFF"
                 shape = "diamond"
             else:
-                color = "#9c27b0"
+                color = "#0088AA"
                 shape = "triangle"
-            
+
             label = mem.content[:30] + "..." if len(mem.content) > 30 else mem.content
             title = f"[{mem.memory_type.upper()}] {mem.content}\nImportance: {mem.importance_score:.2f}"
             size = 10 + (mem.importance_score * 15)
-            
+
             net.add_node(mem.id, label=label, title=title, color=color, size=size, shape=shape)
-            net.add_edge(char_node_id, mem.id, color="#555555", width=1)
+            net.add_edge(char_node_id, mem.id, color="#006699", width=1)
             
         # Save graph
         root_dir = Path(__file__).parent.parent

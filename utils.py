@@ -27,7 +27,7 @@ def create_dark_theme():
     """Create ENGINEERED AMBER theme - Industrial Retro-Futurism"""
     return gr.themes.Soft(
         primary_hue="orange",
-        secondary_hue="amber",
+        secondary_hue="cyan",
         neutral_hue="slate",
         font=gr.themes.GoogleFont("Fira Code"),
     ).set(
@@ -39,54 +39,54 @@ def create_dark_theme():
         background_fill_secondary="#000000",
         background_fill_secondary_dark="#000000",
 
-        # Block colors - Black with orange borders
+        # Block colors - Black with lapis lazuli borders
         block_background_fill="#000000",
         block_background_fill_dark="#000000",
-        block_border_color="#ff4500",
-        block_border_color_dark="#ff4500",
+        block_border_color="#00BFFF",
+        block_border_color_dark="#00BFFF",
         block_label_background_fill="#000000",
         block_label_background_fill_dark="#000000",
-        block_title_text_color="#ff4500",
-        block_title_text_color_dark="#ff4500",
+        block_title_text_color="#00BFFF",
+        block_title_text_color_dark="#00BFFF",
 
         # Input colors - Black
         input_background_fill="#000000",
         input_background_fill_dark="#000000",
-        input_border_color="#ff4500",
-        input_border_color_dark="#ff4500",
-        input_placeholder_color="#883300",
-        input_placeholder_color_dark="#883300",
+        input_border_color="#00BFFF",
+        input_border_color_dark="#00BFFF",
+        input_placeholder_color="#006699",
+        input_placeholder_color_dark="#006699",
 
-        # Button colors - Orange
-        button_primary_background_fill="#ff4500",
-        button_primary_background_fill_dark="#ff4500",
-        button_primary_background_fill_hover="#ff6600",
-        button_primary_background_fill_hover_dark="#ff6600",
+        # Button colors - Lapis Lazuli
+        button_primary_background_fill="#00BFFF",
+        button_primary_background_fill_dark="#00BFFF",
+        button_primary_background_fill_hover="#33CCFF",
+        button_primary_background_fill_hover_dark="#33CCFF",
         button_primary_text_color="#000000",
         button_primary_text_color_dark="#000000",
         # Secondary buttons
         button_secondary_background_fill="#000000",
         button_secondary_background_fill_dark="#000000",
-        button_secondary_background_fill_hover="#ff4500",
-        button_secondary_background_fill_hover_dark="#ff4500",
-        button_secondary_text_color="#ff4500",
-        button_secondary_text_color_dark="#ff4500",
+        button_secondary_background_fill_hover="#00BFFF",
+        button_secondary_background_fill_hover_dark="#00BFFF",
+        button_secondary_text_color="#00BFFF",
+        button_secondary_text_color_dark="#00BFFF",
 
-        # Slider colors - NEON ORANGE
-        slider_color="#ff4500",
-        slider_color_dark="#ff4500",
+        # Slider colors - Lapis Lazuli
+        slider_color="#00BFFF",
+        slider_color_dark="#00BFFF",
 
-        # Checkbox colors - Neon Orange
-        checkbox_background_color_selected="#ff4500",
-        checkbox_background_color_selected_dark="#ff4500",
-        checkbox_border_color_selected="#ff4500",
-        checkbox_border_color_selected_dark="#ff4500",
+        # Checkbox colors - Lapis Lazuli
+        checkbox_background_color_selected="#00BFFF",
+        checkbox_background_color_selected_dark="#00BFFF",
+        checkbox_border_color_selected="#00BFFF",
+        checkbox_border_color_selected_dark="#00BFFF",
 
-        # Text colors - Soft Amber for easy reading
-        body_text_color="#ffcc99",
-        body_text_color_dark="#ffcc99",
-        body_text_color_subdued="#883300",
-        body_text_color_subdued_dark="#883300",
+        # Text colors - Lapis Lazuli
+        body_text_color="#00BFFF",
+        body_text_color_dark="#00BFFF",
+        body_text_color_subdued="#006699",
+        body_text_color_subdued_dark="#006699",
 
         # Border radius - CYBERDECK: Sharp corners
         block_radius="0px",
@@ -154,23 +154,23 @@ KEYBOARD_SHORTCUTS_JS = """
 """
 
 KEYBOARD_SHORTCUTS_HTML = """
-<div id="shortcuts-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-     background: #252525; padding: 24px; border-radius: 12px; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
-    <h3 style="margin-top: 0; color: #fff;">⌨️ Keyboard Shortcuts</h3>
-    <table style="color: #e5e5e5; border-collapse: collapse;">
-        <tr><td style="padding: 8px;"><kbd style="background: #404040; padding: 4px 8px; border-radius: 4px;">Shift</kbd></td>
+<div id="shortcuts-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+     background: #000000; padding: 24px; border-radius: 0px; border: 2px solid #00BFFF; z-index: 1000; box-shadow: 0 0 30px rgba(0,191,255,0.3);">
+    <h3 style="margin-top: 0; color: #00BFFF;">⌨️ Keyboard Shortcuts</h3>
+    <table style="color: #00BFFF; border-collapse: collapse;">
+        <tr><td style="padding: 8px;"><kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">Shift</kbd></td>
             <td style="padding: 8px;">Hold to record (Push-to-Talk)</td></tr>
-        <tr><td style="padding: 8px;"><kbd style="background: #404040; padding: 4px 8px; border-radius: 4px;">Ctrl</kbd>+<kbd style="background: #404040; padding: 4px 8px; border-radius: 4px;">Enter</kbd></td>
+        <tr><td style="padding: 8px;"><kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">Ctrl</kbd>+<kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">Enter</kbd></td>
             <td style="padding: 8px;">Send message</td></tr>
-        <tr><td style="padding: 8px;"><kbd style="background: #404040; padding: 4px 8px; border-radius: 4px;">Ctrl</kbd>+<kbd style="background: #404040; padding: 4px 8px; border-radius: 4px;">N</kbd></td>
+        <tr><td style="padding: 8px;"><kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">Ctrl</kbd>+<kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">N</kbd></td>
             <td style="padding: 8px;">New conversation</td></tr>
-        <tr><td style="padding: 8px;"><kbd style="background: #404040; padding: 4px 8px; border-radius: 4px;">Esc</kbd></td>
+        <tr><td style="padding: 8px;"><kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">Esc</kbd></td>
             <td style="padding: 8px;">Clear input</td></tr>
-        <tr><td style="padding: 8px;"><kbd style="background: #404040; padding: 4px 8px; border-radius: 4px;">Ctrl</kbd>+<kbd style="background: #404040; padding: 4px 8px; border-radius: 4px;">/</kbd></td>
+        <tr><td style="padding: 8px;"><kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">Ctrl</kbd>+<kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">/</kbd></td>
             <td style="padding: 8px;">Toggle this help</td></tr>
     </table>
-    <button onclick="this.parentElement.style.display='none'" 
-            style="margin-top: 16px; padding: 8px 16px; background: #4f46e5; color: white; border: none; border-radius: 6px; cursor: pointer;">
+    <button onclick="this.parentElement.style.display='none'"
+            style="margin-top: 16px; padding: 8px 16px; background: #00BFFF; color: #000000; border: none; border-radius: 0px; cursor: pointer;">
         Close
     </button>
 </div>
@@ -210,11 +210,11 @@ AUDIO_VISUALIZER_JS = """
             const height = this.canvas.height;
             
             // Clear
-            this.ctx.fillStyle = '#1a1a1a';
+            this.ctx.fillStyle = '#000000';
             this.ctx.fillRect(0, 0, width, height);
-            
+
             // Draw fake waveform (would connect to real audio data)
-            this.ctx.strokeStyle = '#4f46e5';
+            this.ctx.strokeStyle = '#00BFFF';
             this.ctx.lineWidth = 2;
             this.ctx.beginPath();
             
@@ -253,37 +253,39 @@ def format_message_html(role: str, content: str, timestamp: str = None, characte
     """Format a chat message as styled HTML"""
     
     if role == "user":
-        bg_color = "#1e3a5f"
+        bg_color = "#000000"
+        border_color = "#00BFFF"
         icon = "👤"
         name = "You"
         align = "right"
     else:
-        bg_color = "#2d2d2d"
+        bg_color = "#000000"
+        border_color = "#006699"
         icon = "🤖"
         name = character_name or "Assistant"
         align = "left"
-    
+
     time_str = ""
     if timestamp:
         try:
             dt = datetime.fromisoformat(timestamp)
-            time_str = f'<span style="font-size: 0.75em; color: #888; margin-left: 8px;">{dt.strftime("%H:%M")}</span>'
+            time_str = f'<span style="font-size: 0.75em; color: #006699; margin-left: 8px;">{dt.strftime("%H:%M")}</span>'
         except:
             pass
-    
+
     # Escape HTML but preserve basic markdown
     content = content.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
     content = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', content)
     content = re.sub(r'\*(.+?)\*', r'<em>\1</em>', content)
     content = content.replace("\n", "<br>")
-    
+
     return f'''
     <div style="display: flex; justify-content: flex-{align.replace('right', 'end').replace('left', 'start')}; margin: 8px 0;">
-        <div style="background: {bg_color}; padding: 12px 16px; border-radius: 12px; max-width: 80%;">
-            <div style="font-size: 0.85em; color: #aaa; margin-bottom: 4px;">
+        <div style="background: {bg_color}; border: 1px solid {border_color}; padding: 12px 16px; border-radius: 0px; max-width: 80%;">
+            <div style="font-size: 0.85em; color: #006699; margin-bottom: 4px;">
                 {icon} {name}{time_str}
             </div>
-            <div style="color: #e5e5e5; line-height: 1.5;">
+            <div style="color: #00BFFF; line-height: 1.5;">
                 {content}
             </div>
         </div>
@@ -294,7 +296,7 @@ def format_message_html(role: str, content: str, timestamp: str = None, characte
 def format_chat_history_html(history: List[Dict[str, str]], character_name: str = "Assistant") -> str:
     """Format entire chat history as HTML"""
     if not history:
-        return '<div style="color: #666; text-align: center; padding: 40px;">Start a conversation...</div>'
+        return '<div style="color: #006699; text-align: center; padding: 40px;">Start a conversation...</div>'
     
     html_parts = []
     for msg in history:
@@ -316,7 +318,7 @@ def format_chat_history_html(history: List[Dict[str, str]], character_name: str 
 def format_typing_indicator(character_name: str = "Assistant") -> str:
     """Create a typing indicator HTML"""
     return f'''
-    <div style="display: flex; align-items: center; padding: 12px; color: #888;">
+    <div style="display: flex; align-items: center; padding: 12px; color: #00BFFF;">
         <span style="margin-right: 8px;">🤖</span>
         <span>{character_name} is thinking</span>
         <span class="typing-dots" style="margin-left: 4px;">
@@ -633,30 +635,30 @@ def create_status_html(
 ) -> str:
     """Create status bar HTML"""
     
-    # PTT indicator
+    # PTT indicator - All lapis lazuli
     if ptt_status == "recording":
-        ptt_html = f'<span style="color: #ef4444;">🔴 Recording ({recording_duration:.1f}s)</span>'
+        ptt_html = f'<span style="color: #00BFFF;">🔴 Recording ({recording_duration:.1f}s)</span>'
     elif ptt_status == "processing":
-        ptt_html = '<span style="color: #f59e0b;">⏳ Processing...</span>'
+        ptt_html = '<span style="color: #00BFFF;">⏳ Processing...</span>'
     elif ptt_status == "offline":
-        ptt_html = '<span style="color: #6b7280;">⭕ PTT Offline</span>'
+        ptt_html = '<span style="color: #006699;">⭕ PTT Offline</span>'
     else:
-        ptt_html = '<span style="color: #22c55e;">🟢 Ready (Hold Shift)</span>'
-    
+        ptt_html = '<span style="color: #00BFFF;">🟢 Ready (Hold Shift)</span>'
+
     # Character
-    char_html = f'<span style="color: #818cf8;">👤 {character_name}</span>' if character_name else ''
-    
+    char_html = f'<span style="color: #00BFFF;">👤 {character_name}</span>' if character_name else ''
+
     # Model
-    model_html = f'<span style="color: #64748b;">🤖 {model_name[:30]}...</span>' if len(model_name) > 30 else f'<span style="color: #64748b;">🤖 {model_name}</span>' if model_name else ''
-    
+    model_html = f'<span style="color: #006699;">🤖 {model_name[:30]}...</span>' if len(model_name) > 30 else f'<span style="color: #006699;">🤖 {model_name}</span>' if model_name else ''
+
     # Thinking
-    thinking_html = '<span style="color: #f59e0b;">💭 Thinking...</span>' if is_thinking else ''
-    
+    thinking_html = '<span style="color: #00BFFF;">💭 Thinking...</span>' if is_thinking else ''
+
     parts = [p for p in [ptt_html, char_html, model_html, thinking_html] if p]
-    
+
     return f'''
-    <div style="display: flex; justify-content: space-between; align-items: center; 
-                padding: 8px 16px; background: #1a1a1a; border-radius: 8px; font-size: 0.9em;">
+    <div style="display: flex; justify-content: space-between; align-items: center;
+                padding: 8px 16px; background: #000000; border: 1px solid #006699; border-radius: 0px; font-size: 0.9em;">
         {' | '.join(parts)}
     </div>
     '''
@@ -665,8 +667,8 @@ def create_status_html(
 def create_memory_stats_html(stats: Dict[str, Any]) -> str:
     """Create memory statistics display HTML"""
     return f'''
-    <div style="background: #252525; padding: 16px; border-radius: 8px; color: #e5e5e5;">
-        <h4 style="margin-top: 0; color: #818cf8;">🧠 Memory Statistics</h4>
+    <div style="background: #000000; padding: 16px; border: 1px solid #00BFFF; border-radius: 0px; color: #00BFFF;">
+        <h4 style="margin-top: 0; color: #00BFFF;">🧠 Memory Statistics</h4>
         <table style="width: 100%; border-collapse: collapse;">
             <tr>
                 <td style="padding: 4px 8px;">Episodic memories:</td>
@@ -684,15 +686,15 @@ def create_memory_stats_html(stats: Dict[str, Any]) -> str:
                 <td style="padding: 4px 8px;">Session summaries:</td>
                 <td style="padding: 4px 8px; text-align: right;">{stats.get('summary_count', 0)}</td>
             </tr>
-            <tr style="border-top: 1px solid #404040;">
+            <tr style="border-top: 1px solid #006699;">
                 <td style="padding: 8px 8px 4px;">Total interactions:</td>
                 <td style="padding: 8px 8px 4px; text-align: right; font-weight: bold;">{stats.get('total_interactions', 0)}</td>
             </tr>
         </table>
-        <div style="margin-top: 12px; font-size: 0.85em; color: #888;">
+        <div style="margin-top: 12px; font-size: 0.85em; color: #006699;">
             Embedding model: {stats.get('embedding_model', 'N/A')}<br>
-            Retrieval weights: R={stats.get('retrieval_weights', {}).get('recency', 0.2)} 
-                              V={stats.get('retrieval_weights', {}).get('relevance', 0.5)} 
+            Retrieval weights: R={stats.get('retrieval_weights', {}).get('recency', 0.2)}
+                              V={stats.get('retrieval_weights', {}).get('relevance', 0.5)}
                               I={stats.get('retrieval_weights', {}).get('importance', 0.3)}
         </div>
     </div>
@@ -713,13 +715,13 @@ def create_character_card_html(
 ) -> str:
     """Create a character selection card"""
     
-    border_color = "#4f46e5" if is_selected else "#333"
-    bg_color = "#252525" if is_selected else "#1a1a1a"
-    
+    border_color = "#00BFFF" if is_selected else "#006699"
+    bg_color = "#000000"
+
     tags_html = ""
     if tags:
         tags_html = '<div style="margin-top: 8px;">' + ' '.join(
-            f'<span style="background: #374151; padding: 2px 8px; border-radius: 4px; font-size: 0.75em;">{tag}</span>'
+            f'<span style="background: #000000; border: 1px solid #006699; padding: 2px 8px; border-radius: 0px; font-size: 0.75em; color: #00BFFF;">{tag}</span>'
             for tag in tags[:3]
         ) + '</div>'
     
