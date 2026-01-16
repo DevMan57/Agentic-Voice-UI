@@ -3719,6 +3719,41 @@ def create_ui():
         }
 
         /* ============================================
+           VAD AUDIO VISUALIZER - Hacker Line Oscilloscope
+           ============================================ */
+        .vad-visualizer-container {
+            position: relative;
+            width: 100%;
+            height: 60px;
+            background: #000000;
+            border: 1px solid var(--theme-dim);
+            margin: 8px 0;
+            overflow: hidden;
+        }
+        #vad-visualizer-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .vad-visualizer-label {
+            position: absolute;
+            top: 4px;
+            left: 8px;
+            font-size: 0.7em;
+            color: var(--theme-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 1;
+        }
+        .vad-visualizer-container.active {
+            border-color: var(--theme-primary);
+            box-shadow: 0 0 10px var(--theme-glow-soft);
+        }
+
+        /* ============================================
            MOBILE PTT BUTTON - Touch-friendly
            ============================================ */
         #mobile-ptt-btn {
@@ -5712,6 +5747,153 @@ def create_ui():
         // CSS-only solution - no JavaScript to avoid side effects
         // Targets ONLY radio buttons and checkbox groups with cyan hover backgrounds
 
+        // ==================== VAD AUDIO VISUALIZER - Hacker Line ====================
+        window.AudioVisualizer = {
+            audioContext: null,
+            analyser: null,
+            dataArray: null,
+            canvas: null,
+            ctx: null,
+            animationId: null,
+            isActive: false,
+            stream: null,
+
+            init: function() {
+                this.canvas = document.getElementById('vad-visualizer-canvas');
+                if (!this.canvas) return false;
+                this.ctx = this.canvas.getContext('2d');
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                return true;
+            },
+
+            resize: function() {
+                if (!this.canvas) return;
+                const container = this.canvas.parentElement;
+                if (container) {
+                    this.canvas.width = container.offsetWidth;
+                    this.canvas.height = container.offsetHeight;
+                }
+            },
+
+            start: async function() {
+                if (this.isActive) return;
+
+                try {
+                    // Get microphone access
+                    this.stream = await navigator.mediaDevices.getUserMedia({
+                        audio: {
+                            echoCancellation: true,
+                            noiseSuppression: true,
+                            autoGainControl: true
+                        }
+                    });
+
+                    // Create audio context and analyser
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    this.analyser = this.audioContext.createAnalyser();
+                    this.analyser.fftSize = 2048;
+                    this.analyser.smoothingTimeConstant = 0.3;
+
+                    const source = this.audioContext.createMediaStreamSource(this.stream);
+                    source.connect(this.analyser);
+
+                    this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+                    this.isActive = true;
+
+                    // Activate container styling
+                    const container = document.querySelector('.vad-visualizer-container');
+                    if (container) container.classList.add('active');
+
+                    // Start animation loop
+                    this.draw();
+                    console.log('[Visualizer] Started audio visualization');
+                } catch (err) {
+                    console.error('[Visualizer] Failed to start:', err);
+                }
+            },
+
+            stop: function() {
+                this.isActive = false;
+
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                    this.animationId = null;
+                }
+
+                if (this.stream) {
+                    this.stream.getTracks().forEach(track => track.stop());
+                    this.stream = null;
+                }
+
+                if (this.audioContext) {
+                    this.audioContext.close();
+                    this.audioContext = null;
+                }
+
+                // Clear canvas
+                if (this.ctx && this.canvas) {
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                }
+
+                // Remove active styling
+                const container = document.querySelector('.vad-visualizer-container');
+                if (container) container.classList.remove('active');
+
+                console.log('[Visualizer] Stopped audio visualization');
+            },
+
+            draw: function() {
+                if (!this.isActive || !this.analyser || !this.ctx) return;
+
+                this.animationId = requestAnimationFrame(() => this.draw());
+
+                // Get waveform data (time domain)
+                this.analyser.getByteTimeDomainData(this.dataArray);
+
+                const canvas = this.canvas;
+                const ctx = this.ctx;
+                const width = canvas.width;
+                const height = canvas.height;
+
+                // Clear canvas
+                ctx.fillStyle = '#000000';
+                ctx.fillRect(0, 0, width, height);
+
+                // Get current theme color dynamically
+                const color = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--theme-primary').trim() || '#00BFFF';
+
+                // Draw waveform line with glow
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = color;
+                ctx.shadowColor = color;
+                ctx.shadowBlur = 12;
+                ctx.beginPath();
+
+                const bufferLength = this.dataArray.length;
+                const sliceWidth = width / bufferLength;
+                let x = 0;
+
+                for (let i = 0; i < bufferLength; i++) {
+                    const v = this.dataArray[i] / 128.0;  // 128 is "zero" for time domain
+                    const y = v * (height / 2);
+
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                    x += sliceWidth;
+                }
+
+                ctx.stroke();
+
+                // Reset shadow for next frame
+                ctx.shadowBlur = 0;
+            }
+        };
+
         // ==================== CYBERDECK HUD SYSTEM ====================
         window.HUD = {
             latency: 0,
@@ -5940,6 +6122,52 @@ def create_ui():
                 mobilePttBtn.addEventListener('mouseup', stopRecording);
                 mobilePttBtn.addEventListener('mouseleave', () => { if (isRecording) stopRecording(); });
             }
+
+            // ============================================
+            // VAD VISUALIZER - Initialize and watch toggle
+            // ============================================
+            setTimeout(() => {
+                // Initialize the visualizer
+                if (window.AudioVisualizer) {
+                    window.AudioVisualizer.init();
+                    console.log('[Visualizer] Initialized');
+                }
+
+                // Watch for VAD toggle changes via MutationObserver
+                // Gradio checkboxes update their checked state dynamically
+                const vadCheckbox = document.querySelector('input[type="checkbox"]');
+                const findVadCheckbox = () => {
+                    // Find checkbox inside element containing "Voice Activated" or "VAD"
+                    const labels = document.querySelectorAll('label, .svelte-1gfkn6j');
+                    for (const label of labels) {
+                        if (label.textContent && label.textContent.includes('Voice Activated')) {
+                            const checkbox = label.closest('.block')?.querySelector('input[type="checkbox"]');
+                            return checkbox;
+                        }
+                    }
+                    return null;
+                };
+
+                const vadInput = findVadCheckbox();
+                if (vadInput) {
+                    // Listen for changes on the actual input
+                    vadInput.addEventListener('change', (e) => {
+                        if (window.AudioVisualizer) {
+                            if (e.target.checked) {
+                                window.AudioVisualizer.start();
+                            } else {
+                                window.AudioVisualizer.stop();
+                            }
+                        }
+                    });
+
+                    // If VAD is already enabled on page load, start visualizer
+                    if (vadInput.checked && window.AudioVisualizer) {
+                        window.AudioVisualizer.start();
+                    }
+                    console.log('[Visualizer] Bound to VAD toggle');
+                }
+            }, 500);
         }, 1000);
         return [];
     }
@@ -6293,6 +6521,13 @@ def create_ui():
                         info=hf_info,
                         interactive=True  # Always interactive - unified models use mic capture
                     )
+                    # VAD Audio Visualizer - Hacker Line oscilloscope
+                    vad_visualizer_html = gr.HTML("""
+                        <div class="vad-visualizer-container" id="vad-visualizer-box">
+                            <span class="vad-visualizer-label">WAVEFORM</span>
+                            <canvas id="vad-visualizer-canvas"></canvas>
+                        </div>
+                    """)
                     tts_toggle = gr.Checkbox(
                         label="Enable TTS",
                         value=SETTINGS.get("tts_enabled", True)
