@@ -66,10 +66,30 @@ from transformers.generation.candidate_generator import (
     AssistedCandidateGeneratorDifferentTokenizers,
     CandidateGenerator,
     PromptLookupCandidateGenerator,
-    _crop_past_key_values,
     _prepare_attention_mask,
     _prepare_token_type_ids,
 )
+# _crop_past_key_values was removed in transformers 4.57+
+try:
+    from transformers.generation.candidate_generator import _crop_past_key_values
+except ImportError:
+    def _crop_past_key_values(model, past_key_values, new_cache_size):
+        """Fallback implementation for transformers 4.57+ compatibility."""
+        if past_key_values is None:
+            return None
+        # Handle DynamicCache and similar cache types
+        if hasattr(past_key_values, 'crop'):
+            past_key_values.crop(new_cache_size)
+            return past_key_values
+        # Handle tuple-based cache (legacy format)
+        if isinstance(past_key_values, (tuple, list)):
+            new_past = []
+            for layer_past in past_key_values:
+                new_past.append(
+                    tuple(past_state[:, :, :new_cache_size, :] for past_state in layer_past)
+                )
+            return tuple(new_past) if isinstance(past_key_values, tuple) else new_past
+        return past_key_values
 from transformers.generation.configuration_utils import (
     GenerationConfig,
     GenerationMode,
