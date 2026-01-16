@@ -3635,12 +3635,17 @@ def create_ui():
             text-transform: uppercase;
             letter-spacing: 1px;
             box-shadow: 0 0 15px var(--theme-glow), inset 0 1px 0 rgba(255,255,255,0.05);
+            overflow-x: auto;
+            flex-wrap: nowrap;
+            gap: 16px;
         }
         .hud-item {
             display: flex;
             align-items: center;
             gap: 8px;
             color: var(--theme-primary);
+            flex-shrink: 0;
+            white-space: nowrap;
         }
         .hud-label {
             color: var(--theme-dim);
@@ -3663,6 +3668,8 @@ def create_ui():
             padding: 6px 12px;
             background: #000000;
             border: 1px solid var(--theme-primary);
+            flex-shrink: 0;
+            white-space: nowrap;
         }
         #emotion-meter .meter-label {
             color: var(--theme-dim);
@@ -6005,8 +6012,8 @@ def create_ui():
         current_provider = gr.State(value=initial_provider)
 
         gr.HTML(f"""
-        <div id="app-banner" style="border: 3px solid var(--theme-primary, #00BFFF); background: linear-gradient(180deg, #141414 0%, #000000 100%); padding: 15px 20px; margin-bottom: 15px; box-shadow: 0 0 25px var(--theme-glow, rgba(0, 191, 255, 0.4)), inset 0 0 30px var(--theme-glow-soft, rgba(0, 191, 255, 0.08)), inset 0 1px 0 rgba(255,255,255,0.05);">
-            <pre style="color: var(--theme-primary, #00BFFF); font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; font-size: 16px; line-height: 1.15; margin: 0; text-align: center; letter-spacing: 0px; text-shadow: 0 0 10px var(--theme-glow-text-strong, rgba(0, 191, 255, 0.6));">
+        <div id="app-banner" style="border: 3px solid var(--theme-primary, #00BFFF); background: linear-gradient(180deg, #141414 0%, #000000 100%); padding: 15px 20px; margin-bottom: 15px; box-shadow: 0 0 25px var(--theme-glow, rgba(0, 191, 255, 0.4)), inset 0 0 30px var(--theme-glow-soft, rgba(0, 191, 255, 0.08)), inset 0 1px 0 rgba(255,255,255,0.05); overflow-x: auto;">
+            <pre style="color: var(--theme-primary, #00BFFF); font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; font-size: 16px; line-height: 1.15; margin: 0; text-align: center; letter-spacing: 0px; text-shadow: 0 0 10px var(--theme-glow-text-strong, rgba(0, 191, 255, 0.6)); white-space: pre; display: inline-block; min-width: 100%;">
 ╔════════════════════════════════════════════════════════════════════════════════════╗
 ║  ████████╗████████╗ ███████╗ ██████╗    ██╗   ██╗ ██████╗ ██╗ ██████╗███████╗      ║
 ║  ╚══██╔══╝╚══██╔══╝ ██╔════╝ ╚════██╗   ██║   ██║██╔═══██╗██║██╔════╝██╔════╝      ║
