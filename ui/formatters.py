@@ -36,13 +36,27 @@ def format_memory_for_ui(context: Dict[str, Any]) -> str:
 
 
 def format_tool_call_html(tool_name: str, arguments: Dict[str, Any], result: str = None,
-                          step: int = None, total: int = None, status: str = "complete") -> str:
-    """Format a tool call as HTML for CYBERDECK System Protocol display"""
+                          step: int = None, total: int = None, status: str = "complete",
+                          use_tree_format: bool = False) -> str:
+    """Format a tool call as HTML for CYBERDECK System Protocol display.
+
+    Args:
+        tool_name: Name of the tool being called
+        arguments: Dict of argument key-value pairs
+        result: Result string from the tool (optional)
+        step: Current step number in a chain (optional)
+        total: Total steps in chain (optional)
+        status: Status indicator - "pending", "complete", or "failed"
+        use_tree_format: If True, use tree/thread structure instead of block format
+    """
     args_str = ", ".join([f"{k}: {v}" for k, v in arguments.items()])
 
     # Status indicator - Military style
     status_icons = {"pending": "[ EXEC ]", "complete": "[ OK ]", "failed": "[ FAIL ]"}
     status_icon = status_icons.get(status, "[ OK ]")
+
+    # Status class for success indicator
+    status_class = "thread-step-success" if status == "complete" else ""
 
     # Protocol indicator for all tool calls
     step_html = ""
@@ -58,6 +72,25 @@ def format_tool_call_html(tool_name: str, arguments: Dict[str, Any], result: str
             # Single tool call - SYS_CALL
             step_html = f'<span class="tool-step-badge">SYS_CALL</span>'
 
+    # Tree format - uses conversation thread structure
+    if use_tree_format:
+        html = f'<div class="thread-step thread-step-exec">'
+        html += f'<span class="tool-step-badge">EXEC</span> {tool_name}'
+        if args_str:
+            html += f'<div class="tool-call-args">└─ {args_str}</div>'
+        html += '</div>'
+
+        if result:
+            display_result = result[:200] + "..." if len(result) > 200 else result
+            display_result = display_result.replace('<', '&lt;').replace('>', '&gt;')
+            html += f'<div class="thread-step thread-step-data">'
+            html += f'<span class="tool-step-badge">DATA</span>'
+            html += f'<div class="tool-call-result">└─ {display_result}</div>'
+            html += '</div>'
+
+        return html
+
+    # Standard block format
     html = f'<div class="tool-call-block{chain_class}">'
     html += f'<div class="tool-call-header">{step_html}{status_icon} {tool_name}</div>'
     html += f'<div class="tool-call-args">{args_str}</div>'
@@ -170,13 +203,79 @@ def filter_for_speech(full_message: str, has_tools: bool = False) -> str:
     return text
 
 
-def format_chat_result_for_ui(result, chat_history: list) -> list:
+def format_conversation_thread(tool_calls: list, response_text: str) -> str:
+    """Format tool calls and response as a conversation thread with tree structure.
+
+    Creates a visual tree showing:
+    ├── [ SYSTEM :: PLANNER ]
+    │   ├── > EXEC: tool_name
+    │   │     └─ args
+    │   ├── < DATA: result
+    │   └── √ STATUS: Success
+    └── [ AI :: RESPONSE ]
+        Response text here
+
+    Args:
+        tool_calls: List of tool call objects with name, arguments, result
+        response_text: Final response text
+
+    Returns:
+        HTML string with thread visualization
+    """
+    if not tool_calls:
+        return response_text
+
+    total_tools = len(tool_calls)
+    html = '<div class="conversation-thread">'
+
+    # System/Planner block
+    html += '<div class="system-planner-block">'
+    html += '<div class="system-planner-header">SYSTEM :: PLANNER</div>'
+    html += '<div class="system-planner-content">'
+
+    for i, tc in enumerate(tool_calls, 1):
+        # Exec step
+        html += f'<div class="thread-step thread-step-exec">'
+        html += f'> EXEC: {tc.name}'
+        if tc.arguments:
+            args_str = ", ".join([f"{k}: {v}" for k, v in tc.arguments.items()])
+            html += f'<div style="padding-left: 20px; color: var(--theme-dim);">└─ {args_str[:100]}</div>'
+        html += '</div>'
+
+        # Data step (result)
+        if tc.result:
+            display_result = tc.result[:150] + "..." if len(tc.result) > 150 else tc.result
+            display_result = display_result.replace('<', '&lt;').replace('>', '&gt;')
+            html += f'<div class="thread-step thread-step-data">'
+            html += f'&lt; DATA: (Click to expand)'
+            html += f'<div style="padding-left: 20px; color: var(--theme-medium);">└─ {display_result}</div>'
+            html += '</div>'
+
+    # Success status
+    html += '<div class="thread-step thread-step-success">'
+    html += f'√ STATUS: Success ({total_tools} {"calls" if total_tools > 1 else "call"})'
+    html += '</div>'
+
+    html += '</div></div>'  # Close planner content and block
+
+    # AI Response block
+    html += '<div class="system-planner-block" style="margin-top: 8px;">'
+    html += '<div class="system-planner-header">AI :: RESPONSE</div>'
+    html += f'<div class="system-planner-content">{response_text}</div>'
+    html += '</div>'
+
+    html += '</div>'  # Close conversation thread
+    return html
+
+
+def format_chat_result_for_ui(result, chat_history: list, use_thread_format: bool = False) -> list:
     """
     Convert ChatResult from service layer into Gradio chatbot format.
 
     Args:
         result: ChatResult object from ChatService
         chat_history: Existing chat history
+        use_thread_format: If True, use thread/tree visualization for tool chains
 
     Returns:
         Updated chat history with new messages formatted for UI
@@ -188,25 +287,33 @@ def format_chat_result_for_ui(result, chat_history: list) -> list:
     if result.tool_calls:
         total_tools = len(result.tool_calls)
         print(f"[UI] Adding {total_tools} tool call blocks with chain visualization")
-        
-        # Format each tool call with step number and total
-        formatted_tools = []
-        for tc in result.tool_calls:
-            formatted_tools.append(format_tool_call_html(
-                tc.name, tc.arguments, tc.result,
-                step=tc.step, total=total_tools
-            ))
-        
-        # Wrap in tool chain container if multiple tools
-        if total_tools > 1:
-            assistant_message_content += '<div class="tool-chain-container">'
-            assistant_message_content += "\n".join(formatted_tools)
-            assistant_message_content += '</div>\n\n'
-        else:
-            assistant_message_content += formatted_tools[0] + "\n\n"
 
-    assistant_message_content += result.response_text
-    
+        # Use thread format for complex multi-tool chains
+        if use_thread_format and total_tools > 1:
+            assistant_message_content = format_conversation_thread(
+                result.tool_calls, result.response_text
+            )
+        else:
+            # Standard block format
+            formatted_tools = []
+            for tc in result.tool_calls:
+                formatted_tools.append(format_tool_call_html(
+                    tc.name, tc.arguments, tc.result,
+                    step=tc.step, total=total_tools
+                ))
+
+            # Wrap in tool chain container if multiple tools
+            if total_tools > 1:
+                assistant_message_content += '<div class="tool-chain-container">'
+                assistant_message_content += "\n".join(formatted_tools)
+                assistant_message_content += '</div>\n\n'
+            else:
+                assistant_message_content += formatted_tools[0] + "\n\n"
+
+            assistant_message_content += result.response_text
+    else:
+        assistant_message_content = result.response_text
+
     # Format with timestamps and expandable containers
     user_formatted = format_message_with_extras(result.user_display_message)
     assistant_formatted = format_message_with_extras(assistant_message_content)
@@ -214,5 +321,5 @@ def format_chat_result_for_ui(result, chat_history: list) -> list:
     # Append to history
     chat_history.append({"role": "user", "content": user_formatted})
     chat_history.append({"role": "assistant", "content": assistant_formatted})
-    
+
     return chat_history

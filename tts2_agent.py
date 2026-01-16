@@ -3822,6 +3822,116 @@ def create_ui():
         }
 
         /* ============================================
+           CONVERSATION THREAD - Tree Structure
+           ============================================ */
+
+        /* Conversation thread - connects user prompt through tools to AI response */
+        .conversation-thread {
+            border-left: 2px solid var(--theme-dim);
+            margin-left: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        /* Thread connector nodes */
+        .conversation-thread::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            background: var(--theme-primary);
+            border-radius: 0;
+            box-shadow: 0 0 8px var(--theme-glow);
+        }
+
+        /* Thread step connector lines */
+        .thread-step {
+            position: relative;
+            padding-left: 24px;
+            margin: 4px 0;
+        }
+
+        .thread-step::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 16px;
+            height: 2px;
+            background: var(--theme-dim);
+        }
+
+        .thread-step::after {
+            content: '';
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--theme-primary);
+            box-shadow: 0 0 4px var(--theme-glow);
+        }
+
+        /* Active step highlight */
+        .thread-step-active {
+            border: 1px solid var(--theme-primary);
+            box-shadow: 0 0 8px var(--theme-glow);
+            background: rgba(0, 0, 0, 0.8);
+            color: var(--theme-primary);
+            padding: 8px;
+            margin-left: 24px;
+        }
+
+        /* Step type indicators */
+        .thread-step-exec::before {
+            content: '>';
+            position: absolute;
+            left: 20px;
+            color: var(--theme-primary);
+            font-weight: bold;
+        }
+
+        .thread-step-data::before {
+            content: '<';
+            position: absolute;
+            left: 20px;
+            color: var(--theme-medium);
+            font-weight: bold;
+        }
+
+        .thread-step-success::before {
+            content: '√';
+            position: absolute;
+            left: 20px;
+            color: #39FF14;
+            font-weight: bold;
+        }
+
+        /* System/Planner block header */
+        .system-planner-block {
+            border: 1px solid var(--theme-dim);
+            margin: 8px 0;
+            background: #000000;
+        }
+
+        .system-planner-header {
+            background: var(--theme-dim);
+            color: #000000;
+            padding: 4px 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8em;
+        }
+
+        .system-planner-content {
+            padding: 8px 12px;
+        }
+
+        /* ============================================
            SYSTEM PROTOCOLS - Tool Chain Styling
            ============================================ */
         .tool-chain-container {
@@ -5268,6 +5378,118 @@ def create_ui():
                     bgDark: '#0a3300',
                     bgMid: '#146600',
                     bgStripe: '#0d4400'
+                },
+                'yellow': {
+                    name: 'Cyber Yellow',
+                    primary: '#FFD600',
+                    dim: '#B39600',
+                    bright: '#FFE033',
+                    medium: '#E6C200',
+                    glow: 'rgba(255, 214, 0, 0.4)',
+                    glowSoft: 'rgba(255, 214, 0, 0.1)',
+                    glowText: 'rgba(255, 214, 0, 0.5)',
+                    glowTextStrong: 'rgba(255, 214, 0, 0.6)',
+                    bgDark: '#332b00',
+                    bgMid: '#665500',
+                    bgStripe: '#443800'
+                },
+                'amber': {
+                    name: 'Retro Amber',
+                    primary: '#FFB000',
+                    dim: '#B37B00',
+                    bright: '#FFC033',
+                    medium: '#E69E00',
+                    glow: 'rgba(255, 176, 0, 0.4)',
+                    glowSoft: 'rgba(255, 176, 0, 0.1)',
+                    glowText: 'rgba(255, 176, 0, 0.5)',
+                    glowTextStrong: 'rgba(255, 176, 0, 0.6)',
+                    bgDark: '#332300',
+                    bgMid: '#664600',
+                    bgStripe: '#442f00'
+                },
+                'matrix': {
+                    name: 'Matrix Green',
+                    primary: '#00FF41',
+                    dim: '#00B32D',
+                    bright: '#33FF66',
+                    medium: '#00E63A',
+                    glow: 'rgba(0, 255, 65, 0.4)',
+                    glowSoft: 'rgba(0, 255, 65, 0.1)',
+                    glowText: 'rgba(0, 255, 65, 0.5)',
+                    glowTextStrong: 'rgba(0, 255, 65, 0.6)',
+                    bgDark: '#003311',
+                    bgMid: '#006622',
+                    bgStripe: '#004417'
+                },
+                'cyan': {
+                    name: 'Tron Cyan',
+                    primary: '#00FFFF',
+                    dim: '#00B3B3',
+                    bright: '#33FFFF',
+                    medium: '#00E6E6',
+                    glow: 'rgba(0, 255, 255, 0.4)',
+                    glowSoft: 'rgba(0, 255, 255, 0.1)',
+                    glowText: 'rgba(0, 255, 255, 0.5)',
+                    glowTextStrong: 'rgba(0, 255, 255, 0.6)',
+                    bgDark: '#003333',
+                    bgMid: '#006666',
+                    bgStripe: '#004444'
+                },
+                'pink': {
+                    name: 'Hot Pink',
+                    primary: '#FF007F',
+                    dim: '#B30059',
+                    bright: '#FF3399',
+                    medium: '#E60072',
+                    glow: 'rgba(255, 0, 127, 0.4)',
+                    glowSoft: 'rgba(255, 0, 127, 0.1)',
+                    glowText: 'rgba(255, 0, 127, 0.5)',
+                    glowTextStrong: 'rgba(255, 0, 127, 0.6)',
+                    bgDark: '#330019',
+                    bgMid: '#660033',
+                    bgStripe: '#440022'
+                },
+                'crimson': {
+                    name: 'Crimson Red',
+                    primary: '#FF1744',
+                    dim: '#B31030',
+                    bright: '#FF4569',
+                    medium: '#E6143D',
+                    glow: 'rgba(255, 23, 68, 0.4)',
+                    glowSoft: 'rgba(255, 23, 68, 0.1)',
+                    glowText: 'rgba(255, 23, 68, 0.5)',
+                    glowTextStrong: 'rgba(255, 23, 68, 0.6)',
+                    bgDark: '#33050d',
+                    bgMid: '#660a1a',
+                    bgStripe: '#440711'
+                },
+                'white': {
+                    name: 'Ghost White',
+                    primary: '#FFFFFF',
+                    dim: '#B3B3B3',
+                    bright: '#FFFFFF',
+                    medium: '#E6E6E6',
+                    glow: 'rgba(255, 255, 255, 0.4)',
+                    glowSoft: 'rgba(255, 255, 255, 0.1)',
+                    glowText: 'rgba(255, 255, 255, 0.5)',
+                    glowTextStrong: 'rgba(255, 255, 255, 0.6)',
+                    bgDark: '#1a1a1a',
+                    bgMid: '#333333',
+                    bgStripe: '#262626'
+                },
+                'racecar': {
+                    name: 'Racecar Green',
+                    primary: '#CCFF00',
+                    dim: '#8FB300',
+                    bright: '#E6FF66',
+                    medium: '#B8E600',
+                    glow: 'rgba(204, 255, 0, 0.5)',
+                    glowSoft: 'rgba(204, 255, 0, 0.15)',
+                    glowText: 'rgba(204, 255, 0, 0.6)',
+                    glowTextStrong: 'rgba(204, 255, 0, 0.75)',
+                    bgDark: '#1a2200',
+                    bgMid: '#334400',
+                    bgStripe: '#263300'
                 }
             },
 
@@ -5395,7 +5617,15 @@ def create_ui():
                                 'lapis lazuli (blue)': 'lapis',
                                 'lightsaber purple': 'purple',
                                 'lightsaber orange': 'orange',
-                                'lightsaber green': 'green'
+                                'lightsaber green': 'green',
+                                'cyber yellow': 'yellow',
+                                'retro amber': 'amber',
+                                'matrix green': 'matrix',
+                                'tron cyan': 'cyan',
+                                'hot pink': 'pink',
+                                'crimson red': 'crimson',
+                                'ghost white': 'white',
+                                'racecar green': 'racecar'
                             };
                             const themeKey = themeMap[text];
                             if (themeKey && self.themes[themeKey]) {
@@ -5408,6 +5638,63 @@ def create_ui():
                 // Run setup after a short delay for Gradio to load
                 setTimeout(setupWatcher, 1000);
                 setTimeout(setupWatcher, 3000);  // Retry in case of slow load
+            },
+
+            // ==================== REACTIVE THEME FLASH EFFECTS ====================
+            // Flash a theme temporarily, then restore the user's theme
+
+            flash: function(flashThemeName, duration = 500) {
+                // Save current theme, flash the new one, restore after duration
+                const savedTheme = this.currentTheme;
+                this.apply(flashThemeName);
+                setTimeout(() => {
+                    this.apply(savedTheme);
+                }, duration);
+            },
+
+            // Flash success (Matrix Green) when task completes
+            flashSuccess: function(duration = 600) {
+                this.flash('matrix', duration);
+                console.log('[Theme] Flash: SUCCESS');
+            },
+
+            // Flash error (Crimson Red) on errors
+            flashError: function(duration = 800) {
+                this.flash('crimson', duration);
+                console.log('[Theme] Flash: ERROR');
+            },
+
+            // Flash based on emotion detection
+            flashEmotion: function(emotion, intensity = 0.5) {
+                const emotionMap = {
+                    'angry': { theme: 'crimson', duration: 600 },
+                    'sad': { theme: 'lapis', duration: 500 },
+                    'happy': { theme: 'yellow', duration: 400 },
+                    'surprised': { theme: 'cyan', duration: 300 },
+                    'fear': { theme: 'purple', duration: 500 },
+                    'disgust': { theme: 'matrix', duration: 400 }
+                };
+                const mapping = emotionMap[emotion];
+                if (mapping && intensity > 0.6) {
+                    this.flash(mapping.theme, mapping.duration);
+                    console.log('[Theme] Flash: Emotion ' + emotion + ' (intensity: ' + intensity + ')');
+                }
+            },
+
+            // Pulse effect - flash current theme brighter
+            pulse: function(duration = 300) {
+                const root = document.documentElement;
+                const current = this.themes[this.currentTheme];
+                if (!current) return;
+
+                // Temporarily brighten the glow
+                root.style.setProperty('--theme-glow', current.glow.replace('0.4', '0.8'));
+                root.style.setProperty('--theme-glow-soft', current.glowSoft.replace('0.1', '0.3'));
+
+                setTimeout(() => {
+                    root.style.setProperty('--theme-glow', current.glow);
+                    root.style.setProperty('--theme-glow-soft', current.glowSoft);
+                }, duration);
             }
         };
 
@@ -6030,7 +6317,15 @@ def create_ui():
                             ("Lapis Lazuli (Blue)", "lapis"),
                             ("Lightsaber Purple", "purple"),
                             ("Lightsaber Orange", "orange"),
-                            ("Lightsaber Green", "green")
+                            ("Lightsaber Green", "green"),
+                            ("Cyber Yellow", "yellow"),
+                            ("Retro Amber", "amber"),
+                            ("Matrix Green", "matrix"),
+                            ("Tron Cyan", "cyan"),
+                            ("Hot Pink", "pink"),
+                            ("Crimson Red", "crimson"),
+                            ("Ghost White", "white"),
+                            ("Racecar Green", "racecar")
                         ],
                         value=SETTINGS.get("theme", "lapis"),
                         label="Color Theme",
