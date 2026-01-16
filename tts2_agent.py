@@ -3505,11 +3505,26 @@ def create_ui():
 
             /* FORCE GRADIO INTERNAL VARIABLES */
             --color-accent: var(--theme-primary) !important;
+            --color-accent-soft: var(--theme-glow-soft) !important;
             --slider-color: var(--theme-primary) !important;
             --loader-color: var(--theme-primary) !important;
+            --checkbox-background-color-selected: var(--theme-primary) !important;
+            --checkbox-border-color-selected: var(--theme-primary) !important;
+            --checkbox-label-background-fill-hover: transparent !important;
+            --button-primary-background-fill: var(--theme-primary) !important;
+            --button-primary-background-fill-hover: var(--theme-bright) !important;
+            --input-border-color-focus: var(--theme-primary) !important;
+            --ring-color: var(--theme-glow) !important;
 
             /* Structure */
+            --primary-50: var(--theme-glow-soft);
+            --primary-100: var(--theme-dim);
+            --primary-200: var(--theme-medium);
+            --primary-300: var(--theme-primary);
+            --primary-400: var(--theme-primary);
             --primary-500: var(--theme-primary);
+            --primary-600: var(--theme-bright);
+            --primary-700: var(--theme-bright);
             --plasma-primary: var(--theme-primary);
             --plasma-glow: var(--theme-glow);
 
@@ -4524,22 +4539,64 @@ def create_ui():
         .gradio-slider:hover,
         .gradio-slider:hover > *,
         .gradio-slider .label-wrap,
-        .gradio-slider .label-wrap:hover {
+        .gradio-slider .label-wrap:hover,
+        .gradio-slider:focus-within {
             background: #000000 !important;
+            box-shadow: none !important;
+        }
+        /* Slider focus state - use theme color, not blue */
+        input[type="range"]:focus {
+            outline: none !important;
+            box-shadow: 0 0 0 2px var(--theme-glow) !important;
+        }
+        input[type="range"]:focus::-webkit-slider-thumb {
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+        }
+        input[type="range"]:active::-webkit-slider-thumb {
+            background: var(--theme-bright) !important;
+            transform: scale(1.3);
+        }
+        input[type="range"]:focus::-moz-range-thumb {
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+        }
+        input[type="range"]:active::-moz-range-thumb {
+            background: var(--theme-bright) !important;
+            transform: scale(1.3);
         }
 
-        /* Checkbox containers - NO hover background on label area */
+        /* Checkbox containers - NO hover effects on container/label, ONLY on input */
         .gradio-checkbox,
         .gradio-checkboxgroup,
         [data-testid="checkbox"] {
             background: #000000 !important;
+            border: none !important;
         }
         .gradio-checkbox:hover,
         .gradio-checkboxgroup:hover,
         [data-testid="checkbox"]:hover,
         .gradio-checkbox .label-wrap:hover,
-        .gradio-checkboxgroup .label-wrap:hover {
+        .gradio-checkboxgroup .label-wrap:hover,
+        .gradio-checkbox label:hover,
+        .gradio-checkboxgroup > .wrap:hover,
+        .gradio-checkbox > .wrap:hover {
             background: #000000 !important;
+            box-shadow: none !important;
+        }
+        /* Checkbox labels - KEEP theme color on hover, no background change */
+        .gradio-checkbox label,
+        .gradio-checkbox span:not(input),
+        .gradio-checkboxgroup label span,
+        [data-testid="checkbox"] label,
+        [data-testid="checkbox"] span {
+            color: var(--theme-primary) !important;
+            background: transparent !important;
+        }
+        .gradio-checkbox:hover label,
+        .gradio-checkbox:hover span:not(input),
+        [data-testid="checkbox"]:hover label,
+        [data-testid="checkbox"]:hover span {
+            color: var(--theme-primary) !important;
+            background: transparent !important;
         }
 
         /* Override Gradio's internal toggle/switch styling */
@@ -4660,13 +4717,31 @@ def create_ui():
             color: #000000 !important;
         }
 
-        /* Radio button container - double border style */
+        /* Radio button container - double border style, NO container-level hover */
         .gradio-radio,
         [data-testid="radio"],
         [role="radiogroup"] {
             border: 1px solid var(--theme-primary) !important;
             background: #000000 !important;
             padding: 4px !important;
+        }
+        .gradio-radio:hover,
+        [data-testid="radio"]:hover,
+        [role="radiogroup"]:hover {
+            background: #000000 !important;
+            box-shadow: none !important;
+        }
+        /* Radio container inner wrapper - no hover effect */
+        .gradio-radio > .wrap,
+        .gradio-radio > div,
+        [role="radiogroup"] > div {
+            background: transparent !important;
+        }
+        .gradio-radio > .wrap:hover,
+        .gradio-radio > div:hover,
+        [role="radiogroup"] > div:hover {
+            background: transparent !important;
+            box-shadow: none !important;
         }
 
         /* ============================================
@@ -4854,12 +4929,15 @@ def create_ui():
             stroke: #000000 !important;
         }
 
-        /* Checkbox labels - BLACK text on hover when background is cyan */
+        /* Checkbox labels - KEEP theme color on hover (no background change on label) */
         .gr-checkbox:hover label,
         .gr-checkbox:hover span,
         [data-testid="checkbox"]:hover label,
-        [data-testid="checkbox"]:hover span {
-            color: #000000 !important;
+        [data-testid="checkbox"]:hover span,
+        .gradio-checkbox:hover label,
+        .gradio-checkbox:hover span {
+            color: var(--theme-primary) !important;
+            background: transparent !important;
         }
 
         /* CheckboxGroup item labels - BLACK text on hover */
@@ -4997,7 +5075,7 @@ def create_ui():
 
         /* ============================================
            CHATBOT ACTION BUTTONS (download, delete, etc)
-           Blue glow background, black icon on hover
+           Precise hover - only the icon button, not the container
            ============================================ */
         #main-chatbot button,
         .chatbot button,
@@ -5006,6 +5084,10 @@ def create_ui():
             border: 1px solid var(--theme-primary) !important;
             color: var(--theme-primary) !important;
             transition: all 0.2s ease !important;
+            /* Tight padding for precise hover targeting */
+            padding: 4px 6px !important;
+            min-width: auto !important;
+            width: auto !important;
         }
         #main-chatbot button:hover,
         .chatbot button:hover,
@@ -5027,6 +5109,101 @@ def create_ui():
             color: var(--theme-primary) !important;
             fill: var(--theme-primary) !important;
             stroke: var(--theme-primary) !important;
+        }
+        /* Chatbot message action container - no hover effect */
+        #main-chatbot .message-actions,
+        #main-chatbot .actions,
+        .chatbot .message-actions {
+            background: transparent !important;
+        }
+        #main-chatbot .message-actions:hover,
+        #main-chatbot .actions:hover,
+        .chatbot .message-actions:hover {
+            background: transparent !important;
+        }
+
+        /* ============================================
+           CONVERSATION LIST ITEMS - Hover with black text
+           ============================================ */
+        .gradio-dataframe tr:hover,
+        .gradio-dataframe tbody tr:hover,
+        .table-wrap tr:hover,
+        .conversation-item:hover,
+        [data-testid="dataframe"] tr:hover {
+            background: var(--theme-primary) !important;
+        }
+        .gradio-dataframe tr:hover td,
+        .gradio-dataframe tbody tr:hover td,
+        .table-wrap tr:hover td,
+        .conversation-item:hover *,
+        [data-testid="dataframe"] tr:hover td {
+            color: #000000 !important;
+        }
+
+        /* ============================================
+           AUDIO PLAYER CONTROLS - Hover with black text
+           ============================================ */
+        audio::-webkit-media-controls-panel {
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+        }
+        .gradio-audio button:hover,
+        .gradio-audio select:hover,
+        [data-testid="audio"] button:hover {
+            color: #000000 !important;
+        }
+        .gradio-audio button:hover *,
+        [data-testid="audio"] button:hover * {
+            color: #000000 !important;
+            fill: #000000 !important;
+        }
+
+        /* ============================================
+           UPLOAD/DROP ZONES - Glow effect, not solid color
+           Keep background visible, just add glow on hover
+           ============================================ */
+        .upload-container,
+        .drop-target,
+        [data-testid="dropzone"],
+        .gradio-file .upload-button,
+        .gradio-image .upload-button {
+            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%) !important;
+            border: 2px dashed var(--theme-primary) !important;
+            color: var(--theme-primary) !important;
+            transition: all 0.2s ease !important;
+        }
+        .upload-container:hover,
+        .drop-target:hover,
+        [data-testid="dropzone"]:hover,
+        .gradio-file .upload-button:hover,
+        .gradio-image .upload-button:hover {
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%) !important;
+            border-color: var(--theme-bright) !important;
+            box-shadow: 0 0 25px var(--theme-glow) !important;
+            color: var(--theme-primary) !important;
+        }
+        /* Upload zone text stays theme color on hover */
+        .upload-container:hover *,
+        .drop-target:hover *,
+        [data-testid="dropzone"]:hover *,
+        .gradio-file .upload-button:hover *,
+        .gradio-image .upload-button:hover * {
+            color: var(--theme-primary) !important;
+        }
+
+        /* ============================================
+           INPUT FIELDS FOCUS - Theme glow, not blue ring
+           ============================================ */
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none !important;
+            border-color: var(--theme-primary) !important;
+            box-shadow: 0 0 0 2px var(--theme-glow) !important;
+        }
+        .gradio-textbox:focus-within input,
+        .gradio-textbox:focus-within textarea {
+            border-color: var(--theme-primary) !important;
+            box-shadow: 0 0 15px var(--theme-glow) !important;
         }
     """
     
