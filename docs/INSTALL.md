@@ -41,7 +41,7 @@ The `VoiceChat.bat` launcher handles everything automatically.
 
 ```cmd
 cd C:\AI
-git clone https://github.com/your-repo/tts2-voice-agent.git
+git clone https://github.com/Alchemyst0x/tts2-voice-agent.git
 cd tts2-voice-agent
 ```
 
@@ -149,8 +149,15 @@ pip install funasr modelscope
 ```bash
 source .venv/bin/activate
 
+# Create models directory
+mkdir -p models/{indextts2,supertonic,embeddings,nuextract,kokoro,hf_cache}
+
 # IndexTTS2 (~4.4GB)
 python -c "from huggingface_hub import snapshot_download; snapshot_download('IndexTeam/IndexTTS2', local_dir='models/indextts2', local_dir_use_symlinks=False)"
+
+# Supertonic (~500MB)
+git lfs install
+git clone https://huggingface.co/neongeckocom/tts-vits-cv-en models/supertonic
 
 # NuExtract (~940MB)
 python -c "from huggingface_hub import hf_hub_download; import os; os.makedirs('models/nuextract', exist_ok=True); hf_hub_download('numind/NuExtract-2.0-2B-GGUF', filename='NuExtract-2.0-2B-Q4_K_M.gguf', local_dir='models/nuextract')"
@@ -162,13 +169,15 @@ python -c "from huggingface_hub import snapshot_download; snapshot_download('Qwe
 python -c "from funasr import AutoModel; AutoModel(model='FunAudioLLM/SenseVoiceSmall', device='cpu', hub='hf')"
 ```
 
-### 6. Windows Audio Dependencies
+### 6. Windows Audio Dependencies (Optional)
 
-In Windows Command Prompt:
+For PTT (Push-to-Talk) keyboard support, install in Windows Command Prompt:
 
 ```cmd
 pip install keyboard pyaudio numpy
 ```
+
+**Note:** If you don't have Python installed on Windows, PTT will use a fallback mode. The Voice Agent will still work - you can use the web UI's record button instead.
 
 ---
 

@@ -156,7 +156,7 @@ def get_batch_content():
     lines.append('set /p VENV_STATUS=<"%TEMP%\\venv_check.txt"')
     lines.append('if "%VENV_STATUS%"=="VENV_MISSING" (')
     lines.append(f'    echo {C_RED}ERROR: Virtual environment not found!{C_RESET}')
-    lines.append(f'    echo {C_AMBER}Please run option [4] Install Dependencies first.{C_RESET}')
+    lines.append(f'    echo {C_AMBER}Please run option [5] Installer first.{C_RESET}')
     lines.append('    echo.')
     lines.append('    pause')
     lines.append('    goto MENU')
@@ -568,7 +568,14 @@ def get_batch_content():
 
     # Windows audio dependencies
     lines.append(f"echo   {C_AMBER}[7/7]{C_RESET} Installing Windows audio dependencies...")
-    lines.append("pip install keyboard pyaudio numpy --quiet 2>nul")
+    lines.append('where python >nul 2>&1')
+    lines.append('if errorlevel 1 (')
+    lines.append(f'    echo         {C_GREY}[SKIP] Windows Python not found - PTT will use fallback{C_RESET}')
+    lines.append(f'    echo         {C_GREY}        Install Python from python.org if you want PTT support{C_RESET}')
+    lines.append(') else (')
+    lines.append('    pip install keyboard pyaudio numpy --quiet 2>nul')
+    lines.append(f'    echo         {C_AMBER}[OK] Windows audio deps installed{C_RESET}')
+    lines.append(')')
     lines.append("echo.")
 
     lines.append(f"echo   {C_AMBER}Dependencies installed!{C_RESET}")
@@ -630,6 +637,9 @@ def get_batch_content():
     lines.append(f"echo   {C_GREY}Total download size: ~9 GB. This may take 10-30 minutes.{C_RESET}")
     lines.append("echo.")
 
+    # Create models directory structure
+    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && mkdir -p models/{indextts2,supertonic,embeddings,nuextract,kokoro,hf_cache}"')
+
     # IndexTTS2
     lines.append(f"echo   {C_AMBER}[1/5]{C_RESET} Downloading IndexTTS2 models (~4.4 GB)...")
     lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && python -c \\"from huggingface_hub import snapshot_download; snapshot_download(\'IndexTeam/IndexTTS2\', local_dir=\'models/indextts2\', local_dir_use_symlinks=False)\\""')
@@ -637,7 +647,7 @@ def get_batch_content():
 
     # Supertonic
     lines.append(f"echo   {C_AMBER}[2/5]{C_RESET} Downloading Supertonic models (~500 MB)...")
-    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && git lfs install && [ ! -d models/supertonic/.git ] && git clone https://huggingface.co/neongeckocom/tts-vits-cv-en models/supertonic || echo Supertonic already exists"')
+    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && git lfs install && if [ -d models/supertonic/.git ]; then echo Supertonic already exists; elif [ -d models/supertonic ]; then rmdir models/supertonic 2>/dev/null; git clone https://huggingface.co/neongeckocom/tts-vits-cv-en models/supertonic; else git clone https://huggingface.co/neongeckocom/tts-vits-cv-en models/supertonic; fi"')
     lines.append("echo.")
 
     # STT Models
@@ -669,7 +679,7 @@ def get_batch_content():
     lines.append(":INSTALL_MODEL_INDEXTTS")
     lines.append("cls")
     lines.append(f"echo   {C_AMBER}Downloading IndexTTS2 models (~4.4 GB)...{C_RESET}")
-    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && python -c \\"from huggingface_hub import snapshot_download; snapshot_download(\'IndexTeam/IndexTTS2\', local_dir=\'models/indextts2\', local_dir_use_symlinks=False)\\""')
+    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && mkdir -p models/indextts2 && . .venv/bin/activate && python -c \\"from huggingface_hub import snapshot_download; snapshot_download(\'IndexTeam/IndexTTS2\', local_dir=\'models/indextts2\', local_dir_use_symlinks=False)\\""')
     lines.append(f"echo   {C_AMBER}Done!{C_RESET}")
     lines.append("pause")
     lines.append("goto INSTALL_MODELS_MENU")
@@ -677,7 +687,7 @@ def get_batch_content():
     lines.append(":INSTALL_MODEL_SUPERTONIC")
     lines.append("cls")
     lines.append(f"echo   {C_AMBER}Downloading Supertonic models (~500 MB)...{C_RESET}")
-    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && git lfs install && [ ! -d models/supertonic/.git ] && git clone https://huggingface.co/neongeckocom/tts-vits-cv-en models/supertonic || echo Already exists"')
+    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && mkdir -p models && git lfs install && if [ -d models/supertonic/.git ]; then echo Supertonic already exists; elif [ -d models/supertonic ]; then rmdir models/supertonic 2>/dev/null; git clone https://huggingface.co/neongeckocom/tts-vits-cv-en models/supertonic; else git clone https://huggingface.co/neongeckocom/tts-vits-cv-en models/supertonic; fi"')
     lines.append(f"echo   {C_AMBER}Done!{C_RESET}")
     lines.append("pause")
     lines.append("goto INSTALL_MODELS_MENU")
@@ -693,7 +703,7 @@ def get_batch_content():
     lines.append(":INSTALL_MODEL_EMBEDDINGS")
     lines.append("cls")
     lines.append(f"echo   {C_AMBER}Downloading embedding model (Qwen3, ~1.2 GB)...{C_RESET}")
-    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && python -c \\"from huggingface_hub import snapshot_download; snapshot_download(\'Qwen/Qwen3-Embedding-0.6B\', local_dir=\'models/embeddings/qwen0.6b\', local_dir_use_symlinks=False)\\""')
+    lines.append('wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && mkdir -p models/embeddings && . .venv/bin/activate && python -c \\"from huggingface_hub import snapshot_download; snapshot_download(\'Qwen/Qwen3-Embedding-0.6B\', local_dir=\'models/embeddings/qwen0.6b\', local_dir_use_symlinks=False)\\""')
     lines.append(f"echo   {C_AMBER}Done!{C_RESET}")
     lines.append("pause")
     lines.append("goto INSTALL_MODELS_MENU")
@@ -777,7 +787,7 @@ def get_batch_content():
     lines.append('set /p VENV_STATUS=<"%TEMP%\\venv_check.txt"')
     lines.append('if "%VENV_STATUS%"=="VENV_MISSING" (')
     lines.append(f'    echo {C_RED}ERROR: Virtual environment not found!{C_RESET}')
-    lines.append(f'    echo {C_AMBER}Please run option [4] Install Dependencies first.{C_RESET}')
+    lines.append(f'    echo {C_AMBER}Please run option [5] Installer first.{C_RESET}')
     lines.append('    echo.')
     lines.append('    pause')
     lines.append('    goto MENU')
