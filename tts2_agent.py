@@ -4986,19 +4986,41 @@ def create_ui():
            TEXT COLOR FIX - Theme Color
            ============================================ */
 
-        /* Override body text to theme color */
-        body, p, span, div {
+        /* Override body text to theme color - EXCLUDE hover/selected states */
+        body,
+        p:not(.selected *):not(:hover *):not([class*="selected"] *),
+        span:not(.selected *):not(:hover *):not([class*="selected"] *):not(label.selected *):not(button:hover *):not(.label-wrap:hover *),
+        div:not(.selected *):not(:hover *):not([class*="selected"] *) {
             color: var(--theme-primary) !important;
         }
 
-        /* Labels - theme color */
-        label, .label-wrap, .svelte-1gfkn6j, h1, h2, h3, h4, h5, h6 {
+        /* Labels - theme color - EXCLUDE selected/hover states */
+        label:not(.selected):not(:hover),
+        .label-wrap:not(:hover),
+        .svelte-1gfkn6j:not(.selected):not(:hover):not(.selected *):not(:hover *),
+        h1, h2, h3, h4, h5, h6 {
             color: var(--theme-primary) !important;
         }
 
         /* Input text - theme color */
-        input, textarea {
+        input:not([type="radio"]):not([type="checkbox"]),
+        textarea {
             color: var(--theme-primary) !important;
+        }
+
+        /* FORCE BLACK TEXT - Elements with theme-primary background MUST have black text */
+        /* This overrides everything - targets any element with bg matching theme */
+        .selected, .selected *,
+        label.selected, label.selected *,
+        button.selected, button.selected *,
+        [aria-checked="true"], [aria-checked="true"] *,
+        .label-wrap:hover, .label-wrap:hover *,
+        .gradio-accordion > .label-wrap:hover *,
+        .gradio-dropdown:hover *,
+        button:hover, button:hover *,
+        .tab-nav button:hover *, .tab-nav button.selected * {
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
         }
 
         /* Native select elements - Theme styling */
@@ -5745,7 +5767,7 @@ def create_ui():
         }
 
         /* === RADIO BUTTONS - FORCE THEME COLORS === */
-        /* Override Gradio's hardcoded blue */
+        /* Override Gradio's hardcoded blue - MAXIMUM SPECIFICITY */
         .gradio-radio label.selected,
         .gradio-radio .wrap label.selected,
         .gradio-radio button[aria-checked="true"],
@@ -5760,14 +5782,30 @@ def create_ui():
             background-color: var(--theme-primary) !important;
             border-color: var(--theme-primary) !important;
             color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
         }
+        /* FORCE black text on selected radio - target ALL descendants */
+        .gradio-radio label.selected,
+        .gradio-radio label.selected span,
+        .gradio-radio label.selected div,
+        .gradio-radio label.selected p,
         .gradio-radio label.selected *,
         .gradio-radio .wrap label.selected *,
+        .gradio-radio button[aria-checked="true"],
+        .gradio-radio button[aria-checked="true"] span,
         .gradio-radio button[aria-checked="true"] *,
+        [role="radiogroup"] button[aria-checked="true"],
+        [role="radiogroup"] button[aria-checked="true"] span,
         [role="radiogroup"] button[aria-checked="true"] *,
+        [role="radiogroup"] label.selected,
+        [role="radiogroup"] label.selected span,
         [role="radiogroup"] label.selected *,
+        .gr-radio .selected,
+        .gr-radio .selected span,
         .gr-radio .selected * {
             color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            fill: #000000 !important;
         }
         /* Unselected radio buttons */
         .gradio-radio label:not(.selected),
@@ -5790,6 +5828,7 @@ def create_ui():
             background: var(--theme-primary) !important;
             background-color: var(--theme-primary) !important;
             color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
             box-shadow: 0 0 20px var(--theme-glow) !important;
         }
         .gradio-radio label:hover *,
@@ -5798,6 +5837,18 @@ def create_ui():
         [role="radiogroup"] button:hover *,
         [role="radiogroup"] label:hover * {
             color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+        }
+
+        /* === CODE/BADGE ELEMENTS - Black text on theme background === */
+        /* Tool names, code elements with background */
+        code, .code, pre code,
+        [class*="badge"], [class*="tag"], [class*="chip"],
+        .tool-name, .function-name,
+        span[style*="background"],
+        mark, .highlight {
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
         }
 
         /* === CHECKBOX FIXES - NO WHITE RECTANGLE === */
