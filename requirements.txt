@@ -22,7 +22,9 @@ numba>=0.59.0                      # 0.59+ required for Python 3.12
 
 # Machine Learning (CUDA recommended for TTS)
 torch>=2.0.0
+torchaudio>=2.0.0                  # Audio processing for PyTorch
 ninja                              # Required for CUDA kernel compilation
+tqdm>=4.60.0                       # Progress bars (used by IndexTTS2)
 
 # Lightweight TTS
 kokoro-onnx>=0.3.1
@@ -81,6 +83,9 @@ jieba>=0.42.0                          # Chinese text segmentation
 
 # FFmpeg bindings
 ffmpeg-python>=0.2.0                   # FFmpeg Python bindings
+
+# Version parsing (used by transformers internals)
+packaging>=21.0
 
 # Testing
 pytest>=7.0.0
