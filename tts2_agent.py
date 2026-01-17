@@ -4138,14 +4138,15 @@ def create_ui():
             font-size: 0.9em;
             background: #000000;
             margin-top: 4px;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
             border: 1px solid var(--theme-primary);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
         .expand-btn:hover {
             background: var(--theme-primary);
-            color: #000000;
+            color: #000000 !important;
+            box-shadow: 0 0 15px var(--theme-glow);
         }
 
         /* Message timestamps */
@@ -4626,10 +4627,11 @@ def create_ui():
             box-shadow: 0 0 10px var(--theme-primary) !important;
         }
         input[type="checkbox"]:hover:not(:checked) {
-            background: var(--theme-primary) !important;
-            background-color: var(--theme-primary) !important;
-            border-color: var(--theme-primary) !important;
-            box-shadow: 0 0 20px var(--theme-glow) !important;
+            /* Keep transparent background, only glow effect - NOT solid fill */
+            background: transparent !important;
+            background-color: transparent !important;
+            border-color: var(--theme-bright) !important;
+            box-shadow: 0 0 20px var(--theme-glow), inset 0 0 10px var(--theme-glow-soft) !important;
         }
         /* Kill any red/error borders Gradio might add */
         input[type="checkbox"]:focus,
@@ -5187,7 +5189,7 @@ def create_ui():
 
         /* ============================================
            STOP/DELETE BUTTONS (variant="stop")
-           Blue glow background, black icon on hover
+           Transparent background with theme glow, icon lines turn black on hover
            ============================================ */
         button.stop,
         button[variant="stop"],
@@ -5202,16 +5204,20 @@ def create_ui():
         button[variant="stop"]:hover,
         .gradio-button.stop:hover,
         .gr-button-stop:hover {
-            background: var(--theme-primary) !important;
-            color: #000000 !important;
-            box-shadow: 0 0 20px var(--theme-glow) !important;
+            /* Transparent background with theme glow - NOT solid fill */
+            background: transparent !important;
+            border-color: var(--theme-bright) !important;
+            box-shadow: 0 0 20px var(--theme-glow), inset 0 0 15px var(--theme-glow-soft) !important;
         }
         button.stop:hover *,
         button[variant="stop"]:hover *,
         .gradio-button.stop:hover *,
         .gr-button-stop:hover * {
+            /* Icon lines turn black with theme glow behind */
             color: #000000 !important;
-            fill: #000000 !important;
+            fill: none !important;
+            stroke: #000000 !important;
+            filter: drop-shadow(0 0 3px var(--theme-primary));
         }
 
         /* ============================================
@@ -5232,7 +5238,8 @@ def create_ui():
 
         /* ============================================
            CHATBOT ACTION BUTTONS (download, delete, etc)
-           Precise hover - only the icon button, not the container
+           Transparent background, only icon lines turn black on hover
+           Theme glow shows through behind the icon
            ============================================ */
         #main-chatbot button,
         .chatbot button,
@@ -5249,23 +5256,27 @@ def create_ui():
         #main-chatbot button:hover,
         .chatbot button:hover,
         [data-testid="chatbot"] button:hover {
-            background: var(--theme-primary) !important;
-            color: #000000 !important;
-            box-shadow: 0 0 15px var(--theme-glow) !important;
+            /* Transparent background with theme glow behind - NOT solid fill */
+            background: transparent !important;
+            border-color: var(--theme-bright) !important;
+            box-shadow: 0 0 20px var(--theme-glow), inset 0 0 15px var(--theme-glow-soft) !important;
         }
         #main-chatbot button:hover svg,
         .chatbot button:hover svg,
         [data-testid="chatbot"] button:hover svg {
+            /* Only the SVG lines turn black - theme glow shows through */
             color: #000000 !important;
-            fill: #000000 !important;
+            fill: none !important;
             stroke: #000000 !important;
+            filter: drop-shadow(0 0 3px var(--theme-primary));
         }
         #main-chatbot button svg,
         .chatbot button svg,
         [data-testid="chatbot"] button svg {
             color: var(--theme-primary) !important;
-            fill: var(--theme-primary) !important;
+            fill: none !important;
             stroke: var(--theme-primary) !important;
+            stroke-width: 1.5px;
         }
         /* Chatbot message action container - no hover effect */
         #main-chatbot .message-actions,
