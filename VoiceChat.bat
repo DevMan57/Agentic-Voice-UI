@@ -14,7 +14,7 @@ set "WSL_WIN_PATH=%WSL_WIN_PATH:E:=/mnt/e%"
 cd /d "%WIN_SCRIPT_DIR%"
 :MENU
 cls
-echo 
+echo.
 echo ========================================================================================
 echo :
 echo :   ╔════════════════════════════════════════════════════════════════════════════════╗
@@ -67,7 +67,7 @@ if "%choice%"=="7" exit /b 0
 goto MENU
 :VOICECHAT
 cls
-echo 
+echo.
 echo ========================================================================================
 echo :
 echo :   ██╗   ██╗ ██████╗ ██╗ ██████╗███████╗     █████╗  ██████╗ ███████╗███╗   ██╗████████╗
@@ -98,7 +98,7 @@ if "%VENV_STATUS%"=="VENV_MISSING" (
 )
 start "" /min wscript.exe scripts\ptt_hidden.vbs
 start "" /min pythonw audio\vad_windows.py
-echo 
+echo.
 wsl -d %WSL_DISTRO% -e bash -c "export NVM_DIR=$HOME/.nvm; [ -s $NVM_DIR/nvm.sh ] && . $NVM_DIR/nvm.sh; cd %WSL_WIN_PATH% && source .venv/bin/activate && python -W ignore tts2_agent.py"
 taskkill /f /im pythonw.exe 2>nul
 echo.
@@ -107,7 +107,7 @@ pause >nul
 goto MENU
 :MOBILE
 cls
-echo 
+echo.
 echo ========================================================================================
 echo :
 echo :   ███╗   ███╗ ██████╗ ██████╗ ██╗██╗     ███████╗
@@ -144,7 +144,7 @@ if "%VENV_STATUS%"=="VENV_MISSING" (
 )
 start "" /min wscript.exe scripts\ptt_hidden.vbs
 start "" /min pythonw audio\vad_windows.py
-echo 
+echo.
 wsl -d %WSL_DISTRO% -e bash -c "export NVM_DIR=$HOME/.nvm; [ -s $NVM_DIR/nvm.sh ] && . $NVM_DIR/nvm.sh; cd %WSL_WIN_PATH% && source .venv/bin/activate && SHARE_MODE=1 python -W ignore tts2_agent.py"
 taskkill /f /im pythonw.exe 2>nul
 echo.
@@ -155,7 +155,7 @@ goto MENU
 cls
 color 06
 chcp 65001 >nul
-echo 
+echo.
 echo ========================================================================================
 echo :
 echo :    ██████╗██╗  ██╗ █████╗ ██████╗  █████╗  ██████╗████████╗███████╗██████╗ ███████╗
@@ -173,14 +173,14 @@ echo   URL: http://localhost:7863
 echo.
 echo ----------------------------------------------------------------------------------------
 echo.
-echo 
+echo.
 wsl -d %WSL_DISTRO% -e bash -c "export NVM_DIR=$HOME/.nvm; [ -s $NVM_DIR/nvm.sh ] && . $NVM_DIR/nvm.sh; cd %WSL_WIN_PATH% && source .venv/bin/activate 2>/dev/null; python character_manager_ui.py"
 goto MENU
 :MCPMANAGER
 cls
 color 04
 chcp 65001 >nul
-echo 
+echo.
 echo ========================================================================================
 echo :
 echo :   ███╗   ███╗ ██████╗██████╗     ███╗   ███╗ █████╗ ███╗   ██╗ █████╗  ██████╗ ███████╗██████╗ 
@@ -198,14 +198,14 @@ echo   URL: http://localhost:7864
 echo.
 echo ----------------------------------------------------------------------------------------
 echo.
-echo 
+echo.
 wsl -d %WSL_DISTRO% -e bash -c "export NVM_DIR=$HOME/.nvm; [ -s $NVM_DIR/nvm.sh ] && . $NVM_DIR/nvm.sh; cd %WSL_WIN_PATH% && source .venv/bin/activate 2>/dev/null; python mcp_manager_ui.py"
 goto MENU
 :INSTALL
 cls
 color 08
 chcp 65001 >nul
-echo 
+echo.
 echo ========================================================================================
 echo :
 echo :   ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗     ███████╗██████╗ 
@@ -248,7 +248,7 @@ if "%install_choice%"=="5" goto MENU
 goto INSTALL
 :INSTALL_WSL
 cls
-echo 
+echo.
 echo ========================================================================================
 echo                             First-Time Setup: WSL2 + Ubuntu
 echo ========================================================================================
@@ -334,7 +334,7 @@ pause
 goto INSTALL
 :INSTALL_PREREQ
 cls
-echo 
+echo.
 echo ========================================================================================
 echo                              Checking System Prerequisites
 echo ========================================================================================
@@ -394,7 +394,7 @@ pause
 goto INSTALL
 :INSTALL_FULL
 cls
-echo 
+echo.
 echo ========================================================================================
 echo                                    Full Installation
 echo ========================================================================================
@@ -418,7 +418,7 @@ echo   [Step 2/3] Installing dependencies...
 goto INSTALL_DEPS_RUN
 :INSTALL_DEPS
 cls
-echo 
+echo.
 echo ========================================================================================
 echo                                 Installing Dependencies
 echo ========================================================================================
@@ -462,7 +462,7 @@ pause
 goto INSTALL
 :INSTALL_MODELS_MENU
 cls
-echo 
+echo.
 echo ========================================================================================
 echo                                     Download Models
 echo ========================================================================================
@@ -500,7 +500,7 @@ if "%model_choice%"=="7" goto INSTALL
 goto INSTALL_MODELS_MENU
 :INSTALL_MODELS_ALL
 cls
-echo 
+echo.
 echo ========================================================================================
 echo                                  Downloading All Models
 echo ========================================================================================
@@ -567,7 +567,7 @@ pause
 goto INSTALL_MODELS_MENU
 :INSTALL_COMPLETE
 cls
-echo 
+echo.
 echo ========================================================================================
 echo :
 echo :   ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗         ██████╗ ██╗  ██╗██╗
@@ -600,7 +600,7 @@ goto MENU
 cls
 color 08
 chcp 65001 >nul
-echo 
+echo.
 echo ========================================================================================
 echo :
 echo :   ███████╗███╗   ███╗ ██████╗ ████████╗██╗ ██████╗ ███╗   ██╗

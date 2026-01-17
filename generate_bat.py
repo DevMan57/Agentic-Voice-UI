@@ -80,7 +80,7 @@ def get_batch_content():
     # --- MENU LOOP ---
     lines.append(":MENU")
     lines.append("cls")
-    lines.append(f"echo {C_ORANGE}")
+    lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_ORANGE)}")
     lines.append(f"echo {C_ORANGE}:{C_RESET}")
     for line in HEADER_ART:
@@ -140,7 +140,7 @@ def get_batch_content():
     # --- VOICE CHAT ---
     lines.append(":VOICECHAT")
     lines.append("cls")
-    lines.append(f"echo {C_ORANGE}")
+    lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_ORANGE)}")
     lines.append(f"echo {C_ORANGE}:{C_RESET}")
     lines.append(f"echo {C_ORANGE}:{C_RESET}   {C_ORANGE}██╗   ██╗ ██████╗ ██╗ ██████╗███████╗     █████╗  ██████╗ ███████╗███╗   ██╗████████╗{C_RESET}")
@@ -171,7 +171,7 @@ def get_batch_content():
     lines.append(')')
     lines.append('start "" /min wscript.exe scripts\\ptt_hidden.vbs')
     lines.append('start "" /min pythonw audio\\vad_windows.py')
-    lines.append(f'echo {C_ORANGE}')
+    lines.append("echo.")
     lines.append(f'wsl -d %WSL_DISTRO% -e bash -c "{nvm_load} cd %WSL_WIN_PATH% && source .venv/bin/activate && python -W ignore tts2_agent.py"')
     lines.append("taskkill /f /im pythonw.exe 2>nul")
     lines.append("echo.")
@@ -182,7 +182,7 @@ def get_batch_content():
     # --- MOBILE ACCESS MODE ---
     lines.append(":MOBILE")
     lines.append("cls")
-    lines.append(f"echo {C_GOLD}")
+    lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_GOLD)}")
     lines.append(f"echo {C_GOLD}:{C_RESET}")
     lines.append(f"echo {C_GOLD}:{C_RESET}   {C_GOLD}███╗   ███╗ ██████╗ ██████╗ ██╗██╗     ███████╗{C_RESET}")
@@ -219,7 +219,7 @@ def get_batch_content():
     lines.append(')')
     lines.append('start "" /min wscript.exe scripts\\ptt_hidden.vbs')
     lines.append('start "" /min pythonw audio\\vad_windows.py')
-    lines.append(f'echo {C_GOLD}')
+    lines.append("echo.")
     # Run with SHARE_MODE=1 environment variable for mobile access
     lines.append(f'wsl -d %WSL_DISTRO% -e bash -c "{nvm_load} cd %WSL_WIN_PATH% && source .venv/bin/activate && SHARE_MODE=1 python -W ignore tts2_agent.py"')
     lines.append("taskkill /f /im pythonw.exe 2>nul")
@@ -233,7 +233,7 @@ def get_batch_content():
     lines.append("cls")
     lines.append("color 06")
     lines.append("chcp 65001 >nul")
-    lines.append(f"echo {C_GOLD}")
+    lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_GOLD)}")
     lines.append(f"echo {C_GOLD}:{C_RESET}")
     lines.append(f"echo {C_GOLD}:{C_RESET}   {C_GOLD} ██████╗██╗  ██╗ █████╗ ██████╗  █████╗  ██████╗████████╗███████╗██████╗ ███████╗{C_RESET}")
@@ -251,7 +251,7 @@ def get_batch_content():
     lines.append(f"echo.")
     lines.append(f"echo {make_bar('-', TERM_WIDTH, C_GREY)}")
     lines.append(f"echo.")
-    lines.append(f'echo {C_GOLD}')
+    lines.append("echo.")
     lines.append(f'wsl -d %WSL_DISTRO% -e bash -c "{nvm_load} cd %WSL_WIN_PATH% && source .venv/bin/activate 2>/dev/null; python character_manager_ui.py"')
     lines.append("goto MENU")
 
@@ -260,7 +260,7 @@ def get_batch_content():
     lines.append("cls")
     lines.append("color 04")
     lines.append("chcp 65001 >nul")
-    lines.append(f"echo {C_AMBER}")
+    lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_AMBER)}")
     lines.append(f"echo {C_AMBER}:{C_RESET}")
     lines.append(f"echo {C_AMBER}:{C_RESET}   {C_AMBER}███╗   ███╗ ██████╗██████╗     ███╗   ███╗ █████╗ ███╗   ██╗ █████╗  ██████╗ ███████╗██████╗ {C_RESET}")
@@ -278,7 +278,7 @@ def get_batch_content():
     lines.append(f"echo.")
     lines.append(f"echo {make_bar('-', TERM_WIDTH, C_GREY)}")
     lines.append(f"echo.")
-    lines.append(f'echo {C_AMBER}')
+    lines.append("echo.")
     lines.append(f'wsl -d %WSL_DISTRO% -e bash -c "{nvm_load} cd %WSL_WIN_PATH% && source .venv/bin/activate 2>/dev/null; python mcp_manager_ui.py"')
     lines.append("goto MENU")
 
@@ -287,7 +287,7 @@ def get_batch_content():
     lines.append("cls")
     lines.append("color 08")
     lines.append("chcp 65001 >nul")
-    lines.append(f"echo {C_DARK}")
+    lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
     lines.append(f"echo {C_DARK}:{C_RESET}")
     lines.append(f"echo {C_DARK}:{C_RESET}   {C_DARK}██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗     ███████╗██████╗ {C_RESET}")
@@ -332,7 +332,7 @@ def get_batch_content():
     # --- WSL2 + UBUNTU SETUP ---
     lines.append(":INSTALL_WSL")
     lines.append("cls")
-    lines.append(f"echo {C_RED}")
+    lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_RED)}")
     lines.append(f"echo {make_title('First-Time Setup: WSL2 + Ubuntu', C_AMBER)}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_RED)}")
@@ -434,7 +434,7 @@ def get_batch_content():
     # --- PREREQUISITES CHECK ---
     lines.append(":INSTALL_PREREQ")
     lines.append("cls")
-    lines.append(f"echo {C_DARK}")
+    lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
     lines.append(f"echo {make_title('Checking System Prerequisites', C_AMBER)}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
@@ -505,7 +505,7 @@ def get_batch_content():
     # --- FULL INSTALL ---
     lines.append(":INSTALL_FULL")
     lines.append("cls")
-    lines.append(f"echo {C_DARK}")
+    lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
     lines.append(f"echo {make_title('Full Installation', C_AMBER)}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
@@ -534,7 +534,7 @@ def get_batch_content():
     # --- INSTALL DEPENDENCIES ---
     lines.append(":INSTALL_DEPS")
     lines.append("cls")
-    lines.append(f"echo {C_DARK}")
+    lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
     lines.append(f"echo {make_title('Installing Dependencies', C_AMBER)}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
@@ -597,7 +597,7 @@ def get_batch_content():
     # --- MODELS MENU ---
     lines.append(":INSTALL_MODELS_MENU")
     lines.append("cls")
-    lines.append(f"echo {C_DARK}")
+    lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
     lines.append(f"echo {make_title('Download Models', C_AMBER)}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
@@ -637,7 +637,7 @@ def get_batch_content():
     # --- DOWNLOAD ALL MODELS ---
     lines.append(":INSTALL_MODELS_ALL")
     lines.append("cls")
-    lines.append(f"echo {C_DARK}")
+    lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
     lines.append(f"echo {make_title('Downloading All Models', C_AMBER)}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
@@ -727,7 +727,7 @@ def get_batch_content():
     # --- INSTALL COMPLETE ---
     lines.append(":INSTALL_COMPLETE")
     lines.append("cls")
-    lines.append(f"echo {C_AMBER}")
+    lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_AMBER)}")
     lines.append(f"echo {C_AMBER}:{C_RESET}")
     lines.append(f"echo {C_AMBER}:{C_RESET}   {C_AMBER}██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗         ██████╗ ██╗  ██╗██╗{C_RESET}")
@@ -762,7 +762,7 @@ def get_batch_content():
     lines.append("cls")
     lines.append("color 08")
     lines.append("chcp 65001 >nul")
-    lines.append(f"echo {C_GREY}")
+    lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_GREY)}")
     lines.append(f"echo {C_GREY}:{C_RESET}")
     lines.append(f"echo {C_GREY}:{C_RESET}   {C_GREY}███████╗███╗   ███╗ ██████╗ ████████╗██╗ ██████╗ ███╗   ██╗{C_RESET}")
