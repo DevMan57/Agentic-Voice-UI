@@ -5256,19 +5256,19 @@ def create_ui():
         #main-chatbot button:hover,
         .chatbot button:hover,
         [data-testid="chatbot"] button:hover {
-            /* Transparent background with theme glow behind - NOT solid fill */
-            background: transparent !important;
+            /* Theme background so black icon is visible */
+            background: var(--theme-primary) !important;
             border-color: var(--theme-bright) !important;
-            box-shadow: 0 0 20px var(--theme-glow), inset 0 0 15px var(--theme-glow-soft) !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
         }
         #main-chatbot button:hover svg,
         .chatbot button:hover svg,
         [data-testid="chatbot"] button:hover svg {
-            /* Only the SVG lines turn black - theme glow shows through */
+            /* Black icon visible against theme background */
             color: #000000 !important;
             fill: none !important;
             stroke: #000000 !important;
-            filter: drop-shadow(0 0 3px var(--theme-primary));
+            filter: none !important;
         }
         #main-chatbot button svg,
         .chatbot button svg,
@@ -5372,6 +5372,175 @@ def create_ui():
         .gradio-textbox:focus-within textarea {
             border-color: var(--theme-primary) !important;
             box-shadow: 0 0 15px var(--theme-glow) !important;
+        }
+
+        /* ============================================
+           FIX: Message Input Focus Ring - Theme color not orange
+           Override Gradio's default focus-visible ring
+           ============================================ */
+        #msg-input textarea:focus,
+        #msg-input textarea:focus-visible,
+        #msg-input:focus-within textarea,
+        .gradio-textbox textarea:focus,
+        .gradio-textbox textarea:focus-visible {
+            outline: none !important;
+            border-color: var(--theme-primary) !important;
+            box-shadow: 0 0 0 2px var(--theme-glow), 0 0 15px var(--theme-glow) !important;
+        }
+        /* Kill Gradio's orange/blue focus ring globally */
+        *:focus-visible {
+            outline-color: var(--theme-primary) !important;
+        }
+        input:focus-visible,
+        textarea:focus-visible,
+        button:focus-visible,
+        select:focus-visible {
+            outline: 2px solid var(--theme-primary) !important;
+            outline-offset: 1px !important;
+        }
+
+        /* ============================================
+           FIX: Chatbot Action Buttons - Visible icon on hover
+           Theme background so black icon is visible
+           ============================================ */
+        #main-chatbot button:hover,
+        .chatbot button:hover,
+        [data-testid="chatbot"] button:hover,
+        #main-chatbot .message button:hover,
+        .chatbot .message button:hover {
+            /* Theme background so black icon is visible */
+            background: var(--theme-primary) !important;
+            border-color: var(--theme-bright) !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+        }
+        #main-chatbot button:hover svg,
+        .chatbot button:hover svg,
+        [data-testid="chatbot"] button:hover svg,
+        #main-chatbot .message button:hover svg {
+            color: #000000 !important;
+            fill: none !important;
+            stroke: #000000 !important;
+            filter: none !important;
+        }
+
+        /* ============================================
+           FIX: Accordion Headers - Text turns black on hover
+           More specific selectors for nested spans
+           ============================================ */
+        .gradio-accordion > .label-wrap:hover,
+        .gradio-accordion > .label-wrap:hover span,
+        .gradio-accordion > .label-wrap:hover button,
+        .gradio-accordion > .label-wrap:hover svg,
+        .gradio-accordion .label-wrap:hover *,
+        .gradio-accordion .label-wrap:hover span.svelte-1w6vloh,
+        .gradio-accordion .label-wrap:hover span[data-testid],
+        .gradio-accordion button.label-wrap:hover *,
+        .gradio-accordion > div:first-child:hover,
+        .gradio-accordion > div:first-child:hover * {
+            color: #000000 !important;
+            fill: #000000 !important;
+            stroke: #000000 !important;
+        }
+
+        /* ============================================
+           FIX: Audio Player Waveform - Theme color
+           Override WaveSurfer.js default colors
+           ============================================ */
+        .gradio-audio .waveform-container,
+        .gradio-audio [data-testid="waveform"],
+        [data-testid="audio"] .waveform-container,
+        #audio-response .waveform-container {
+            --waveform-color: var(--theme-primary) !important;
+            --progress-color: var(--theme-bright) !important;
+        }
+        /* Target WaveSurfer wave elements directly */
+        .gradio-audio wave,
+        .gradio-audio canvas,
+        [data-testid="audio"] wave,
+        [data-testid="audio"] canvas,
+        #audio-response wave,
+        #audio-response canvas {
+            filter: hue-rotate(0deg) !important;
+        }
+        /* Override progress bar in audio player */
+        .gradio-audio .progress,
+        .gradio-audio [role="progressbar"],
+        [data-testid="audio"] .progress,
+        #audio-response .progress {
+            background: var(--theme-primary) !important;
+        }
+        /* Audio player time indicator and cursor */
+        .gradio-audio .time,
+        [data-testid="audio"] .time,
+        .gradio-audio input[type="range"],
+        [data-testid="audio"] input[type="range"] {
+            accent-color: var(--theme-primary) !important;
+        }
+
+        /* ============================================
+           FIX: Checkboxes - Only fill the box itself
+           Not the entire label background
+           ============================================ */
+        /* Reset any background expansion on labels */
+        .gradio-checkbox label,
+        .gradio-checkboxgroup label,
+        [data-testid="checkbox"] label,
+        .gr-check-radio label,
+        .wrap label:has(input[type="checkbox"]) {
+            background: transparent !important;
+            background-color: transparent !important;
+            padding: 0 !important;
+        }
+        .gradio-checkbox label:hover,
+        .gradio-checkboxgroup label:hover,
+        [data-testid="checkbox"] label:hover,
+        .gr-check-radio label:hover {
+            background: transparent !important;
+            background-color: transparent !important;
+        }
+        /* The actual checkbox input - theme fill when checked */
+        input[type="checkbox"] {
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            width: 16px !important;
+            height: 16px !important;
+            min-width: 16px !important;
+            min-height: 16px !important;
+            max-width: 16px !important;
+            max-height: 16px !important;
+            border: 2px solid var(--theme-primary) !important;
+            border-radius: 3px !important;
+            background: #000000 !important;
+            cursor: pointer !important;
+            position: relative !important;
+            flex-shrink: 0 !important;
+        }
+        input[type="checkbox"]:checked {
+            background: var(--theme-primary) !important;
+            border-color: var(--theme-primary) !important;
+        }
+        /* Checkmark inside the checkbox */
+        input[type="checkbox"]:checked::after {
+            content: '' !important;
+            position: absolute !important;
+            left: 4px !important;
+            top: 1px !important;
+            width: 4px !important;
+            height: 8px !important;
+            border: solid #000000 !important;
+            border-width: 0 2px 2px 0 !important;
+            transform: rotate(45deg) !important;
+        }
+        /* Prevent Gradio from expanding checkbox label */
+        .gradio-checkbox .wrap,
+        .gradio-checkboxgroup .wrap,
+        .gr-check-radio .wrap {
+            background: transparent !important;
+            padding: 0 !important;
+        }
+        .gradio-checkbox .wrap:hover,
+        .gradio-checkboxgroup .wrap:hover {
+            background: transparent !important;
         }
     """
     
