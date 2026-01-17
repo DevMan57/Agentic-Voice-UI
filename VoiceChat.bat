@@ -91,7 +91,7 @@ wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && [ -d .venv ] && echo VENV_O
 set /p VENV_STATUS=<"%TEMP%\venv_check.txt"
 if "%VENV_STATUS%"=="VENV_MISSING" (
     echo [38;2;0;191;255mERROR: Virtual environment not found![0m
-    echo [38;2;0;191;255mPlease run option [4] Install Dependencies first.[0m
+    echo [38;2;0;191;255mPlease run option [5] Installer first.[0m
     echo.
     pause
     goto MENU
@@ -190,7 +190,7 @@ echo [38;2;0;191;255m:[0m   [38;2;0;191;255m██║╚██╔╝██║
 echo [38;2;0;191;255m:[0m   [38;2;0;191;255m██║ ╚═╝ ██║╚██████╗██║         ██║ ╚═╝ ██║██║  ██║██║ ╚████║██║  ██║╚██████╔╝███████╗██║  ██║[0m
 echo [38;2;0;191;255m:[0m   [38;2;0;191;255m╚═╝     ╚═╝ ╚═════╝╚═╝         ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝[0m
 echo [38;2;0;191;255m:[0m
-echo [38;2;0;191;255m:[0m                            [90mConfigure Agent Tools + Install Servers[0m
+echo                         [90mConfigure Agent Tools + Install Servers[0m
 echo [38;2;0;191;255m:[0m
 echo [38;2;0;191;255m========================================================================================[0m
 echo.
@@ -250,7 +250,7 @@ goto INSTALL
 cls
 echo [38;2;0;191;255m
 echo [38;2;0;191;255m========================================================================================[0m
-echo [38;2;0;191;255m:[0m                     [38;2;0;191;255mFirst-Time Setup: WSL2 + Ubuntu[0m
+echo                             [38;2;0;191;255mFirst-Time Setup: WSL2 + Ubuntu[0m
 echo [38;2;0;191;255m========================================================================================[0m
 echo.
 echo   [38;2;0;191;255mThis will install:[0m
@@ -336,7 +336,7 @@ goto INSTALL
 cls
 echo [38;2;0;136;170m
 echo [38;2;0;136;170m========================================================================================[0m
-echo [38;2;0;136;170m:[0m                        [38;2;0;191;255mChecking System Prerequisites[0m
+echo                              [38;2;0;191;255mChecking System Prerequisites[0m
 echo [38;2;0;136;170m========================================================================================[0m
 echo.
 set PREREQ_OK=1
@@ -396,7 +396,7 @@ goto INSTALL
 cls
 echo [38;2;0;136;170m
 echo [38;2;0;136;170m========================================================================================[0m
-echo [38;2;0;136;170m:[0m                          [38;2;0;191;255mFull Installation[0m
+echo                                    [38;2;0;191;255mFull Installation[0m
 echo [38;2;0;136;170m========================================================================================[0m
 echo.
 echo   [38;2;0;191;255m[Step 1/3][0m Verifying prerequisites...
@@ -420,7 +420,7 @@ goto INSTALL_DEPS_RUN
 cls
 echo [38;2;0;136;170m
 echo [38;2;0;136;170m========================================================================================[0m
-echo [38;2;0;136;170m:[0m                       [38;2;0;191;255mInstalling Dependencies[0m
+echo                                 [38;2;0;191;255mInstalling Dependencies[0m
 echo [38;2;0;136;170m========================================================================================[0m
 echo.
 set FROM_FULL=0
@@ -446,7 +446,14 @@ echo   [38;2;0;191;255m[6/7][0m Installing FunASR + SenseVoice (STT backends).
 wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && pip install -q funasr modelscope"
 echo.
 echo   [38;2;0;191;255m[7/7][0m Installing Windows audio dependencies...
-pip install keyboard pyaudio numpy --quiet 2>nul
+where python >nul 2>&1
+if errorlevel 1 (
+    echo         [90m[SKIP] Windows Python not found - PTT will use fallback[0m
+    echo         [90m        Install Python from python.org if you want PTT support[0m
+) else (
+    pip install keyboard pyaudio numpy --quiet 2>nul
+    echo         [38;2;0;191;255m[OK] Windows audio deps installed[0m
+)
 echo.
 echo   [38;2;0;191;255mDependencies installed![0m
 echo.
@@ -457,7 +464,7 @@ goto INSTALL
 cls
 echo [38;2;0;136;170m
 echo [38;2;0;136;170m========================================================================================[0m
-echo [38;2;0;136;170m:[0m                          [38;2;0;191;255mDownload Models[0m
+echo                                     [38;2;0;191;255mDownload Models[0m
 echo [38;2;0;136;170m========================================================================================[0m
 echo [38;2;0;136;170m:[0m
 echo [38;2;0;136;170m:[0m  [38;2;0;191;255m[1] Download All Models (Recommended)[0m                            [90m~9 GB[0m
@@ -495,16 +502,17 @@ goto INSTALL_MODELS_MENU
 cls
 echo [38;2;0;136;170m
 echo [38;2;0;136;170m========================================================================================[0m
-echo [38;2;0;136;170m:[0m                       [38;2;0;191;255mDownloading All Models[0m
+echo                                  [38;2;0;191;255mDownloading All Models[0m
 echo [38;2;0;136;170m========================================================================================[0m
 echo.
 echo   [90mTotal download size: ~9 GB. This may take 10-30 minutes.[0m
 echo.
+wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && mkdir -p models/{indextts2,supertonic,embeddings,nuextract,kokoro,hf_cache}"
 echo   [38;2;0;191;255m[1/5][0m Downloading IndexTTS2 models (~4.4 GB)...
 wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && python -c \"from huggingface_hub import snapshot_download; snapshot_download('IndexTeam/IndexTTS2', local_dir='models/indextts2', local_dir_use_symlinks=False)\""
 echo.
 echo   [38;2;0;191;255m[2/5][0m Downloading Supertonic models (~500 MB)...
-wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && git lfs install && [ ! -d models/supertonic/.git ] && git clone https://huggingface.co/neongeckocom/tts-vits-cv-en models/supertonic || echo Supertonic already exists"
+wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && git lfs install && if [ -d models/supertonic/.git ]; then echo Supertonic already exists; elif [ -d models/supertonic ]; then rmdir models/supertonic 2>/dev/null; git clone https://huggingface.co/neongeckocom/tts-vits-cv-en models/supertonic; else git clone https://huggingface.co/neongeckocom/tts-vits-cv-en models/supertonic; fi"
 echo.
 echo   [38;2;0;191;255m[3/5][0m Downloading STT models (SenseVoice + FunASR)...
 wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && python -c \"from funasr import AutoModel; print('Downloading SenseVoice...'); AutoModel(model='FunAudioLLM/SenseVoiceSmall', device='cpu', hub='hf'); print('Done!')\""
@@ -525,14 +533,14 @@ goto INSTALL
 :INSTALL_MODEL_INDEXTTS
 cls
 echo   [38;2;0;191;255mDownloading IndexTTS2 models (~4.4 GB)...[0m
-wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && python -c \"from huggingface_hub import snapshot_download; snapshot_download('IndexTeam/IndexTTS2', local_dir='models/indextts2', local_dir_use_symlinks=False)\""
+wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && mkdir -p models/indextts2 && . .venv/bin/activate && python -c \"from huggingface_hub import snapshot_download; snapshot_download('IndexTeam/IndexTTS2', local_dir='models/indextts2', local_dir_use_symlinks=False)\""
 echo   [38;2;0;191;255mDone![0m
 pause
 goto INSTALL_MODELS_MENU
 :INSTALL_MODEL_SUPERTONIC
 cls
 echo   [38;2;0;191;255mDownloading Supertonic models (~500 MB)...[0m
-wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && git lfs install && [ ! -d models/supertonic/.git ] && git clone https://huggingface.co/neongeckocom/tts-vits-cv-en models/supertonic || echo Already exists"
+wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && mkdir -p models && git lfs install && if [ -d models/supertonic/.git ]; then echo Supertonic already exists; elif [ -d models/supertonic ]; then rmdir models/supertonic 2>/dev/null; git clone https://huggingface.co/neongeckocom/tts-vits-cv-en models/supertonic; else git clone https://huggingface.co/neongeckocom/tts-vits-cv-en models/supertonic; fi"
 echo   [38;2;0;191;255mDone![0m
 pause
 goto INSTALL_MODELS_MENU
@@ -546,7 +554,7 @@ goto INSTALL_MODELS_MENU
 :INSTALL_MODEL_EMBEDDINGS
 cls
 echo   [38;2;0;191;255mDownloading embedding model (Qwen3, ~1.2 GB)...[0m
-wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && . .venv/bin/activate && python -c \"from huggingface_hub import snapshot_download; snapshot_download('Qwen/Qwen3-Embedding-0.6B', local_dir='models/embeddings/qwen0.6b', local_dir_use_symlinks=False)\""
+wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && mkdir -p models/embeddings && . .venv/bin/activate && python -c \"from huggingface_hub import snapshot_download; snapshot_download('Qwen/Qwen3-Embedding-0.6B', local_dir='models/embeddings/qwen0.6b', local_dir_use_symlinks=False)\""
 echo   [38;2;0;191;255mDone![0m
 pause
 goto INSTALL_MODELS_MENU
@@ -609,7 +617,7 @@ echo [90m:[0m   [90m██║     ██╔══██║██║     █�
 echo [90m:[0m   [90m╚██████╗██║  ██║███████╗██║██████╔╝██║  ██║██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║[0m
 echo [90m:[0m   [90m ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝[0m
 echo [90m:[0m
-echo [90m:[0m                     [38;2;0;191;255mPersonalize Speech Emotion Recognition to YOUR Voice[0m
+echo                   [38;2;0;191;255mPersonalize Speech Emotion Recognition to YOUR Voice[0m
 echo [90m:[0m
 echo [90m========================================================================================[0m
 echo.
@@ -625,7 +633,7 @@ wsl -d %WSL_DISTRO% -e bash -c "cd %WSL_WIN_PATH% && [ -d .venv ] && echo VENV_O
 set /p VENV_STATUS=<"%TEMP%\venv_check.txt"
 if "%VENV_STATUS%"=="VENV_MISSING" (
     echo [38;2;0;191;255mERROR: Virtual environment not found![0m
-    echo [38;2;0;191;255mPlease run option [4] Install Dependencies first.[0m
+    echo [38;2;0;191;255mPlease run option [5] Installer first.[0m
     echo.
     pause
     goto MENU

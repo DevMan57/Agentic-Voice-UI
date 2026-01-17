@@ -45,6 +45,14 @@ def make_item(key, label, status="", color_main=C_AMBER):
 def make_sub(label, info=""):
     return f"{C_ORANGE}:{C_RESET}       {C_GREY}+-- {label}{C_RESET}"
 
+def make_title(text, color=C_AMBER, width=TERM_WIDTH):
+    """Center a title within the terminal width"""
+    # Account for ANSI codes in padding calculation
+    text_len = len(text)
+    total_padding = width - text_len
+    left_pad = total_padding // 2
+    return f"{' ' * left_pad}{color}{text}{C_RESET}"
+
 def get_batch_content():
     lines = []
 
@@ -262,7 +270,7 @@ def get_batch_content():
     lines.append(f"echo {C_AMBER}:{C_RESET}   {C_AMBER}██║ ╚═╝ ██║╚██████╗██║         ██║ ╚═╝ ██║██║  ██║██║ ╚████║██║  ██║╚██████╔╝███████╗██║  ██║{C_RESET}")
     lines.append(f"echo {C_AMBER}:{C_RESET}   {C_AMBER}╚═╝     ╚═╝ ╚═════╝╚═╝         ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝{C_RESET}")
     lines.append(f"echo {C_AMBER}:{C_RESET}")
-    lines.append(f"echo {C_AMBER}:{C_RESET}                            {C_GREY}Configure Agent Tools + Install Servers{C_RESET}")
+    lines.append(f"echo {make_title('Configure Agent Tools + Install Servers', C_GREY)}")
     lines.append(f"echo {C_AMBER}:{C_RESET}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_AMBER)}")
     lines.append(f"echo.")
@@ -326,7 +334,7 @@ def get_batch_content():
     lines.append("cls")
     lines.append(f"echo {C_RED}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_RED)}")
-    lines.append(f"echo {C_RED}:{C_RESET}                     {C_AMBER}First-Time Setup: WSL2 + Ubuntu{C_RESET}")
+    lines.append(f"echo {make_title('First-Time Setup: WSL2 + Ubuntu', C_AMBER)}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_RED)}")
     lines.append("echo.")
     lines.append(f"echo   {C_AMBER}This will install:{C_RESET}")
@@ -428,7 +436,7 @@ def get_batch_content():
     lines.append("cls")
     lines.append(f"echo {C_DARK}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
-    lines.append(f"echo {C_DARK}:{C_RESET}                        {C_AMBER}Checking System Prerequisites{C_RESET}")
+    lines.append(f"echo {make_title('Checking System Prerequisites', C_AMBER)}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
     lines.append("echo.")
     lines.append("set PREREQ_OK=1")
@@ -499,7 +507,7 @@ def get_batch_content():
     lines.append("cls")
     lines.append(f"echo {C_DARK}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
-    lines.append(f"echo {C_DARK}:{C_RESET}                          {C_AMBER}Full Installation{C_RESET}")
+    lines.append(f"echo {make_title('Full Installation', C_AMBER)}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
     lines.append("echo.")
 
@@ -528,7 +536,7 @@ def get_batch_content():
     lines.append("cls")
     lines.append(f"echo {C_DARK}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
-    lines.append(f"echo {C_DARK}:{C_RESET}                       {C_AMBER}Installing Dependencies{C_RESET}")
+    lines.append(f"echo {make_title('Installing Dependencies', C_AMBER)}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
     lines.append("echo.")
     lines.append("set FROM_FULL=0")
@@ -591,7 +599,7 @@ def get_batch_content():
     lines.append("cls")
     lines.append(f"echo {C_DARK}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
-    lines.append(f"echo {C_DARK}:{C_RESET}                          {C_AMBER}Download Models{C_RESET}")
+    lines.append(f"echo {make_title('Download Models', C_AMBER)}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
     lines.append(f"echo {C_DARK}:{C_RESET}")
     lines.append(f"echo {C_DARK}:{C_RESET}  {C_AMBER}[1] Download All Models (Recommended){C_RESET}                            {C_GREY}~9 GB{C_RESET}")
@@ -631,7 +639,7 @@ def get_batch_content():
     lines.append("cls")
     lines.append(f"echo {C_DARK}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
-    lines.append(f"echo {C_DARK}:{C_RESET}                       {C_AMBER}Downloading All Models{C_RESET}")
+    lines.append(f"echo {make_title('Downloading All Models', C_AMBER)}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
     lines.append("echo.")
     lines.append(f"echo   {C_GREY}Total download size: ~9 GB. This may take 10-30 minutes.{C_RESET}")
@@ -771,7 +779,7 @@ def get_batch_content():
     lines.append(f"echo {C_GREY}:{C_RESET}   {C_GREY}╚██████╗██║  ██║███████╗██║██████╔╝██║  ██║██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║{C_RESET}")
     lines.append(f"echo {C_GREY}:{C_RESET}   {C_GREY} ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝{C_RESET}")
     lines.append(f"echo {C_GREY}:{C_RESET}")
-    lines.append(f"echo {C_GREY}:{C_RESET}                     {C_AMBER}Personalize Speech Emotion Recognition to YOUR Voice{C_RESET}")
+    lines.append(f"echo {make_title('Personalize Speech Emotion Recognition to YOUR Voice', C_AMBER)}")
     lines.append(f"echo {C_GREY}:{C_RESET}")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_GREY)}")
     lines.append(f"echo.")
