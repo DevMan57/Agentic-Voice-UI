@@ -471,18 +471,26 @@ class VADManager:
         if self.recorder:
             self.recorder.pause(duration)
         elif self._is_wsl:
-            # For WSL, we communicate via file. 
+            # For WSL, we communicate via file.
             # We must maintain 'enabled' state based on self.is_active, but set 'tts_playing' to True.
             update_vad_control(enabled=self.is_active, tts_playing=True)
-            
+
             if duration:
                 # Spawn a thread to reset it after audio finishes
                 def _reset():
-                    time.sleep(duration)
-                    # CRITICAL FIX: Only set enabled=True if VAD is actually supposed to be active!
-                    # Previous bug: this blinded set enabled=True, overriding the checkbox.
-                    update_vad_control(enabled=self.is_active, tts_playing=False)
-                    
+                    try:
+                        time.sleep(duration)
+                        # CRITICAL FIX: Only set enabled=True if VAD is actually supposed to be active!
+                        # Previous bug: this blinded set enabled=True, overriding the checkbox.
+                        update_vad_control(enabled=self.is_active, tts_playing=False)
+                    except Exception as e:
+                        # Ensure tts_playing gets reset even if there's an error
+                        print(f"[VAD] Reset thread error: {e}")
+                        try:
+                            update_vad_control(enabled=self.is_active, tts_playing=False)
+                        except:
+                            pass
+
                 threading.Thread(target=_reset, daemon=True).start()
 
 # ============================================================================
@@ -3431,8 +3439,16 @@ def check_ptt_recording(*args):
         if random.random() < 0.1:  # 10% chance each check
             cleanup_old_recordings(max_age_hours=1, max_files=5)
         return gr.update(), gr.update(), gr.update(), gr.update(), gr.update(), gr.update(), gr.update()
-    
+
     print("[PTT] Recording detected")
+
+    # CRITICAL FIX: Reset tts_playing flag when a new recording is detected.
+    # If the user was able to create a new recording, TTS must be done playing.
+    # This fixes the issue where tts_playing can get stuck at 1 due to race conditions
+    # or failed reset threads, permanently blocking VAD/PTT.
+    if vad_manager_instance and vad_manager_instance._is_wsl:
+        update_vad_control(enabled=vad_manager_instance.is_active, tts_playing=False)
+
     result = process_voice_input(audio_data, *args)
     
     # Always cleanup after processing a recording
