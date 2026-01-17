@@ -29,8 +29,8 @@ warnings.filterwarnings("ignore", message=".*WebSocketServerProtocol.*")
 # Silence noisy loggers
 import logging
 
-# Force all output to match the Lapis Lazuli theme (RGB 0, 191, 255)
-LAPIS = "\033[38;2;0;191;255m"
+# Force all output to white for clean console display
+LAPIS = "\033[37m"
 RESET = "\033[0m"
 
 # Wrap stdout/stderr to always output lapis lazuli
@@ -3103,19 +3103,20 @@ def process_voice_input(audio_data, chat_history, character_id, voice_file, *arg
     """Process voice input with thread safety - handles variable settings args"""
     # args contains: model, temp, tokens, top_p, freq, pres, conv_id, tts, provider, [group_args...], image
     if not processing_lock.acquire(blocking=False):
-        return chat_history, None, "⏳ Processing...", gr.update(), args[6] if len(args) > 6 else "new", gr.update(), "", ""
+        # Return 7 values to match timer outputs
+        return chat_history, None, "⏳ Processing...", gr.update(), args[6] if len(args) > 6 else "new", gr.update(), ""
 
     try:
         if audio_data is None:
              # args[6] is conversation_id usually, but let's be safe
             conv_id = args[6] if len(args) > 6 else "new"
-            return chat_history, None, "", gr.update(), conv_id, gr.update(), "", ""
+            return chat_history, None, "", gr.update(), conv_id, gr.update(), ""
 
         # Transcribe with potential emotion (SenseVoice provides both)
         user_message, stt_emotion = transcribe_audio(audio_data)
         if not user_message or user_message.startswith("["):
             conv_id = args[6] if len(args) > 6 else "new"
-            return chat_history, None, user_message or "", gr.update(), conv_id, gr.update(), "", ""
+            return chat_history, None, user_message or "", gr.update(), conv_id, gr.update(), ""
 
         # Handle emotion routing based on STT backend
         global _current_emotion
@@ -3161,9 +3162,8 @@ def process_voice_input(audio_data, chat_history, character_id, voice_file, *arg
         global _last_audio_hash
         _last_audio_hash = None
 
-        # Include HUD update (element 7)
-        hud_update = final_result[7] if len(final_result) > 7 else ""
-        return final_result[0], final_result[1], user_message, final_result[3], final_result[4], final_result[5], final_result[6], hud_update
+        # Return 7 values to match timer outputs: chatbot, audio, transcription, memory, conv_id, image, tts_warning
+        return final_result[0], final_result[1], user_message, final_result[3], final_result[4], final_result[5], final_result[6]
     finally:
         processing_lock.release()
 
@@ -5697,6 +5697,352 @@ def create_ui():
             color: #000000 !important;
             fill: #000000 !important;
         }
+
+        /* ============================================
+           COMPREHENSIVE FIX: All Theme Color Overrides
+           Force theme colors to override Gradio's hardcoded blue
+           ============================================ */
+
+        /* === ACCORDION HOVER TEXT FIX - ULTRA AGGRESSIVE === */
+        /* When hovering accordion header, ALL text must turn black */
+        .gradio-accordion > .label-wrap:hover,
+        .gradio-accordion > .label-wrap:hover *,
+        .gradio-accordion > button.label-wrap:hover,
+        .gradio-accordion > button.label-wrap:hover *,
+        .gradio-accordion .label-wrap:hover span,
+        .gradio-accordion .label-wrap:hover span *,
+        .gradio-accordion .label-wrap:hover div,
+        .gradio-accordion .label-wrap:hover p,
+        .gradio-accordion .label-wrap:hover label,
+        .gradio-accordion > .label-wrap:hover .svelte-1w6vloh,
+        .gradio-accordion > .label-wrap:hover [class*="svelte"],
+        .gradio-accordion .open:hover *,
+        .gradio-accordion > div:first-child:hover,
+        .gradio-accordion > div:first-child:hover *,
+        .gradio-accordion > div:first-child:hover span,
+        .block.gradio-accordion > .label-wrap:hover *,
+        div.gradio-accordion > .label-wrap:hover * {
+            color: #000000 !important;
+            fill: #000000 !important;
+            stroke: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+        }
+
+        /* === RADIO BUTTONS - FORCE THEME COLORS === */
+        /* Override Gradio's hardcoded blue */
+        .gradio-radio label.selected,
+        .gradio-radio .wrap label.selected,
+        .gradio-radio button[aria-checked="true"],
+        [role="radiogroup"] button[aria-checked="true"],
+        [role="radiogroup"] label.selected,
+        .gr-radio .selected,
+        [data-testid="radio"] .selected,
+        input[type="radio"]:checked + label,
+        input[type="radio"]:checked + span,
+        .wrap input[type="radio"]:checked + label {
+            background: var(--theme-primary) !important;
+            background-color: var(--theme-primary) !important;
+            border-color: var(--theme-primary) !important;
+            color: #000000 !important;
+        }
+        .gradio-radio label.selected *,
+        .gradio-radio .wrap label.selected *,
+        .gradio-radio button[aria-checked="true"] *,
+        [role="radiogroup"] button[aria-checked="true"] *,
+        [role="radiogroup"] label.selected *,
+        .gr-radio .selected * {
+            color: #000000 !important;
+        }
+        /* Unselected radio buttons */
+        .gradio-radio label:not(.selected),
+        .gradio-radio .wrap label:not(.selected),
+        .gradio-radio button[aria-checked="false"],
+        [role="radiogroup"] button[aria-checked="false"],
+        [role="radiogroup"] label:not(.selected),
+        .gr-radio label:not(.selected) {
+            background: #000000 !important;
+            background-color: #000000 !important;
+            border: 1px solid var(--theme-primary) !important;
+            color: var(--theme-primary) !important;
+        }
+        /* Radio button hover - black text on theme background */
+        .gradio-radio label:hover,
+        .gradio-radio .wrap label:hover,
+        .gradio-radio button:hover,
+        [role="radiogroup"] button:hover,
+        [role="radiogroup"] label:hover {
+            background: var(--theme-primary) !important;
+            background-color: var(--theme-primary) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+        }
+        .gradio-radio label:hover *,
+        .gradio-radio .wrap label:hover *,
+        .gradio-radio button:hover *,
+        [role="radiogroup"] button:hover *,
+        [role="radiogroup"] label:hover * {
+            color: #000000 !important;
+        }
+
+        /* === CHECKBOX FIXES - NO WHITE RECTANGLE === */
+        /* Kill any background on checkbox labels/wrappers */
+        .gradio-checkbox,
+        .gradio-checkbox .wrap,
+        .gradio-checkbox label,
+        .gradio-checkbox > div,
+        .gradio-checkboxgroup,
+        .gradio-checkboxgroup .wrap,
+        .gradio-checkboxgroup label,
+        [data-testid="checkbox"],
+        [data-testid="checkbox"] .wrap,
+        [data-testid="checkbox"] label,
+        .gr-check-radio,
+        .gr-check-radio .wrap,
+        .gr-check-radio label {
+            background: transparent !important;
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+        .gradio-checkbox:hover,
+        .gradio-checkbox:hover .wrap,
+        .gradio-checkbox:hover label,
+        .gradio-checkbox:hover > div,
+        .gradio-checkbox .wrap:hover,
+        .gradio-checkbox label:hover,
+        [data-testid="checkbox"]:hover,
+        [data-testid="checkbox"]:hover .wrap,
+        [data-testid="checkbox"]:hover label,
+        [data-testid="checkbox"] label:hover,
+        .gr-check-radio:hover,
+        .gr-check-radio label:hover {
+            background: transparent !important;
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+        /* Checkbox text stays theme color */
+        .gradio-checkbox label span,
+        .gradio-checkbox .wrap span,
+        .gradio-checkboxgroup label span,
+        [data-testid="checkbox"] label span,
+        [data-testid="checkbox"] span,
+        .gr-check-radio label span {
+            color: var(--theme-primary) !important;
+            background: transparent !important;
+        }
+        .gradio-checkbox:hover label span,
+        .gradio-checkbox:hover span,
+        .gradio-checkboxgroup:hover label span,
+        [data-testid="checkbox"]:hover label span,
+        [data-testid="checkbox"]:hover span {
+            color: var(--theme-primary) !important;
+            background: transparent !important;
+        }
+        /* Actual checkbox input - theme fill when checked */
+        input[type="checkbox"] {
+            background: #000000 !important;
+            background-color: #000000 !important;
+            border: 2px solid var(--theme-primary) !important;
+            accent-color: var(--theme-primary) !important;
+        }
+        input[type="checkbox"]:checked {
+            background: var(--theme-primary) !important;
+            background-color: var(--theme-primary) !important;
+            border-color: var(--theme-primary) !important;
+        }
+        input[type="checkbox"]:hover:not(:checked) {
+            background: transparent !important;
+            background-color: transparent !important;
+            border-color: var(--theme-bright) !important;
+            box-shadow: 0 0 15px var(--theme-glow) !important;
+        }
+
+        /* === CHECKBOXGROUP (Multi-select) - Black text on hover === */
+        .gradio-checkboxgroup > div > label:hover,
+        .gradio-checkboxgroup .wrap > label:hover,
+        [data-testid="checkbox-group"] label:hover {
+            background: var(--theme-primary) !important;
+            color: #000000 !important;
+        }
+        .gradio-checkboxgroup > div > label:hover span,
+        .gradio-checkboxgroup > div > label:hover *,
+        .gradio-checkboxgroup .wrap > label:hover span,
+        [data-testid="checkbox-group"] label:hover span {
+            color: #000000 !important;
+        }
+
+        /* === AUDIO WAVEFORM FIX - Force Theme Color === */
+        /* Target WaveSurfer directly - this is a canvas-based component */
+        .gradio-audio,
+        .gradio-audio *,
+        [data-testid="audio"],
+        [data-testid="audio"] * {
+            --waveform-color: var(--theme-primary) !important;
+            --progress-color: var(--theme-bright) !important;
+            accent-color: var(--theme-primary) !important;
+        }
+        /* Force theme color on any blue elements */
+        .gradio-audio [style*="rgb(33, 150, 243)"],
+        .gradio-audio [style*="#2196F3"],
+        .gradio-audio [style*="#2196f3"],
+        [data-testid="audio"] [style*="rgb(33, 150, 243)"],
+        [data-testid="audio"] [style*="#2196F3"] {
+            background-color: var(--theme-primary) !important;
+            color: var(--theme-primary) !important;
+        }
+        /* Audio time display */
+        .gradio-audio .time,
+        .gradio-audio [class*="time"],
+        [data-testid="audio"] .time {
+            color: var(--theme-primary) !important;
+        }
+
+        /* === SLIDER/INPUT FOCUS FIX - Theme not blue === */
+        input[type="range"] {
+            accent-color: var(--theme-primary) !important;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            background: var(--theme-primary) !important;
+            border-color: var(--theme-primary) !important;
+        }
+        input[type="range"]::-moz-range-thumb {
+            background: var(--theme-primary) !important;
+            border-color: var(--theme-primary) !important;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            background: linear-gradient(to right, var(--theme-primary), var(--theme-dim)) !important;
+        }
+        input[type="range"]::-moz-range-track {
+            background: linear-gradient(to right, var(--theme-primary), var(--theme-dim)) !important;
+        }
+        /* Number inputs inside sliders */
+        .gradio-slider input[type="number"],
+        .gradio-slider input[type="text"] {
+            border-color: var(--theme-primary) !important;
+            color: var(--theme-primary) !important;
+        }
+        .gradio-slider input[type="number"]:focus,
+        .gradio-slider input[type="text"]:focus {
+            border-color: var(--theme-primary) !important;
+            box-shadow: 0 0 0 2px var(--theme-glow) !important;
+            outline: none !important;
+        }
+
+        /* === MESSAGE BOX FOCUS - Theme not amber === */
+        #msg-input,
+        #msg-input:focus-within,
+        #msg-input.focused,
+        .gradio-textbox.focused,
+        .gradio-textbox:focus-within {
+            border-color: var(--theme-primary) !important;
+            box-shadow: 0 0 0 2px var(--theme-glow), 0 0 15px var(--theme-glow) !important;
+        }
+        #msg-input textarea:focus,
+        #msg-input textarea:focus-visible,
+        .gradio-textbox textarea:focus {
+            border-color: var(--theme-primary) !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        /* Override Gradio's internal block focus style */
+        .block:focus-within,
+        .block.focused,
+        [class*="block"]:focus-within {
+            --block-border-color: var(--theme-primary) !important;
+            border-color: var(--theme-primary) !important;
+            box-shadow: 0 0 0 2px var(--theme-glow) !important;
+        }
+
+        /* === KILL ALL HARDCODED BLUE IN GRADIO === */
+        /* Target common Gradio blue values */
+        [style*="rgb(33, 150, 243)"],
+        [style*="#2196F3"],
+        [style*="#2196f3"],
+        [style*="rgb(25, 118, 210)"],
+        [style*="#1976D2"],
+        [style*="#1976d2"],
+        [style*="rgb(66, 165, 245)"],
+        [style*="#42A5F5"],
+        [style*="#42a5f5"] {
+            background-color: var(--theme-primary) !important;
+            border-color: var(--theme-primary) !important;
+            color: var(--theme-primary) !important;
+        }
+
+        /* === SVG/ICON FIX - Theme colors === */
+        svg, svg *, path, circle, rect, line, polyline, polygon {
+            stroke: var(--theme-primary);
+            fill: var(--theme-primary);
+        }
+        button:hover svg, button:hover svg *,
+        button:hover path, button:hover circle {
+            stroke: #000000 !important;
+            fill: #000000 !important;
+        }
+        /* Keep chatbot button SVGs as outlines */
+        #main-chatbot button svg,
+        .chatbot button svg {
+            fill: none !important;
+            stroke: var(--theme-primary) !important;
+        }
+        #main-chatbot button:hover svg,
+        .chatbot button:hover svg {
+            fill: none !important;
+            stroke: #000000 !important;
+        }
+
+        /* === FOCUS VISIBLE RING FIX === */
+        *:focus-visible {
+            outline: 2px solid var(--theme-primary) !important;
+            outline-offset: 2px !important;
+        }
+        input:focus-visible,
+        textarea:focus-visible,
+        select:focus-visible,
+        button:focus-visible {
+            outline: 2px solid var(--theme-primary) !important;
+            outline-offset: 2px !important;
+        }
+
+        /* === GRADIO-SPECIFIC COMPONENT OVERRIDES === */
+        /* These target Gradio's internal CSS variables that may override our styles */
+        :root,
+        .gradio-container,
+        .dark {
+            --color-accent: var(--theme-primary) !important;
+            --color-accent-soft: var(--theme-glow-soft) !important;
+            --slider-color: var(--theme-primary) !important;
+            --loader-color: var(--theme-primary) !important;
+            --checkbox-background-color: #000000 !important;
+            --checkbox-background-color-focus: transparent !important;
+            --checkbox-background-color-hover: transparent !important;
+            --checkbox-background-color-selected: var(--theme-primary) !important;
+            --checkbox-border-color: var(--theme-primary) !important;
+            --checkbox-border-color-focus: var(--theme-primary) !important;
+            --checkbox-border-color-hover: var(--theme-bright) !important;
+            --checkbox-border-color-selected: var(--theme-primary) !important;
+            --checkbox-label-background-fill: transparent !important;
+            --checkbox-label-background-fill-hover: transparent !important;
+            --checkbox-label-background-fill-selected: transparent !important;
+            --checkbox-check: #000000 !important;
+            --radio-circle: var(--theme-primary) !important;
+            --radio-circle-fill: var(--theme-primary) !important;
+            --button-primary-background-fill: var(--theme-primary) !important;
+            --button-primary-background-fill-hover: var(--theme-bright) !important;
+            --button-primary-text-color: #000000 !important;
+            --button-primary-border-color: var(--theme-primary) !important;
+            --input-border-color: var(--theme-primary) !important;
+            --input-border-color-focus: var(--theme-primary) !important;
+            --input-background-fill: #000000 !important;
+            --block-border-color: var(--theme-primary) !important;
+            --block-border-color-focus: var(--theme-primary) !important;
+            --panel-border-color: var(--theme-primary) !important;
+            --border-color-accent: var(--theme-primary) !important;
+            --border-color-primary: var(--theme-primary) !important;
+            --ring-color: var(--theme-glow) !important;
+            --shadow-drop: 0 0 15px var(--theme-glow) !important;
+            --waveform-color: var(--theme-primary) !important;
+            --progress-color: var(--theme-bright) !important;
+        }
     """
     
     # JavaScript for keyboard shortcuts, copy buttons, HUD updates, and expandable messages
@@ -7318,7 +7664,7 @@ def create_ui():
 
         def on_stt_backend_change(value):
             """Handle STT backend switch with appropriate cleanup and feedback."""
-            global STT_MODEL, STT_BACKEND_NAME
+            global STT_MODEL, STT_BACKEND_NAME, _last_audio_hash
 
             SETTINGS["stt_backend"] = value
             save_settings(SETTINGS)
@@ -7326,6 +7672,15 @@ def create_ui():
             # Clear cached model to force reload on next transcription
             STT_MODEL = None
             STT_BACKEND_NAME = None
+
+            # Clear audio hash to allow fresh recordings after backend switch
+            _last_audio_hash = None
+
+            # Reset VAD control file to ensure tts_playing is cleared
+            # This fixes issues where tts_playing can get stuck at 1
+            if vad_manager_instance and vad_manager_instance.is_active:
+                update_vad_control(enabled=True, tts_playing=False)
+                print("  → VAD control reset (tts_playing=False)")
 
             # Clear CUDA memory if switching away from GPU backend
             if value == "faster_whisper" and torch.cuda.is_available():
@@ -7994,9 +8349,9 @@ def process_group_chat_wrapper(user_message, chat_history, character_id, voice_f
 
 
 if __name__ == "__main__":
-    # Force lapis lazuli color at very start of execution
-    sys.stdout.write("\033[38;2;0;191;255m")
-    sys.stderr.write("\033[38;2;0;191;255m")
+    # Force white color at very start of execution
+    sys.stdout.write("\033[37m")
+    sys.stderr.write("\033[37m")
     sys.stdout.flush()
     sys.stderr.flush()
 
@@ -8006,8 +8361,8 @@ if __name__ == "__main__":
     print(f"   Platform: {PLATFORM.title()}" + (" (WSL)" if IS_WSL else ""))
     print("="*60)
 
-    # Ensure lapis stays active
-    sys.stdout.write("\033[38;2;0;191;255m")
+    # Ensure white color stays active
+    sys.stdout.write("\033[37m")
 
     # Move all status logs AFTER the banner
     print(f"\n[Platform] {PLATFORM.title()}" + (" (WSL)" if IS_WSL else ""))
@@ -8055,8 +8410,8 @@ if __name__ == "__main__":
     if SCREEN_AVAILABLE: features.append("Screen Capture")
     if PDF_AVAILABLE: features.append("Docs (PDF/TXT/MD/DOCX/CSV/JSON/Code)")
     
-    # Re-apply lapis color before features
-    sys.stdout.write("\033[38;2;0;191;255m")
+    # Re-apply white color before features
+    sys.stdout.write("\033[37m")
     print(f"[Features] Enabled: {', '.join(features)}")
 
     print(f"\n✓ Starting on http://127.0.0.1:{SERVER_PORT}")
@@ -8075,7 +8430,7 @@ if __name__ == "__main__":
         update_vad_control(enabled=False, tts_playing=False)
 
     # Final color enforcement before uvicorn/gradio takes over
-    sys.stdout.write("\033[38;2;0;191;255m")
+    sys.stdout.write("\033[37m")
     sys.stdout.flush()
 
     # Use 0.0.0.0 for share mode to allow external connections
