@@ -4,17 +4,17 @@ import os
 TARGET_FILE = "VoiceChat.bat"
 DELETE_FILE = "VoiceChat_new.bat"
 
-# --- ANSI Colors (Lapis Lazuli Palette - TrueColor) ---
+# --- ANSI Colors (Disabled - Standard White) ---
 ESC = "\x1b"
-C_RESET   = f"{ESC}[0m"
-C_GREY    = f"{ESC}[90m"
+C_RESET   = ""
+C_GREY    = ""
 
-# The Palette - Lapis Lazuli Glowing Blue (ALL lapis lazuli now)
-C_ORANGE  = f"{ESC}[38;2;0;191;255m"   # Lapis Lazuli #00BFFF (Borders)
-C_AMBER   = f"{ESC}[38;2;0;191;255m"   # Lapis Lazuli #00BFFF (Main Text)
-C_GOLD    = f"{ESC}[38;2;0;191;255m"   # Lapis Lazuli #00BFFF (Highlights)
-C_RED     = f"{ESC}[38;2;0;191;255m"   # Lapis Lazuli #00BFFF (Alerts - now blue)
-C_DARK    = f"{ESC}[38;2;0;136;170m"   # Dim Lapis #0088AA (Subtitles)
+# All colors disabled for standard white text
+C_ORANGE  = ""
+C_AMBER   = ""
+C_GOLD    = ""
+C_RED     = ""
+C_DARK    = ""
 
 # --- ASCII Art (TTS2 VOICE) ---
 HEADER_ART = [
