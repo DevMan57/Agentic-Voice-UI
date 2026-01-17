@@ -3515,11 +3515,26 @@ def create_ui():
             --loader-color: var(--theme-primary) !important;
             --checkbox-background-color-selected: var(--theme-primary) !important;
             --checkbox-border-color-selected: var(--theme-primary) !important;
+            --checkbox-border-color: var(--theme-primary) !important;
+            --checkbox-label-background-fill: transparent !important;
             --checkbox-label-background-fill-hover: transparent !important;
+            --checkbox-label-background-fill-selected: transparent !important;
             --button-primary-background-fill: var(--theme-primary) !important;
             --button-primary-background-fill-hover: var(--theme-bright) !important;
             --input-border-color-focus: var(--theme-primary) !important;
             --ring-color: var(--theme-glow) !important;
+            /* CRITICAL: Override Gradio's block focus border (the amber ring) */
+            --block-border-color-focus: var(--theme-primary) !important;
+            --block-shadow-focus: 0 0 0 2px var(--theme-glow) !important;
+            --input-shadow-focus: 0 0 0 2px var(--theme-glow), 0 0 15px var(--theme-glow) !important;
+            --border-color-accent: var(--theme-primary) !important;
+            --shadow-drop: 0 0 15px var(--theme-glow) !important;
+            /* Radio buttons */
+            --radio-circle-fill: var(--theme-primary) !important;
+            --radio-border-color-selected: var(--theme-primary) !important;
+            /* Audio player waveform */
+            --waveform-color: var(--theme-primary) !important;
+            --progress-bar-color: var(--theme-primary) !important;
 
             /* Structure */
             --primary-50: var(--theme-glow-soft);
@@ -5542,6 +5557,146 @@ def create_ui():
         .gradio-checkboxgroup .wrap:hover {
             background: transparent !important;
         }
+
+        /* ============================================
+           FIX: Message Box Wrapper Focus Ring
+           Override Gradio's amber/orange focus border
+           ============================================ */
+        #msg-input:focus-within,
+        #msg-input.focused,
+        .gradio-textbox:focus-within,
+        [data-testid="textbox"]:focus-within {
+            border-color: var(--theme-primary) !important;
+            box-shadow: 0 0 0 2px var(--theme-glow), 0 0 15px var(--theme-glow) !important;
+            outline: none !important;
+        }
+        /* Override the wrapper/container focus style */
+        .gradio-textbox > .wrap:focus-within,
+        .gradio-textbox > div:focus-within,
+        #msg-input > .wrap:focus-within,
+        #msg-input > div:focus-within {
+            border-color: var(--theme-primary) !important;
+            box-shadow: 0 0 15px var(--theme-glow) !important;
+            outline: none !important;
+        }
+        /* Block-level focus override */
+        .gradio-container .block:focus-within,
+        .gradio-container [class*="block"]:focus-within {
+            --block-border-color: var(--theme-primary) !important;
+            border-color: var(--theme-primary) !important;
+        }
+
+        /* ============================================
+           FIX: Chatbot Collapse Button (conversation box)
+           Theme background on hover with black icon
+           ============================================ */
+        #main-chatbot .collapse-btn:hover,
+        #main-chatbot [class*="collapse"]:hover,
+        .chatbot .collapse-btn:hover,
+        .chatbot [class*="collapse"]:hover,
+        #main-chatbot button[aria-label*="collapse"]:hover,
+        #main-chatbot button[aria-label*="Collapse"]:hover,
+        #main-chatbot button[aria-label*="expand"]:hover,
+        #main-chatbot button[aria-label*="Expand"]:hover {
+            background: var(--theme-primary) !important;
+            border-color: var(--theme-bright) !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
+        }
+        #main-chatbot .collapse-btn:hover svg,
+        #main-chatbot .collapse-btn:hover *,
+        #main-chatbot [class*="collapse"]:hover svg,
+        .chatbot .collapse-btn:hover svg,
+        .chatbot .collapse-btn:hover * {
+            color: #000000 !important;
+            fill: #000000 !important;
+            stroke: #000000 !important;
+        }
+
+        /* ============================================
+           FIX: Radio Buttons - Use theme colors
+           Not hardcoded blue
+           ============================================ */
+        input[type="radio"]:checked {
+            background: var(--theme-primary) !important;
+            border-color: var(--theme-primary) !important;
+            box-shadow: 0 0 10px var(--theme-glow) !important;
+        }
+        /* Radio button group selected option */
+        .gr-radio label.selected,
+        .gr-radio label[data-selected="true"],
+        [data-testid="radio"] label.selected,
+        [data-testid="radio"] label[data-selected="true"],
+        .wrap label.selected,
+        .wrap label[data-selected="true"] {
+            background: var(--theme-primary) !important;
+            border-color: var(--theme-primary) !important;
+            color: #000000 !important;
+        }
+        .gr-radio label.selected span,
+        .gr-radio label[data-selected="true"] span,
+        [data-testid="radio"] label.selected span {
+            color: #000000 !important;
+        }
+
+        /* ============================================
+           FIX: Sliders - Use theme colors
+           ============================================ */
+        input[type="range"]::-webkit-slider-runnable-track {
+            background: var(--theme-primary) !important;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            background: var(--theme-primary) !important;
+        }
+        input[type="range"]::-moz-range-track {
+            background: var(--theme-primary) !important;
+        }
+        input[type="range"]::-moz-range-thumb {
+            background: var(--theme-primary) !important;
+        }
+        .gradio-slider .range-indicator,
+        .gradio-slider [class*="indicator"] {
+            background: var(--theme-primary) !important;
+        }
+
+        /* ============================================
+           FIX: Dropdown/Select Focus
+           ============================================ */
+        select:focus,
+        .gradio-dropdown:focus-within,
+        [data-testid="dropdown"]:focus-within {
+            border-color: var(--theme-primary) !important;
+            box-shadow: 0 0 15px var(--theme-glow) !important;
+            outline: none !important;
+        }
+
+        /* ============================================
+           FIX: All accordion headers with even more specificity
+           Ensure text turns black on white hover background
+           ============================================ */
+        .gradio-accordion > .label-wrap:hover,
+        .gradio-accordion .label-wrap:hover,
+        .gradio-accordion header:hover,
+        .gradio-accordion > button:hover,
+        .gradio-accordion [role="button"]:hover {
+            background: var(--theme-primary) !important;
+            color: #000000 !important;
+        }
+        .gradio-accordion > .label-wrap:hover span,
+        .gradio-accordion > .label-wrap:hover div,
+        .gradio-accordion > .label-wrap:hover p,
+        .gradio-accordion > .label-wrap:hover svg,
+        .gradio-accordion > .label-wrap:hover path,
+        .gradio-accordion > .label-wrap:hover *:not(input):not(button) {
+            color: #000000 !important;
+            fill: #000000 !important;
+            stroke: #000000 !important;
+        }
+        /* Icon in accordion header */
+        .gradio-accordion .label-wrap:hover .icon,
+        .gradio-accordion .label-wrap:hover svg {
+            color: #000000 !important;
+            fill: #000000 !important;
+        }
     """
     
     # JavaScript for keyboard shortcuts, copy buttons, HUD updates, and expandable messages
@@ -5740,6 +5895,26 @@ def create_ui():
                 root.style.setProperty('--theme-bg-dark', theme.bgDark);
                 root.style.setProperty('--theme-bg-mid', theme.bgMid);
                 root.style.setProperty('--theme-bg-stripe', theme.bgStripe);
+
+                // Also update Gradio internal variables
+                root.style.setProperty('--color-accent', theme.primary);
+                root.style.setProperty('--slider-color', theme.primary);
+                root.style.setProperty('--loader-color', theme.primary);
+                root.style.setProperty('--checkbox-background-color-selected', theme.primary);
+                root.style.setProperty('--checkbox-border-color-selected', theme.primary);
+                root.style.setProperty('--checkbox-border-color', theme.primary);
+                root.style.setProperty('--button-primary-background-fill', theme.primary);
+                root.style.setProperty('--button-primary-background-fill-hover', theme.bright);
+                root.style.setProperty('--input-border-color-focus', theme.primary);
+                root.style.setProperty('--ring-color', theme.glow);
+                root.style.setProperty('--block-border-color-focus', theme.primary);
+                root.style.setProperty('--block-shadow-focus', '0 0 0 2px ' + theme.glow);
+                root.style.setProperty('--input-shadow-focus', '0 0 0 2px ' + theme.glow + ', 0 0 15px ' + theme.glow);
+                root.style.setProperty('--border-color-accent', theme.primary);
+                root.style.setProperty('--radio-circle-fill', theme.primary);
+                root.style.setProperty('--radio-border-color-selected', theme.primary);
+                root.style.setProperty('--waveform-color', theme.primary);
+                root.style.setProperty('--progress-bar-color', theme.primary);
 
                 // Update banner dynamically
                 const banner = document.querySelector('#app-banner');
