@@ -58,6 +58,9 @@ ddgs>=4.0.0
 # Character Definitions (YAML support)
 pyyaml>=6.0
 
+# JSON5 support (required by IndexTTS2)
+json5>=0.9.0
+
 # Testing
 pytest>=7.0.0
 
