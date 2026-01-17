@@ -29,9 +29,9 @@ Self-contained project with all models and dependencies bundled. Designed for **
 > **New User?** Read the **[Installation Guide](docs/INSTALL.md)** for detailed setup.
 
 ### 1. Run the Launcher
-```cmd
-VoiceChat.bat
-```
+**Right-click `VoiceChat.bat` → Run as administrator**
+
+> **Note:** Administrator privileges are required for WSL2 installation and keyboard hooks (PTT).
 
 ### 2. Install
 Select **Option [5] Install Dependencies**.
@@ -102,7 +102,7 @@ All models and dependencies are bundled in the `models/` and `lib/` directories.
 Access the voice agent from your phone or any device on your network.
 
 ### Quick Start
-1. Run `VoiceChat.bat`
+1. Right-click `VoiceChat.bat` → **Run as administrator**
 2. Select **Option [2] Mobile/Remote Access**
 3. A public HTTPS URL will be generated (e.g., `https://xxxxx.gradio.live`)
 4. Open the URL on your phone
