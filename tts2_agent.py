@@ -801,6 +801,7 @@ DEFAULT_SETTINGS = {
     "stt_device": "cuda:0",  # Device for SenseVoice/FunASR
     "use_sensevoice_emotion": True,  # Use built-in emotion when available
     "use_sensevoice_vad": True,  # Use built-in VAD when available
+    "tools_enabled": True,  # Pure Voice Chat mode when False (disables all tool calling)
 }
 
 def load_settings() -> dict:
@@ -2818,8 +2819,12 @@ def should_load_tools(message: str) -> bool:
         message: The user's message
 
     Returns:
-        True if tools should be loaded, False for casual conversation
+        True if tools should be loaded, False for casual conversation or Pure Voice Chat mode
     """
+    # Pure Voice Chat mode: completely disable all tool calling for faster responses
+    if not SETTINGS.get("tools_enabled", True):
+        return False
+
     message_lower = message.lower().strip()
 
     # Casual conversation patterns that DON'T need tools
@@ -6575,6 +6580,13 @@ def create_ui():
                     )
 
                 with gr.Accordion("🔧 Tools", open=False):
+                    # Pure Voice Chat toggle (disables all tool calling for faster responses)
+                    pure_voice_chat = gr.Checkbox(
+                        label="🗣️ Pure Voice Chat Mode",
+                        value=not SETTINGS.get("tools_enabled", True),
+                        info="Disable all tool calling for faster, conversational responses"
+                    )
+
                     # Show available tools dynamically
                     tool_list = REGISTRY.list_tools()
                     tool_names = [t["function"]["name"] for t in tool_list]
@@ -6596,7 +6608,7 @@ def create_ui():
 **Full File Access:** {"✓ Enabled" if CONFIG.get("ENABLE_FULL_FILE_ACCESS") else "✗ Disabled (sandbox only)"}"""
 
                     tools_available = gr.Markdown(tools_md)
-                    
+
                     full_file_access = gr.Checkbox(
                         label="Enable Full File Access",
                         value=CONFIG.get("ENABLE_FULL_FILE_ACCESS", False),
@@ -7069,8 +7081,18 @@ def create_ui():
             inputs=[full_file_access],
             outputs=[tools_available, tools_status]
         )
-        
-        
+
+        # Pure Voice Chat toggle (inverted: checked = tools disabled)
+        def on_pure_voice_chat_toggle(enabled):
+            # enabled = True means Pure Voice Chat is ON, so tools are DISABLED
+            SETTINGS["tools_enabled"] = not enabled
+            save_settings(SETTINGS)
+            status = "enabled (tools disabled)" if enabled else "disabled (tools enabled)"
+            print(f"[Settings] Pure Voice Chat mode {status}")
+            return enabled
+
+        pure_voice_chat.change(fn=on_pure_voice_chat_toggle, inputs=[pure_voice_chat])
+
         # Message sending (with TTS warning)
         all_settings = [model_dropdown, temperature_slider, max_tokens_slider, 
                         top_p_slider, freq_penalty_slider, pres_penalty_slider,
