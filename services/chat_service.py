@@ -145,9 +145,10 @@ class ChatService:
             if not incognito:
                 self.settings["current_conversation_id"] = actual_conversation_id
         
-        # Activate character memory
-        self.memory.activate_character(character_id)
-        
+        # Activate character memory (skip in incognito mode)
+        if not incognito:
+            self.memory.activate_character(character_id)
+
         # Get character
         character = self.characters.get_character(character_id)
         if not character:
@@ -160,10 +161,15 @@ class ChatService:
                 user_display_message=user_message,
                 tts_warning="❌ Character not found"
             )
-        
-        # Build memory context
-        memory_context = self.memory.build_context(character_id, user_message)
-        formatted_memory = self.memory.format_context_for_prompt(memory_context)
+
+        # Build memory context (skip entirely in incognito mode)
+        if incognito:
+            print("[Memory] Incognito: Bypassing memory and knowledge graph queries")
+            memory_context = {}
+            formatted_memory = ""
+        else:
+            memory_context = self.memory.build_context(character_id, user_message)
+            formatted_memory = self.memory.format_context_for_prompt(memory_context)
         
         # Build system prompt
         system_prompt = self._build_system_prompt(

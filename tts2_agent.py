@@ -1604,15 +1604,28 @@ def init_tts():
         if not TTS_AVAILABLE:
             print("[TTS] IndexTTS2 not available - voice synthesis disabled")
             return None
-        
-        # Re-init if switching backends
-        is_kokoro = False
+
+        # Re-init if switching backends - check ALL other backend types
+        is_other_backend = False
         try:
-             is_kokoro = isinstance(TTS_MODEL, KokoroTTS)
+            is_kokoro = isinstance(TTS_MODEL, KokoroTTS)
+            is_other_backend = is_kokoro
         except (NameError, TypeError):
-            pass  # KokoroTTS may not be imported or TTS_MODEL is None
-        
-        if TTS_MODEL is not None and is_kokoro:
+            pass
+        try:
+            from audio.backends.soprano import SopranoBackend
+            if isinstance(TTS_MODEL, SopranoBackend):
+                is_other_backend = True
+        except (ImportError, NameError, TypeError):
+            pass
+        try:
+            from audio.backends.supertonic import SupertonicBackend
+            if isinstance(TTS_MODEL, SupertonicBackend):
+                is_other_backend = True
+        except (ImportError, NameError, TypeError):
+            pass
+
+        if TTS_MODEL is not None and is_other_backend:
             print("[TTS] Switching to IndexTTS2...")
             TTS_MODEL = None
             clear_cuda_memory()
@@ -3053,13 +3066,11 @@ def process_message_with_memory_v2(user_message: str, chat_history: list, charac
     if result.audio_data and vad_manager_instance:
         sr, audio = result.audio_data
         duration = len(audio) / sr
-        # Use 2.5x multiplier + buffer to account for:
-        # - Browser autoplay delay (1-3 seconds)
-        # - Network latency from WSL to browser
-        # - Variable playback speed
-        # - User breathing/making small sounds
-        # - Walking, footsteps, ambient noise in room
-        vad_manager_instance.pause(duration * 2.5 + 8.0)
+        # Use 1.1x multiplier + 0.5s buffer for:
+        # - Small buffer for browser autoplay delay
+        # - Minimal safety margin
+        # Previous: duration * 2.5 + 8.0 caused excessive 8+ second delays!
+        vad_manager_instance.pause(duration * 1.1 + 0.5)
     
     # Format result for UI using formatters
     formatted_history = ui_format_chat_result(result, chat_history)
@@ -4781,7 +4792,24 @@ def create_ui():
         .gradio-checkbox .wrap,
         .gradio-checkboxgroup .wrap,
         .gradio-checkbox .form,
-        .gradio-checkboxgroup .form {
+        .gradio-checkboxgroup .form,
+        /* ADDITIONAL: Target Gradio's internal structure more aggressively */
+        .gradio-checkbox > div > div,
+        .gradio-checkboxgroup > div > div,
+        .gradio-checkbox > div > div > div,
+        .gradio-checkboxgroup > div > div > div,
+        .gradio-checkbox label > span,
+        .gradio-checkboxgroup label > span,
+        div[class*="checkbox"] > div,
+        div[class*="checkbox"] label,
+        div[class*="checkbox"] span:not([class*="label"]),
+        .checkbox-wrapper,
+        .checkbox-container,
+        /* Target by data attributes Gradio might use */
+        [data-testid*="checkbox"] > *,
+        [data-testid*="checkbox"] label > *,
+        [class*="CheckboxGroup"] > *,
+        [class*="Checkbox"] > * {
             background: transparent !important;
             background-color: transparent !important;
         }
@@ -5083,6 +5111,47 @@ def create_ui():
             color: var(--theme-medium) !important;
         }
 
+        /* ============================================
+           MARKDOWN ELEMENTS - THEME COLOR SUPPORT
+           Ensure all markdown text follows the theme
+           ============================================ */
+        .prose, .prose *,
+        .markdown-body, .markdown-body *,
+        [class*="Markdown"], [class*="Markdown"] *,
+        .gradio-markdown, .gradio-markdown *,
+        .md, .md * {
+            color: var(--theme-primary) !important;
+        }
+        /* Markdown bold text */
+        .prose strong, .prose b,
+        .markdown-body strong, .markdown-body b,
+        [class*="Markdown"] strong, [class*="Markdown"] b,
+        .gradio-markdown strong, .gradio-markdown b {
+            color: var(--theme-primary) !important;
+            font-weight: bold !important;
+        }
+        /* Markdown italic text */
+        .prose em, .prose i,
+        .markdown-body em, .markdown-body i,
+        [class*="Markdown"] em, [class*="Markdown"] i,
+        .gradio-markdown em, .gradio-markdown i {
+            color: var(--theme-primary) !important;
+        }
+        /* Markdown paragraphs and spans */
+        .prose p, .prose span,
+        .markdown-body p, .markdown-body span,
+        [class*="Markdown"] p, [class*="Markdown"] span,
+        .gradio-markdown p, .gradio-markdown span {
+            color: var(--theme-primary) !important;
+        }
+        /* Markdown lists */
+        .prose li, .prose ul, .prose ol,
+        .markdown-body li, .markdown-body ul, .markdown-body ol,
+        [class*="Markdown"] li, [class*="Markdown"] ul, [class*="Markdown"] ol,
+        .gradio-markdown li, .gradio-markdown ul, .gradio-markdown ol {
+            color: var(--theme-primary) !important;
+        }
+
         /* Chatbot messages */
         #main-chatbot [role="user"] > p,
         #main-chatbot [role="user"] > span,
@@ -5295,16 +5364,16 @@ def create_ui():
         button[variant="stop"]:hover,
         .gradio-button.stop:hover,
         .gr-button-stop:hover {
-            /* Transparent background with theme glow - NOT solid fill */
-            background: transparent !important;
+            /* Solid theme background on hover for visibility */
+            background: var(--theme-primary) !important;
             border-color: var(--theme-bright) !important;
-            box-shadow: 0 0 20px var(--theme-glow), inset 0 0 15px var(--theme-glow-soft) !important;
+            box-shadow: 0 0 20px var(--theme-glow) !important;
         }
         button.stop:hover *,
         button[variant="stop"]:hover *,
         .gradio-button.stop:hover *,
         .gr-button-stop:hover * {
-            /* Icon lines turn black with theme glow behind */
+            /* Black text on theme background for contrast */
             color: #000000 !important;
             fill: none !important;
             stroke: #000000 !important;
@@ -5878,8 +5947,8 @@ def create_ui():
             -webkit-text-fill-color: #000000 !important;
         }
 
-        /* === CODE/BADGE ELEMENTS - Black text on theme background === */
-        /* Tool names, code elements with background */
+        /* === CODE/BADGE ELEMENTS - Black text on WHITE background === */
+        /* Tool names, code elements - use white background for readability */
         code, .code, pre code,
         [class*="badge"], [class*="tag"], [class*="chip"],
         .tool-name, .function-name,
@@ -5887,6 +5956,18 @@ def create_ui():
         mark, .highlight {
             color: #000000 !important;
             -webkit-text-fill-color: #000000 !important;
+            background: #FFFFFF !important;
+            background-color: #FFFFFF !important;
+            padding: 2px 6px !important;
+            border-radius: 3px !important;
+        }
+        /* Code blocks in markdown - white background */
+        .markdown code,
+        .prose code,
+        [class*="Markdown"] code {
+            background: #FFFFFF !important;
+            background-color: #FFFFFF !important;
+            color: #000000 !important;
         }
 
         /* === CHECKBOX FIXES - NO WHITE RECTANGLE === */
@@ -6839,6 +6920,49 @@ def create_ui():
                 observer.observe(chatbot, { childList: true, subtree: true });
                 addCopyButtons(); // Initial run
             }
+
+            // ============================================
+            // HUD UPDATE TRIGGER OBSERVER
+            // Watch for Gradio to update the hidden hud-update-trigger element
+            // and execute any script content it contains
+            // ============================================
+            const setupHudObserver = () => {
+                const hudTrigger = document.getElementById('hud-update-trigger');
+                if (hudTrigger) {
+                    const hudObserver = new MutationObserver(() => {
+                        // Find any script tags in the content and execute them
+                        const scripts = hudTrigger.querySelectorAll('script');
+                        scripts.forEach(script => {
+                            if (script.textContent) {
+                                try {
+                                    eval(script.textContent);
+                                } catch (e) {
+                                    console.warn('[HUD] Error executing update:', e);
+                                }
+                            }
+                        });
+                        // Also check for inline content (in case script isn't parsed)
+                        const content = hudTrigger.innerHTML || '';
+                        if (content.includes('window.HUD.update')) {
+                            // Extract and run the update call
+                            const match = content.match(/window\\.HUD\\.update\\(([\\s\\S]*?)\\);/);
+                            if (match) {
+                                try {
+                                    eval('window.HUD.update(' + match[1] + ');');
+                                } catch (e) {
+                                    console.warn('[HUD] Fallback parse error:', e);
+                                }
+                            }
+                        }
+                    });
+                    hudObserver.observe(hudTrigger, { childList: true, subtree: true, characterData: true });
+                    console.log('[HUD] Observer attached to hud-update-trigger');
+                } else {
+                    // Retry after a short delay (Gradio may not have rendered yet)
+                    setTimeout(setupHudObserver, 500);
+                }
+            };
+            setupHudObserver();
 
             // ============================================
             // MOBILE PTT - Touch-based recording
