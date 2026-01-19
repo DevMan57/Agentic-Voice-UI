@@ -24,10 +24,10 @@ import hashlib
 # ============================================================================
 
 def create_dark_theme():
-    """Create ENGINEERED AMBER theme - Industrial Retro-Futurism"""
+    """Create Ghost White theme - Clean Monochrome"""
     return gr.themes.Soft(
-        primary_hue="orange",
-        secondary_hue="cyan",
+        primary_hue="gray",
+        secondary_hue="gray",
         neutral_hue="slate",
         font=gr.themes.GoogleFont("Fira Code"),
     ).set(
@@ -39,54 +39,54 @@ def create_dark_theme():
         background_fill_secondary="#000000",
         background_fill_secondary_dark="#000000",
 
-        # Block colors - Black with lapis lazuli borders
+        # Block colors - Black with white borders
         block_background_fill="#000000",
         block_background_fill_dark="#000000",
-        block_border_color="#00BFFF",
-        block_border_color_dark="#00BFFF",
+        block_border_color="#FFFFFF",
+        block_border_color_dark="#FFFFFF",
         block_label_background_fill="#000000",
         block_label_background_fill_dark="#000000",
-        block_title_text_color="#00BFFF",
-        block_title_text_color_dark="#00BFFF",
+        block_title_text_color="#FFFFFF",
+        block_title_text_color_dark="#FFFFFF",
 
         # Input colors - Black
         input_background_fill="#000000",
         input_background_fill_dark="#000000",
-        input_border_color="#00BFFF",
-        input_border_color_dark="#00BFFF",
-        input_placeholder_color="#006699",
-        input_placeholder_color_dark="#006699",
+        input_border_color="#FFFFFF",
+        input_border_color_dark="#FFFFFF",
+        input_placeholder_color="#B3B3B3",
+        input_placeholder_color_dark="#B3B3B3",
 
-        # Button colors - Lapis Lazuli
-        button_primary_background_fill="#00BFFF",
-        button_primary_background_fill_dark="#00BFFF",
-        button_primary_background_fill_hover="#33CCFF",
-        button_primary_background_fill_hover_dark="#33CCFF",
+        # Button colors - Ghost White
+        button_primary_background_fill="#FFFFFF",
+        button_primary_background_fill_dark="#FFFFFF",
+        button_primary_background_fill_hover="#E6E6E6",
+        button_primary_background_fill_hover_dark="#E6E6E6",
         button_primary_text_color="#000000",
         button_primary_text_color_dark="#000000",
         # Secondary buttons
         button_secondary_background_fill="#000000",
         button_secondary_background_fill_dark="#000000",
-        button_secondary_background_fill_hover="#00BFFF",
-        button_secondary_background_fill_hover_dark="#00BFFF",
-        button_secondary_text_color="#00BFFF",
-        button_secondary_text_color_dark="#00BFFF",
+        button_secondary_background_fill_hover="#FFFFFF",
+        button_secondary_background_fill_hover_dark="#FFFFFF",
+        button_secondary_text_color="#FFFFFF",
+        button_secondary_text_color_dark="#FFFFFF",
 
-        # Slider colors - Lapis Lazuli
-        slider_color="#00BFFF",
-        slider_color_dark="#00BFFF",
+        # Slider colors - Ghost White
+        slider_color="#FFFFFF",
+        slider_color_dark="#FFFFFF",
 
-        # Checkbox colors - Lapis Lazuli
-        checkbox_background_color_selected="#00BFFF",
-        checkbox_background_color_selected_dark="#00BFFF",
-        checkbox_border_color_selected="#00BFFF",
-        checkbox_border_color_selected_dark="#00BFFF",
+        # Checkbox colors - Ghost White
+        checkbox_background_color_selected="#FFFFFF",
+        checkbox_background_color_selected_dark="#FFFFFF",
+        checkbox_border_color_selected="#FFFFFF",
+        checkbox_border_color_selected_dark="#FFFFFF",
 
-        # Text colors - Lapis Lazuli
-        body_text_color="#00BFFF",
-        body_text_color_dark="#00BFFF",
-        body_text_color_subdued="#006699",
-        body_text_color_subdued_dark="#006699",
+        # Text colors - Ghost White
+        body_text_color="#FFFFFF",
+        body_text_color_dark="#FFFFFF",
+        body_text_color_subdued="#B3B3B3",
+        body_text_color_subdued_dark="#B3B3B3",
 
         # Border radius - CYBERDECK: Sharp corners
         block_radius="0px",
@@ -155,22 +155,22 @@ KEYBOARD_SHORTCUTS_JS = """
 
 KEYBOARD_SHORTCUTS_HTML = """
 <div id="shortcuts-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-     background: #000000; padding: 24px; border-radius: 0px; border: 2px solid #00BFFF; z-index: 1000; box-shadow: 0 0 30px rgba(0,191,255,0.3);">
-    <h3 style="margin-top: 0; color: #00BFFF;">⌨️ Keyboard Shortcuts</h3>
-    <table style="color: #00BFFF; border-collapse: collapse;">
-        <tr><td style="padding: 8px;"><kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">Shift</kbd></td>
+     background: #000000; padding: 24px; border-radius: 0px; border: 2px solid var(--theme-primary, #FFFFFF); z-index: 1000; box-shadow: 0 0 30px var(--theme-glow, rgba(255,255,255,0.3));">
+    <h3 style="margin-top: 0; color: var(--theme-primary, #FFFFFF);">⌨️ Keyboard Shortcuts</h3>
+    <table style="color: var(--theme-primary, #FFFFFF); border-collapse: collapse;">
+        <tr><td style="padding: 8px;"><kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #FFFFFF);">Shift</kbd></td>
             <td style="padding: 8px;">Hold to record (Push-to-Talk)</td></tr>
-        <tr><td style="padding: 8px;"><kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">Ctrl</kbd>+<kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">Enter</kbd></td>
+        <tr><td style="padding: 8px;"><kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #FFFFFF);">Ctrl</kbd>+<kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #FFFFFF);">Enter</kbd></td>
             <td style="padding: 8px;">Send message</td></tr>
-        <tr><td style="padding: 8px;"><kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">Ctrl</kbd>+<kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">N</kbd></td>
+        <tr><td style="padding: 8px;"><kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #FFFFFF);">Ctrl</kbd>+<kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #FFFFFF);">N</kbd></td>
             <td style="padding: 8px;">New conversation</td></tr>
-        <tr><td style="padding: 8px;"><kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">Esc</kbd></td>
+        <tr><td style="padding: 8px;"><kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #FFFFFF);">Esc</kbd></td>
             <td style="padding: 8px;">Clear input</td></tr>
-        <tr><td style="padding: 8px;"><kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">Ctrl</kbd>+<kbd style="background: #000000; border: 1px solid #00BFFF; padding: 4px 8px; border-radius: 0px; color: #00BFFF;">/</kbd></td>
+        <tr><td style="padding: 8px;"><kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #FFFFFF);">Ctrl</kbd>+<kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #FFFFFF);">/</kbd></td>
             <td style="padding: 8px;">Toggle this help</td></tr>
     </table>
     <button onclick="this.parentElement.style.display='none'"
-            style="margin-top: 16px; padding: 8px 16px; background: #00BFFF; color: #000000; border: none; border-radius: 0px; cursor: pointer;">
+            style="margin-top: 16px; padding: 8px 16px; background: var(--theme-primary, #FFFFFF); color: #000000; border: none; border-radius: 0px; cursor: pointer;">
         Close
     </button>
 </div>
@@ -214,7 +214,7 @@ AUDIO_VISUALIZER_JS = """
             this.ctx.fillRect(0, 0, width, height);
 
             // Draw fake waveform (would connect to real audio data)
-            this.ctx.strokeStyle = '#00BFFF';
+            this.ctx.strokeStyle = '#FFFFFF';
             this.ctx.lineWidth = 2;
             this.ctx.beginPath();
             
@@ -251,16 +251,16 @@ AUDIO_VISUALIZER_JS = """
 
 def format_message_html(role: str, content: str, timestamp: str = None, character_name: str = None) -> str:
     """Format a chat message as styled HTML"""
-    
+
     if role == "user":
         bg_color = "#000000"
-        border_color = "#00BFFF"
+        border_color = "var(--theme-primary, #FFFFFF)"
         icon = "👤"
         name = "You"
         align = "right"
     else:
         bg_color = "#000000"
-        border_color = "#006699"
+        border_color = "var(--theme-dim, #B3B3B3)"
         icon = "🤖"
         name = character_name or "Assistant"
         align = "left"
@@ -269,7 +269,7 @@ def format_message_html(role: str, content: str, timestamp: str = None, characte
     if timestamp:
         try:
             dt = datetime.fromisoformat(timestamp)
-            time_str = f'<span style="font-size: 0.75em; color: #006699; margin-left: 8px;">{dt.strftime("%H:%M")}</span>'
+            time_str = f'<span style="font-size: 0.75em; color: var(--theme-dim, #B3B3B3); margin-left: 8px;">{dt.strftime("%H:%M")}</span>'
         except:
             pass
 
@@ -282,10 +282,10 @@ def format_message_html(role: str, content: str, timestamp: str = None, characte
     return f'''
     <div style="display: flex; justify-content: flex-{align.replace('right', 'end').replace('left', 'start')}; margin: 8px 0;">
         <div style="background: {bg_color}; border: 1px solid {border_color}; padding: 12px 16px; border-radius: 0px; max-width: 80%;">
-            <div style="font-size: 0.85em; color: #006699; margin-bottom: 4px;">
+            <div style="font-size: 0.85em; color: var(--theme-dim, #B3B3B3); margin-bottom: 4px;">
                 {icon} {name}{time_str}
             </div>
-            <div style="color: #00BFFF; line-height: 1.5;">
+            <div style="color: var(--theme-primary, #FFFFFF); line-height: 1.5;">
                 {content}
             </div>
         </div>
@@ -296,7 +296,7 @@ def format_message_html(role: str, content: str, timestamp: str = None, characte
 def format_chat_history_html(history: List[Dict[str, str]], character_name: str = "Assistant") -> str:
     """Format entire chat history as HTML"""
     if not history:
-        return '<div style="color: #006699; text-align: center; padding: 40px;">Start a conversation...</div>'
+        return '<div style="color: var(--theme-dim, #B3B3B3); text-align: center; padding: 40px;">Start a conversation...</div>'
     
     html_parts = []
     for msg in history:
@@ -318,7 +318,7 @@ def format_chat_history_html(history: List[Dict[str, str]], character_name: str 
 def format_typing_indicator(character_name: str = "Assistant") -> str:
     """Create a typing indicator HTML"""
     return f'''
-    <div style="display: flex; align-items: center; padding: 12px; color: #00BFFF;">
+    <div style="display: flex; align-items: center; padding: 12px; color: var(--theme-primary, #FFFFFF);">
         <span style="margin-right: 8px;">🤖</span>
         <span>{character_name} is thinking</span>
         <span class="typing-dots" style="margin-left: 4px;">
@@ -634,31 +634,31 @@ def create_status_html(
     is_thinking: bool = False
 ) -> str:
     """Create status bar HTML"""
-    
+
     # PTT indicator - All lapis lazuli
     if ptt_status == "recording":
-        ptt_html = f'<span style="color: #00BFFF;">🔴 Recording ({recording_duration:.1f}s)</span>'
+        ptt_html = f'<span style="color: var(--theme-primary, #FFFFFF);">🔴 Recording ({recording_duration:.1f}s)</span>'
     elif ptt_status == "processing":
-        ptt_html = '<span style="color: #00BFFF;">⏳ Processing...</span>'
+        ptt_html = '<span style="color: var(--theme-primary, #FFFFFF);">⏳ Processing...</span>'
     elif ptt_status == "offline":
-        ptt_html = '<span style="color: #006699;">⭕ PTT Offline</span>'
+        ptt_html = '<span style="color: var(--theme-dim, #B3B3B3);">⭕ PTT Offline</span>'
     else:
-        ptt_html = '<span style="color: #00BFFF;">🟢 Ready (Hold Shift)</span>'
+        ptt_html = '<span style="color: var(--theme-primary, #FFFFFF);">🟢 Ready (Hold Shift)</span>'
 
     # Character
-    char_html = f'<span style="color: #00BFFF;">👤 {character_name}</span>' if character_name else ''
+    char_html = f'<span style="color: var(--theme-primary, #FFFFFF);">👤 {character_name}</span>' if character_name else ''
 
     # Model
-    model_html = f'<span style="color: #006699;">🤖 {model_name[:30]}...</span>' if len(model_name) > 30 else f'<span style="color: #006699;">🤖 {model_name}</span>' if model_name else ''
+    model_html = f'<span style="color: var(--theme-dim, #B3B3B3);">🤖 {model_name[:30]}...</span>' if len(model_name) > 30 else f'<span style="color: var(--theme-dim, #B3B3B3);">🤖 {model_name}</span>' if model_name else ''
 
     # Thinking
-    thinking_html = '<span style="color: #00BFFF;">💭 Thinking...</span>' if is_thinking else ''
+    thinking_html = '<span style="color: var(--theme-primary, #FFFFFF);">💭 Thinking...</span>' if is_thinking else ''
 
     parts = [p for p in [ptt_html, char_html, model_html, thinking_html] if p]
 
     return f'''
     <div style="display: flex; justify-content: space-between; align-items: center;
-                padding: 8px 16px; background: #000000; border: 1px solid #006699; border-radius: 0px; font-size: 0.9em;">
+                padding: 8px 16px; background: #000000; border: 1px solid var(--theme-dim, #B3B3B3); border-radius: 0px; font-size: 0.9em;">
         {' | '.join(parts)}
     </div>
     '''
@@ -667,8 +667,8 @@ def create_status_html(
 def create_memory_stats_html(stats: Dict[str, Any]) -> str:
     """Create memory statistics display HTML"""
     return f'''
-    <div style="background: #000000; padding: 16px; border: 1px solid #00BFFF; border-radius: 0px; color: #00BFFF;">
-        <h4 style="margin-top: 0; color: #00BFFF;">🧠 Memory Statistics</h4>
+    <div style="background: #000000; padding: 16px; border: 1px solid var(--theme-primary, #FFFFFF); border-radius: 0px; color: var(--theme-primary, #FFFFFF);">
+        <h4 style="margin-top: 0; color: var(--theme-primary, #FFFFFF);">🧠 Memory Statistics</h4>
         <table style="width: 100%; border-collapse: collapse;">
             <tr>
                 <td style="padding: 4px 8px;">Episodic memories:</td>
@@ -686,12 +686,12 @@ def create_memory_stats_html(stats: Dict[str, Any]) -> str:
                 <td style="padding: 4px 8px;">Session summaries:</td>
                 <td style="padding: 4px 8px; text-align: right;">{stats.get('summary_count', 0)}</td>
             </tr>
-            <tr style="border-top: 1px solid #006699;">
+            <tr style="border-top: 1px solid var(--theme-dim, #B3B3B3);">
                 <td style="padding: 8px 8px 4px;">Total interactions:</td>
                 <td style="padding: 8px 8px 4px; text-align: right; font-weight: bold;">{stats.get('total_interactions', 0)}</td>
             </tr>
         </table>
-        <div style="margin-top: 12px; font-size: 0.85em; color: #006699;">
+        <div style="margin-top: 12px; font-size: 0.85em; color: var(--theme-dim, #B3B3B3);">
             Embedding model: {stats.get('embedding_model', 'N/A')}<br>
             Retrieval weights: R={stats.get('retrieval_weights', {}).get('recency', 0.2)}
                               V={stats.get('retrieval_weights', {}).get('relevance', 0.5)}
@@ -714,20 +714,20 @@ def create_character_card_html(
     is_selected: bool = False
 ) -> str:
     """Create a character selection card"""
-    
-    border_color = "#00BFFF" if is_selected else "#006699"
+
+    border_color = "var(--theme-primary, #FFFFFF)" if is_selected else "var(--theme-dim, #B3B3B3)"
     bg_color = "#000000"
 
     tags_html = ""
     if tags:
         tags_html = '<div style="margin-top: 8px;">' + ' '.join(
-            f'<span style="background: #000000; border: 1px solid #006699; padding: 2px 8px; border-radius: 0px; font-size: 0.75em; color: #00BFFF;">{tag}</span>'
+            f'<span style="background: #000000; border: 1px solid var(--theme-dim, #B3B3B3); padding: 2px 8px; border-radius: 0px; font-size: 0.75em; color: var(--theme-primary, #FFFFFF);">{tag}</span>'
             for tag in tags[:3]
         ) + '</div>'
-    
+
     return f'''
-    <div style="background: {bg_color}; border: 2px solid {border_color}; border-radius: 12px; 
-                padding: 16px; cursor: pointer; transition: all 0.2s;" 
+    <div style="background: {bg_color}; border: 2px solid {border_color}; border-radius: 12px;
+                padding: 16px; cursor: pointer; transition: all 0.2s;"
          class="character-card" data-id="{character_id}">
         <div style="font-size: 1.2em; margin-bottom: 4px;">{display_name}</div>
         <div style="color: #888; font-size: 0.9em;">{description[:100]}...</div>

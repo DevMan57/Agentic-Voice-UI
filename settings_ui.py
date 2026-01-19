@@ -282,12 +282,12 @@ def _get_system_info_html() -> str:
         cuda_memory = "N/A"
     
     return f"""
-    <div style="background: #000000; padding: 12px; border: 1px solid var(--theme-primary, #00BFFF); border-radius: 0px; font-family: monospace; font-size: 0.85em;">
-        <div style="color: var(--theme-dim, #006699);">Platform: <span style="color: var(--theme-primary, #00BFFF);">{platform.system()} {platform.release()}</span></div>
-        <div style="color: var(--theme-dim, #006699);">Python: <span style="color: var(--theme-primary, #00BFFF);">{platform.python_version()}</span></div>
-        <div style="color: var(--theme-dim, #006699);">CUDA: <span style="color: var(--theme-primary, #00BFFF);">{'✓ Available' if cuda_available else '✗ Not available'}</span></div>
-        <div style="color: var(--theme-dim, #006699);">GPU: <span style="color: var(--theme-primary, #00BFFF);">{cuda_device}</span></div>
-        <div style="color: var(--theme-dim, #006699);">VRAM: <span style="color: var(--theme-primary, #00BFFF);">{cuda_memory}</span></div>
+    <div style="background: #000000; padding: 12px; border: 1px solid var(--theme-primary, #FFFFFF); border-radius: 0px; font-family: monospace; font-size: 0.85em;">
+        <div style="color: var(--theme-dim, #B3B3B3);">Platform: <span style="color: var(--theme-primary, #FFFFFF);">{platform.system()} {platform.release()}</span></div>
+        <div style="color: var(--theme-dim, #B3B3B3);">Python: <span style="color: var(--theme-primary, #FFFFFF);">{platform.python_version()}</span></div>
+        <div style="color: var(--theme-dim, #B3B3B3);">CUDA: <span style="color: var(--theme-primary, #FFFFFF);">{'✓ Available' if cuda_available else '✗ Not available'}</span></div>
+        <div style="color: var(--theme-dim, #B3B3B3);">GPU: <span style="color: var(--theme-primary, #FFFFFF);">{cuda_device}</span></div>
+        <div style="color: var(--theme-dim, #B3B3B3);">VRAM: <span style="color: var(--theme-primary, #FFFFFF);">{cuda_memory}</span></div>
     </div>
     """
 
@@ -304,51 +304,51 @@ def create_shortcuts_modal() -> str:
         top: 50%; left: 50%;
         transform: translate(-50%, -50%);
         background: #000000;
-        border: 2px solid var(--theme-primary, #00BFFF);
+        border: 2px solid var(--theme-primary, #FFFFFF);
         border-radius: 0px;
         padding: 24px;
         z-index: 1000;
         display: none;
-        box-shadow: 0 0 30px var(--theme-glow, rgba(0,191,255,0.3));
+        box-shadow: 0 0 30px var(--theme-glow, rgba(255,255,255,0.3));
         max-width: 400px;
     ">
-        <h3 style="margin-top: 0; color: var(--theme-primary, #00BFFF); display: flex; align-items: center; gap: 8px;">
+        <h3 style="margin-top: 0; color: var(--theme-primary, #FFFFFF); display: flex; align-items: center; gap: 8px;">
             <span>⌨️</span> Keyboard Shortcuts
         </h3>
-        <table style="width: 100%; color: var(--theme-primary, #00BFFF); border-collapse: collapse;">
+        <table style="width: 100%; color: var(--theme-primary, #FFFFFF); border-collapse: collapse;">
             <tr>
                 <td style="padding: 8px 0;">
-                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; font-family: monospace; color: var(--theme-primary, #00BFFF);">Shift</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; font-family: monospace; color: var(--theme-primary, #FFFFFF);">Shift</kbd>
                 </td>
                 <td style="padding: 8px 12px;">Hold to record (Push-to-Talk)</td>
             </tr>
             <tr>
                 <td style="padding: 8px 0;">
-                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #00BFFF);">Ctrl</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #FFFFFF);">Ctrl</kbd>
                     +
-                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #00BFFF);">Enter</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #FFFFFF);">Enter</kbd>
                 </td>
                 <td style="padding: 8px 12px;">Send message</td>
             </tr>
             <tr>
                 <td style="padding: 8px 0;">
-                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #00BFFF);">Ctrl</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #FFFFFF);">Ctrl</kbd>
                     +
-                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #00BFFF);">N</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #FFFFFF);">N</kbd>
                 </td>
                 <td style="padding: 8px 12px;">New conversation</td>
             </tr>
             <tr>
                 <td style="padding: 8px 0;">
-                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #00BFFF);">Esc</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #FFFFFF);">Esc</kbd>
                 </td>
                 <td style="padding: 8px 12px;">Clear input</td>
             </tr>
             <tr>
                 <td style="padding: 8px 0;">
-                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #00BFFF);">Ctrl</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #FFFFFF);">Ctrl</kbd>
                     +
-                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #00BFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #00BFFF);">/</kbd>
+                    <kbd style="background: #000000; border: 1px solid var(--theme-primary, #FFFFFF); padding: 4px 8px; border-radius: 0px; color: var(--theme-primary, #FFFFFF);">/</kbd>
                 </td>
                 <td style="padding: 8px 12px;">Toggle this help</td>
             </tr>
@@ -357,7 +357,7 @@ def create_shortcuts_modal() -> str:
             margin-top: 16px;
             width: 100%;
             padding: 10px;
-            background: var(--theme-primary, #00BFFF);
+            background: var(--theme-primary, #FFFFFF);
             color: #000000;
             border: none;
             border-radius: 0px;
@@ -394,10 +394,10 @@ def create_status_bar(
 
     # Use CSS variables for theme support
     status_colors = {
-        "ready": "var(--theme-primary, #00BFFF)",
-        "recording": "var(--theme-primary, #00BFFF)",
-        "processing": "var(--theme-primary, #00BFFF)",
-        "offline": "var(--theme-dim, #006699)"
+        "ready": "var(--theme-primary, #FFFFFF)",
+        "recording": "var(--theme-primary, #FFFFFF)",
+        "processing": "var(--theme-primary, #FFFFFF)",
+        "offline": "var(--theme-dim, #B3B3B3)"
     }
 
     status_icons = {
@@ -407,7 +407,7 @@ def create_status_bar(
         "offline": "⭕"
     }
 
-    ptt_color = status_colors.get(ptt_status, "var(--theme-dim, #006699)")
+    ptt_color = status_colors.get(ptt_status, "var(--theme-dim, #B3B3B3)")
     ptt_icon = status_icons.get(ptt_status, "⭕")
     ptt_text = {
         "ready": "Ready (Hold Shift)",
@@ -423,18 +423,18 @@ def create_status_bar(
         align-items: center;
         padding: 8px 16px;
         background: #000000;
-        border: 1px solid var(--theme-dim, #006699);
+        border: 1px solid var(--theme-dim, #B3B3B3);
         border-radius: 0px;
         font-size: 0.85em;
-        color: var(--theme-primary, #00BFFF);
+        color: var(--theme-primary, #FFFFFF);
     ">
         <div style="display: flex; gap: 16px; align-items: center;">
             <span style="color: {ptt_color};">{ptt_icon} {ptt_text}</span>
-            {f'<span style="color: var(--theme-primary, #00BFFF);">👤 {character_name}</span>' if character_name else ''}
+            {f'<span style="color: var(--theme-primary, #FFFFFF);">👤 {character_name}</span>' if character_name else ''}
         </div>
         <div style="display: flex; gap: 16px; align-items: center;">
             {f'<span>🧠 {memory_count} memories</span>' if memory_count else ''}
-            {f'<span style="color: var(--theme-dim, #006699);">🤖 {model_name[:25]}...</span>' if len(model_name) > 25 else f'<span style="color: var(--theme-dim, #006699);">🤖 {model_name}</span>' if model_name else ''}
+            {f'<span style="color: var(--theme-dim, #B3B3B3);">🤖 {model_name[:25]}...</span>' if len(model_name) > 25 else f'<span style="color: var(--theme-dim, #B3B3B3);">🤖 {model_name}</span>' if model_name else ''}
         </div>
     </div>
     """

@@ -3321,15 +3321,15 @@ def get_ptt_status() -> Tuple[str, str, float, str]:
             extra = parts[2] if len(parts) > 2 else ""
             
             status_map = {
-                "ready": ("🎤 PTT Ready (Right Shift)", "#00BFFF", "lapis"),
-                "recording": (f"🔴 RECORDING ({duration:.1f}s)", "#00BFFF", "lapis"),
-                "processing": (f"⏳ Processing...", "#00BFFF", "lapis"),
-                "sent": ("✅ Sent!", "#00BFFF", "lapis"),
-                "error": (f"❌ Error: {extra}", "#00BFFF", "lapis"),
-                "offline": ("⚫ Offline", "#006699", "lapis-dim"),
+                "ready": ("🎤 PTT Ready (Right Shift)", "#FFFFFF", "white"),
+                "recording": (f"🔴 RECORDING ({duration:.1f}s)", "#FFFFFF", "white"),
+                "processing": (f"⏳ Processing...", "#FFFFFF", "white"),
+                "sent": ("✅ Sent!", "#FFFFFF", "white"),
+                "error": (f"❌ Error: {extra}", "#FFFFFF", "white"),
+                "offline": ("⚫ Offline", "#B3B3B3", "white-dim"),
             }
 
-            display, color, _ = status_map.get(status, ("❓ Unknown", "#006699", "lapis-dim"))
+            display, color, _ = status_map.get(status, ("❓ Unknown", "#B3B3B3", "white-dim"))
             if extra and status == "ready":
                 display = f"🎤 {extra}"
             
@@ -3512,17 +3512,17 @@ def create_ui():
            Lapis Lazuli | Lightsaber Purple | Orange | Green
            ============================================ */
 
-        /* CSS Variables - Theme Colors (defaults to Lapis Lazuli) */
+        /* CSS Variables - Theme Colors (defaults to Ghost White) */
         :root {
             /* THEME COLOR VARIABLES - Changed dynamically by JavaScript */
-            --theme-primary: #00BFFF;      /* Main accent color */
-            --theme-dim: #006699;          /* Darker variant */
-            --theme-bright: #33CCFF;       /* Lighter/hover variant */
-            --theme-medium: #0088AA;       /* Medium variant */
-            --theme-glow: rgba(0, 191, 255, 0.4);      /* Glow effect */
-            --theme-glow-soft: rgba(0, 191, 255, 0.1); /* Soft glow */
-            --theme-glow-text: rgba(0, 191, 255, 0.5); /* Text shadow */
-            --theme-glow-text-strong: rgba(0, 191, 255, 0.6); /* Strong text shadow */
+            --theme-primary: #FFFFFF;      /* Main accent color */
+            --theme-dim: #B3B3B3;          /* Darker variant */
+            --theme-bright: #FFFFFF;       /* Lighter/hover variant */
+            --theme-medium: #E6E6E6;       /* Medium variant */
+            --theme-glow: rgba(255, 255, 255, 0.4);      /* Glow effect */
+            --theme-glow-soft: rgba(255, 255, 255, 0.1); /* Soft glow */
+            --theme-glow-text: rgba(255, 255, 255, 0.5); /* Text shadow */
+            --theme-glow-text-strong: rgba(255, 255, 255, 0.6); /* Strong text shadow */
 
             /* FORCE GRADIO INTERNAL VARIABLES */
             --color-accent: var(--theme-primary) !important;
@@ -4761,6 +4761,34 @@ def create_ui():
             background: #000000 !important;
             border: none !important;
         }
+        /* COMPREHENSIVE CHECKBOX BACKGROUND FIX - Force transparent/black backgrounds */
+        .gradio-checkbox *,
+        .gradio-checkboxgroup *,
+        [data-testid="checkbox"] *,
+        [data-testid="checkboxgroup"] *,
+        .gradio-checkbox > div,
+        .gradio-checkboxgroup > div,
+        .gradio-checkbox .wrap,
+        .gradio-checkboxgroup .wrap,
+        .gradio-checkbox .form,
+        .gradio-checkboxgroup .form {
+            background: transparent !important;
+            background-color: transparent !important;
+        }
+        /* Checkbox input elements - black background when not selected */
+        .gradio-checkbox input[type="checkbox"],
+        .gradio-checkboxgroup input[type="checkbox"],
+        [data-testid="checkbox"] input,
+        [data-testid="checkboxgroup"] input {
+            background: #000000 !important;
+            background-color: #000000 !important;
+        }
+        /* Selected checkboxes use theme color */
+        .gradio-checkbox input[type="checkbox"]:checked,
+        .gradio-checkboxgroup input[type="checkbox"]:checked {
+            background: var(--theme-primary) !important;
+            background-color: var(--theme-primary) !important;
+        }
         .gradio-checkbox:hover,
         .gradio-checkboxgroup:hover,
         [data-testid="checkbox"]:hover,
@@ -4888,7 +4916,7 @@ def create_ui():
 
         /* ============================================
            HOVER TEXT FIX - Radio and CheckboxGroup only
-           Regular checkboxes keep cyan text (black background)
+           Regular checkboxes keep white text (black background)
            ============================================ */
         .gradio-radio label:hover,
         .gradio-radio label:hover *,
@@ -6288,7 +6316,7 @@ def create_ui():
                 }
             },
 
-            currentTheme: 'lapis',
+            currentTheme: 'white',
 
             apply: function(themeName) {
                 const theme = this.themes[themeName];
@@ -6635,7 +6663,7 @@ def create_ui():
 
                 // Get current theme color dynamically
                 const color = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--theme-primary').trim() || '#00BFFF';
+                    .getPropertyValue('--theme-primary').trim() || '#FFFFFF';
 
                 // Draw waveform line with glow
                 ctx.lineWidth = 2;
@@ -6975,10 +7003,10 @@ def create_ui():
             start_url: window.location.origin,
             display: 'standalone',
             background_color: '#000000',
-            theme_color: '#00BFFF',
+            theme_color: '#FFFFFF',
             icons: [
-                { src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23000" width="100" height="100"/><text y="70" x="50" text-anchor="middle" font-size="60" fill="%2300BFFF">🎤</text></svg>', sizes: '192x192', type: 'image/svg+xml' },
-                { src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23000" width="100" height="100"/><text y="70" x="50" text-anchor="middle" font-size="60" fill="%2300BFFF">🎤</text></svg>', sizes: '512x512', type: 'image/svg+xml' }
+                { src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23000" width="100" height="100"/><text y="70" x="50" text-anchor="middle" font-size="60" fill="%23FFFFFF">🎤</text></svg>', sizes: '192x192', type: 'image/svg+xml' },
+                { src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23000" width="100" height="100"/><text y="70" x="50" text-anchor="middle" font-size="60" fill="%23FFFFFF">🎤</text></svg>', sizes: '512x512', type: 'image/svg+xml' }
             ]
         };
         const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
@@ -6993,7 +7021,7 @@ def create_ui():
         // iOS splash screen color
         const appleLink = document.createElement('link');
         appleLink.rel = 'apple-touch-icon';
-        appleLink.href = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23000" width="100" height="100"/><text y="70" x="50" text-anchor="middle" font-size="60" fill="%2300BFFF">🎤</text></svg>';
+        appleLink.href = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23000" width="100" height="100"/><text y="70" x="50" text-anchor="middle" font-size="60" fill="%23FFFFFF">🎤</text></svg>';
         document.head.appendChild(appleLink);
 
         return [];
@@ -7013,8 +7041,8 @@ def create_ui():
         current_provider = gr.State(value=initial_provider)
 
         gr.HTML(f"""
-        <div id="app-banner" style="border: 3px solid var(--theme-primary, #00BFFF); background: linear-gradient(180deg, #141414 0%, #000000 100%); padding: 15px 20px; margin-bottom: 15px; box-shadow: 0 0 25px var(--theme-glow, rgba(0, 191, 255, 0.4)), inset 0 0 30px var(--theme-glow-soft, rgba(0, 191, 255, 0.08)), inset 0 1px 0 rgba(255,255,255,0.05); overflow-x: auto;">
-            <pre style="color: var(--theme-primary, #00BFFF); font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; font-size: 16px; line-height: 1.15; margin: 0; text-align: center; letter-spacing: 0px; text-shadow: 0 0 10px var(--theme-glow-text-strong, rgba(0, 191, 255, 0.6)); white-space: pre; display: inline-block; min-width: 100%;">
+        <div id="app-banner" style="border: 3px solid var(--theme-primary, #FFFFFF); background: linear-gradient(180deg, #141414 0%, #000000 100%); padding: 15px 20px; margin-bottom: 15px; box-shadow: 0 0 25px var(--theme-glow, rgba(255, 255, 255, 0.4)), inset 0 0 30px var(--theme-glow-soft, rgba(255, 255, 255, 0.08)), inset 0 1px 0 rgba(255,255,255,0.05); overflow-x: auto;">
+            <pre style="color: var(--theme-primary, #FFFFFF); font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; font-size: 16px; line-height: 1.15; margin: 0; text-align: center; letter-spacing: 0px; text-shadow: 0 0 10px var(--theme-glow-text-strong, rgba(255, 255, 255, 0.6)); white-space: pre; display: inline-block; min-width: 100%;">
 ╔════════════════════════════════════════════════════════════════════════════════════╗
 ║  ████████╗████████╗ ███████╗ ██████╗    ██╗   ██╗ ██████╗ ██╗ ██████╗███████╗      ║
 ║  ╚══██╔══╝╚══██╔══╝ ██╔════╝ ╚════██╗   ██║   ██║██╔═══██╗██║██╔════╝██╔════╝      ║
@@ -7024,8 +7052,8 @@ def create_ui():
 ║     ╚═╝      ╚═╝    ╚══════╝ ╚══════╝     ╚═══╝   ╚═════╝ ╚═╝ ╚═════╝╚══════╝      ║
 ╚════════════════════════════════════════════════════════════════════════════════════╝
             </pre>
-            <div style="text-align: center; color: var(--theme-primary, #00BFFF); font-size: 0.9em; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">
-                Multi-Character • Memory • Tools • Vision • MCP &nbsp;|&nbsp; <span style="color: var(--theme-primary, #00BFFF);">Running on {PLATFORM.title()}{" (WSL)" if IS_WSL else ""}</span>
+            <div style="text-align: center; color: var(--theme-primary, #FFFFFF); font-size: 0.9em; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">
+                Multi-Character • Memory • Tools • Vision • MCP &nbsp;|&nbsp; <span style="color: var(--theme-primary, #FFFFFF);">Running on {PLATFORM.title()}{" (WSL)" if IS_WSL else ""}</span>
             </div>
         </div>
         """)
@@ -7192,7 +7220,7 @@ def create_ui():
                         )
                         with gr.Column(scale=1):
                             screen_btn = gr.Button("📸 Capture Screen", variant="secondary")
-                            clear_image_btn = gr.Button("🗑️ Clear", size="sm")
+                            clear_image_btn = gr.Button("✕ Clear", size="sm")
 
                 with gr.Accordion("📄 Document Analysis", open=False):
                     doc_upload = gr.File(
@@ -7403,7 +7431,7 @@ def create_ui():
                         max_lines=1
                     )
                     with gr.Row():
-                        delete_conv_btn = gr.Button("🗑️ Delete", size="sm", variant="stop")
+                        delete_conv_btn = gr.Button("✕ Delete", size="sm", variant="stop")
                     with gr.Row():
                         export_txt_btn = gr.Button("📄 Export TXT", size="sm")
                         export_json_btn = gr.Button("📋 Export JSON", size="sm")
@@ -7443,7 +7471,7 @@ def create_ui():
                     )
                     with gr.Row():
                         update_memory_btn = gr.Button("💾 Update", size="sm", variant="primary")
-                        delete_memory_btn = gr.Button("🗑️ Delete", size="sm", variant="stop")
+                        delete_memory_btn = gr.Button("✕ Delete", size="sm", variant="stop")
                     memory_editor_status = gr.Textbox(visible=False, show_label=False)
                 
                 with gr.Accordion("🖥️ System Info", open=False):
