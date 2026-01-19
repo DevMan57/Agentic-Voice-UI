@@ -4,17 +4,22 @@ import os
 TARGET_FILE = "VoiceChat.bat"
 DELETE_FILE = "VoiceChat_new.bat"
 
-# --- ANSI Colors (Disabled - Standard White) ---
+# --- ANSI Colors (Green Theme) ---
 ESC = "\x1b"
-C_RESET   = ""
-C_GREY    = ""
+C_RESET   = f"{ESC}[0m"
+C_GREY    = f"{ESC}[38;5;244m"
 
-# All colors disabled for standard white text
-C_ORANGE  = ""
-C_AMBER   = ""
-C_GOLD    = ""
-C_RED     = ""
-C_DARK    = ""
+# Green color palette (matching notification style)
+C_GREEN   = f"{ESC}[38;5;35m"   # Main green - matches notification
+C_BRIGHT  = f"{ESC}[38;5;46m"   # Bright green for highlights
+C_DARK    = f"{ESC}[38;5;22m"   # Dark forest green
+C_CYAN    = f"{ESC}[38;5;37m"   # Teal/cyan accent
+C_RED     = f"{ESC}[38;5;196m"  # Red for errors/exit
+
+# Aliases for compatibility
+C_ORANGE  = C_GREEN   # Main accent color
+C_AMBER   = C_BRIGHT  # Highlight color
+C_GOLD    = C_CYAN    # Secondary accent
 
 # --- ASCII Art (TTS2 VOICE) ---
 HEADER_ART = [
@@ -65,6 +70,7 @@ def get_batch_content():
     # --- RESIZE WINDOW ---
     lines.append('mode con: cols=92 lines=42')
     lines.append('powershell -command "&{$W=(get-host).ui.rawui;$B=$W.buffersize;$B.height=1000;$W.buffersize=$B;}"')
+    lines.append('color 07')  # White text on black background
 
     # --- PATH SETUP ---
     lines.append('set "WSL_DISTRO=Ubuntu"')
@@ -231,7 +237,7 @@ def get_batch_content():
     # --- MANAGER ---
     lines.append(":MANAGER")
     lines.append("cls")
-    lines.append("color 06")
+    lines.append("color 07")
     lines.append("chcp 65001 >nul")
     lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_GOLD)}")
@@ -258,7 +264,7 @@ def get_batch_content():
     # --- MCP MANAGER ---
     lines.append(":MCPMANAGER")
     lines.append("cls")
-    lines.append("color 04")
+    lines.append("color 07")
     lines.append("chcp 65001 >nul")
     lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_AMBER)}")
@@ -285,7 +291,7 @@ def get_batch_content():
     # --- INSTALL MENU ---
     lines.append(":INSTALL")
     lines.append("cls")
-    lines.append("color 08")
+    lines.append("color 07")
     lines.append("chcp 65001 >nul")
     lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_DARK)}")
@@ -760,7 +766,7 @@ def get_batch_content():
     # --- CALIBRATE ---
     lines.append(":CALIBRATE")
     lines.append("cls")
-    lines.append("color 08")
+    lines.append("color 07")
     lines.append("chcp 65001 >nul")
     lines.append("echo.")
     lines.append(f"echo {make_bar('=', TERM_WIDTH, C_GREY)}")

@@ -1348,13 +1348,23 @@ def get_voice_choices_for_backend(backend: str = None) -> tuple:
             return kokoro_voices, last
         return VOICE_CHOICES, SETTINGS.get("last_voice", "reference.wav")
 
-    else:  # indextts - supports all voices for cloning
-        # Validate last_voice is in VOICE_CHOICES
+    else:  # indextts - only custom voice reference files (not Kokoro presets)
+        # IndexTTS2 voices are custom .wav files WITHOUT Kokoro prefixes
+        # Kokoro voices have prefixes: af_, am_, bf_, bm_
+        indextts_voices = [
+            (get_voice_display_name(v), v) for v in AVAILABLE_VOICES
+            if not v.startswith(('af_', 'am_', 'bf_', 'bm_'))
+        ]
+        if not indextts_voices:
+            # Fallback if no custom voices found
+            indextts_voices = VOICE_CHOICES
+
+        # Validate last_voice is in indextts_voices
         last = SETTINGS.get("last_voice", "reference.wav")
-        valid_values = [v[1] for v in VOICE_CHOICES]
+        valid_values = [v[1] for v in indextts_voices]
         if last not in valid_values:
-            last = "reference.wav"
-        return VOICE_CHOICES, last
+            last = indextts_voices[0][1] if indextts_voices else "reference.wav"
+        return indextts_voices, last
 
 AVAILABLE_VOICES = get_available_voices()
 VOICE_CHOICES = [(get_voice_display_name(v), v) for v in AVAILABLE_VOICES]
@@ -3166,13 +3176,13 @@ def process_voice_input(audio_data, chat_history, character_id, voice_file, *arg
                                             group_enabled, group_members, group_turns, incognito, image):
             final_result = res
             
-        # Clear audio hash after successful processing to allow fresh recordings
-        global _last_audio_hash
-        _last_audio_hash = None
-
         # Return 7 values to match timer outputs: chatbot, audio, transcription, memory, conv_id, image, tts_warning
         return final_result[0], final_result[1], user_message, final_result[3], final_result[4], final_result[5], final_result[6]
     finally:
+        # CRITICAL: Always clear audio hash to allow next recording
+        # This must be in finally block to ensure it's reset even on error
+        global _last_audio_hash
+        _last_audio_hash = None
         processing_lock.release()
 
 
