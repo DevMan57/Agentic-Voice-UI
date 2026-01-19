@@ -8471,7 +8471,12 @@ if __name__ == "__main__":
 
     # Move all status logs AFTER the banner
     print(f"\n[Platform] {PLATFORM.title()}" + (" (WSL)" if IS_WSL else ""))
-    print(f"[Voices] Available: {', '.join(AVAILABLE_VOICES)}")
+
+    # Separate IndexTTS and Kokoro voices for clearer display
+    indextts_voices = [v for v in AVAILABLE_VOICES if not v.startswith(('af_', 'am_', 'bf_', 'bm_'))]
+    kokoro_voices = [v for v in AVAILABLE_VOICES if v.startswith(('af_', 'am_', 'bf_', 'bm_'))]
+    print(f"[Voices] IndexTTS2: {', '.join(indextts_voices)}")
+    print(f"[Voices] Kokoro: {', '.join(kokoro_voices)}")
     
     if TTS_AVAILABLE:
         print("[TTS] IndexTTS2 module found")
